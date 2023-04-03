@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="elara-orders" />
+        <module name="elara-products-get" />
+        <module name="elara-admin-console" />
+        <module name="elara-delivery" />
+        <module name="elara-email" />
+        <module name="elara-bom" />
+        <module name="elara-users" />
+        <module name="elara-login" />
+        <module name="elara-eureka" />
+        <module name="elara-gateway" />
+        <module name="elara-payment" />
+        <module name="elara-products" />
+        <module name="elara-config-server" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
