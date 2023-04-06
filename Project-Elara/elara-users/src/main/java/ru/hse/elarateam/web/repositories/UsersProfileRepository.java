@@ -4,24 +4,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hse.elarateam.model.Role;
-import ru.hse.elarateam.model.RoleEnum;
+import ru.hse.elarateam.model.UserProfile;
 
-import java.util.Optional;
 import java.util.UUID;
 
-public interface RoleRepository extends JpaRepository<Role, UUID> {
-    Optional<Role> findOneByRole(RoleEnum role);
-
+public interface UsersProfileRepository extends JpaRepository<UserProfile, UUID> {
     @Override
-    @Query("UPDATE Role role SET role.deleted = true WHERE role.id = ?1")
+    @Query("UPDATE UserProfile userProfile SET userProfile.deleted = true WHERE userProfile.id = ?1")
     @Modifying
     @Transactional
     void deleteById(UUID uuid);
 
     @Override
-    @Query("UPDATE Role role SET role.deleted = true WHERE role = ?1")
+    @Query("UPDATE UserProfile userProfile SET userProfile.deleted = true WHERE userProfile = ?1")
     @Modifying
     @Transactional
-    void delete(Role entity);
+    void delete(UserProfile entity);
 }

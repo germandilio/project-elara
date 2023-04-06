@@ -20,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Where(clause = "deleted = false")
+@Where(clause = "deleted=false")
 @Table(name = "user_profiles")
 public class UserProfile {
     @Id
@@ -48,8 +48,9 @@ public class UserProfile {
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
+    @Builder.Default
     @Column(columnDefinition = "boolean default false")
-    private Boolean deleted = false;
+    private Boolean deleted = Boolean.FALSE;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -58,8 +59,6 @@ public class UserProfile {
     @UpdateTimestamp
     private Timestamp lastUpdateTime;
 
-    @Version
-    private Integer version;
 
     @Override
     public boolean equals(Object o) {

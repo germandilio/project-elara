@@ -31,14 +31,15 @@ public class Role {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false, unique = true)
-    private String role;
+    private RoleEnum role;
 
     @Column(length = 1024, columnDefinition = "varchar(1024)")
     private String roleDescription;
 
     @Column(columnDefinition = "boolean default false")
-    private Boolean deleted = false;
+    private Boolean deleted = Boolean.FALSE;
 
     @CreationTimestamp
     @Column(updatable = false)

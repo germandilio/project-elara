@@ -21,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Where(clause = "deleted = false")
+@Where(clause = "deleted=false")
 @Table(name = "user_service_info")
 public class UserServiceInfo {
     @Id
@@ -42,10 +42,10 @@ public class UserServiceInfo {
     private String password;
 
     @Column(length = 128, columnDefinition = "varchar(128)", unique = true)
-    private String emailVerificationToken;
+    private String emailVerificationToken = null;
 
     @Column(length = 128, columnDefinition = "varchar(128)", unique = true)
-    private String passwordResetToken;
+    private String passwordResetToken = null;
 
     @Column(columnDefinition = "timestamp")
     private Timestamp passwordResetTokenExpirationTime;
@@ -54,8 +54,9 @@ public class UserServiceInfo {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Builder.Default
     @Column(columnDefinition = "boolean default false")
-    private Boolean deleted = false;
+    private Boolean deleted = Boolean.FALSE;
 
     @CreationTimestamp
     @Column(updatable = false)
