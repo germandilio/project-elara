@@ -1,4 +1,4 @@
-package ru.hse.elarateam.dto.response;
+package ru.hse.products.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

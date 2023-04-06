@@ -1,12 +1,12 @@
-package ru.hse.elarateam.services;
+package ru.hse.products.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hse.elarateam.dto.request.OrderedItemRequestDTO;
-import ru.hse.elarateam.model.Product;
-import ru.hse.elarateam.repositories.ProductsRepository;
+import ru.hse.products.dto.request.OrderedItemRequestDTO;
+import ru.hse.products.model.Product;
+import ru.hse.products.repositories.ProductsRepository;
 
 import java.util.ArrayList;
 import java.util.List;

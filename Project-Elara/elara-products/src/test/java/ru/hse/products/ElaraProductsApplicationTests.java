@@ -1,14 +1,15 @@
-package ru.hse.elarateam;
+package ru.hse.products;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import ru.hse.elarateam.dto.request.OrderedItemRequestDTO;
-import ru.hse.elarateam.model.Product;
-import ru.hse.elarateam.repositories.ProductsRepository;
-import ru.hse.elarateam.services.ProductsService;
+import ru.hse.products.dto.request.OrderedItemRequestDTO;
+import ru.hse.products.model.Product;
+import ru.hse.products.repositories.ProductsRepository;
+import ru.hse.products.services.ProductsService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -76,8 +77,8 @@ public class ElaraProductsApplicationTests {
     public void testDeleted() {
         var products = productsRepository.findAll();
 
-        assertEquals(false, products.get(0).getDeleted());
-        assertEquals(false, products.get(1).getDeleted());
+        Assertions.assertEquals(false, products.get(0).getDeleted());
+        Assertions.assertEquals(false, products.get(1).getDeleted());
     }
 
     @Test
@@ -119,8 +120,8 @@ public class ElaraProductsApplicationTests {
 
         assertEquals(List.of(uuid1, uuid2), allocatedProducts);
         assertEquals(2, productsRepository.findAll().size());
-        assertEquals(5L, productsRepository.findById(uuid1).orElseThrow().getQuantity());
-        assertEquals(5L, productsRepository.findById(uuid2).orElseThrow().getQuantity());
+        Assertions.assertEquals(5L, productsRepository.findById(uuid1).orElseThrow().getQuantity());
+        Assertions.assertEquals(5L, productsRepository.findById(uuid2).orElseThrow().getQuantity());
     }
 
     @Test
@@ -147,7 +148,7 @@ public class ElaraProductsApplicationTests {
 
         assertEquals(List.of(uuid1, uuid2), deallocatedProducts);
         assertEquals(2, productsRepository.findAll().size());
-        assertEquals(15L, productsRepository.findById(uuid1).orElseThrow().getQuantity());
-        assertEquals(15L, productsRepository.findById(uuid2).orElseThrow().getQuantity());
+        Assertions.assertEquals(15L, productsRepository.findById(uuid1).orElseThrow().getQuantity());
+        Assertions.assertEquals(15L, productsRepository.findById(uuid2).orElseThrow().getQuantity());
     }
 }

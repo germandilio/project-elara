@@ -1,10 +1,12 @@
-package ru.hse.elarateam.model;
+package ru.hse.products.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,27 +15,26 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "pictures")
-public class Picture {
+@Table(name = "sports")
+public class Sport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 256, columnDefinition = "varchar(256)", nullable = false)
-    private String uri;
+    @Column(length = 32, columnDefinition = "varchar(32)", nullable = false)
+    private String name;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false, unique = true)
+    @ManyToMany(mappedBy = "sports", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Product product;
+    private Set<Product> products = new LinkedHashSet<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Picture picture = (Picture) o;
-        return getId() != null && Objects.equals(getId(), picture.getId());
+        Sport sport = (Sport) o;
+        return getId() != null && Objects.equals(getId(), sport.getId());
     }
 
     @Override

@@ -1,11 +1,11 @@
-package ru.hse.elarateam.repositories;
+package ru.hse.products.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hse.elarateam.model.Product;
+import ru.hse.products.model.Product;
 
 import java.util.UUID;
 

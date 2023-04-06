@@ -1,12 +1,12 @@
-package ru.hse.elarateam;
+package ru.hse.products;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import ru.hse.elarateam.model.Product;
-import ru.hse.elarateam.repositories.ProductsRepository;
+import ru.hse.products.model.Product;
+import ru.hse.products.repositories.ProductsRepository;
 
 import java.math.BigDecimal;
 
