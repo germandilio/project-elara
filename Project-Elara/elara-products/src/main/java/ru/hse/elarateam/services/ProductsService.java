@@ -30,25 +30,30 @@ public class ProductsService {
      * @return allocated products ids list
      * <p>
      * If any of the above conditions is unsatisfied (e.g. invalid id or quantity)
-     * the transaction is aborted, runtime exception is thrown
+     * the transaction is rolled back and runtime exception is thrown
      * </p>
      */
     @Transactional(rollbackFor = RuntimeException.class)
     public List<UUID> allocateProducts(List<OrderedItemRequestDTO> requiredProducts) {
         // id correctness check
-        checkIds(requiredProducts);
+        var incorrectIds = checkIds(requiredProducts);
+        if (!incorrectIds.isEmpty()) {
+            log.info("Allocation failed. Incorrect ids: " + incorrectIds);
+            throw new IllegalArgumentException("Allocation failed. Incorrect id found.");
+        }
 
         // quantity sufficiency check
         var insufficientQuantityIds = new ArrayList<UUID>();
         for (var item : requiredProducts) {
             var productId = item.getProductId();
             var requiredQuantity = item.getQuantity();
-            if (productsRepository.getReferenceById(productId).getQuantity() < requiredQuantity) {
+            if (productsRepository.findById(productId).orElseThrow().getQuantity() < requiredQuantity) {
                 insufficientQuantityIds.add(productId);
             }
         }
         if (!insufficientQuantityIds.isEmpty()) {
-            throw new IllegalArgumentException("Insufficient quantity of these products: " + insufficientQuantityIds);
+            log.info("Allocation failed. Insufficient quantity: " + insufficientQuantityIds);
+            throw new IllegalArgumentException("Allocation failed. Insufficient quantity found.");
         }
 
         // products allocation
@@ -56,13 +61,20 @@ public class ProductsService {
         for (var item : requiredProducts) {
             var productId = item.getProductId();
             var requiredQuantity = item.getQuantity();
-            var product = productsRepository.getReferenceById(productId);
+            var product = productsRepository.findById(productId).orElseThrow();
             product.setQuantity(product.getQuantity() - requiredQuantity);
             updatedProducts.add(product);
         }
+        log.debug("Updated products to allocate: " + updatedProducts);
 
         // return allocated products ids
-        return productsRepository.saveAllAndFlush(updatedProducts).stream().map(Product::getId).collect(Collectors.toList());
+        var allocatedProducts = productsRepository.saveAllAndFlush(updatedProducts).stream()
+                .map(Product::getId)
+                .collect(Collectors.toList());
+
+        log.info("Products allocated: " + allocatedProducts);
+
+        return allocatedProducts;
     }
 
     /**
@@ -75,33 +87,45 @@ public class ProductsService {
      *
      * <p>
      * If any of the above conditions is unsatisfied (e.g. invalid id)
-     * the transaction is aborted, runtime exception is thrown
+     * the transaction is rolled back and runtime exception is thrown
      * </p>
      */
     @Transactional(rollbackFor = RuntimeException.class)
     public List<UUID> deallocateProducts(List<OrderedItemRequestDTO> requiredProducts) {
         // id correctness check
-        checkIds(requiredProducts);
+        var incorrectIds = checkIds(requiredProducts);
+        if (!incorrectIds.isEmpty()) {
+            log.info("Deallocation failed. Incorrect ids: " + incorrectIds);
+            throw new IllegalArgumentException("Deallocation failed. Incorrect id found.");
+        }
 
         // products deallocation
         var updatedProducts = new ArrayList<Product>();
         for (var item : requiredProducts) {
             var productId = item.getProductId();
             var requiredQuantity = item.getQuantity();
-            var product = productsRepository.getReferenceById(productId);
+            var product = productsRepository.findById(productId).orElseThrow();
             product.setQuantity(product.getQuantity() + requiredQuantity);
             updatedProducts.add(product);
         }
+        log.debug("Updated products to deallocate: " + updatedProducts);
 
         // return deallocated products ids
-        return productsRepository.saveAllAndFlush(updatedProducts).stream().map(Product::getId).collect(Collectors.toList());
+        var deallocatedProducts = productsRepository.saveAllAndFlush(updatedProducts).stream()
+                .map(Product::getId)
+                .collect(Collectors.toList());
+
+        log.info("Products deallocated: " + deallocatedProducts);
+
+        return deallocatedProducts;
     }
 
     /**
      * checks if required products exist (exists by id)
+     *
      * @param requiredProducts list of required order items (unchecked)
      */
-    private void checkIds(List<OrderedItemRequestDTO> requiredProducts) {
+    private List<UUID> checkIds(List<OrderedItemRequestDTO> requiredProducts) {
         var incorrectIds = new ArrayList<UUID>();
         for (var item : requiredProducts) {
             var productId = item.getProductId();
@@ -109,9 +133,6 @@ public class ProductsService {
                 incorrectIds.add(productId);
             }
         }
-        if (!incorrectIds.isEmpty()) {
-            throw new IllegalArgumentException("Invalid product ids: " + incorrectIds);
-        }
+        return incorrectIds;
     }
-
 }

@@ -4,11 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import ru.hse.elarateam.dto.request.OrderedItemRequestDTO;
 import ru.hse.elarateam.model.Product;
 import ru.hse.elarateam.repositories.ProductsRepository;
 import ru.hse.elarateam.services.ProductsService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@ActiveProfiles("local-dev")
 public class ElaraProductsApplicationTests {
 
     @Autowired
@@ -24,15 +27,57 @@ public class ElaraProductsApplicationTests {
     @Autowired
     private ProductsService productsService;
 
-    @Test
-    public void contextLoads() {
-    }
-
     @BeforeEach
     public void setUp() {
-        productsRepository.save(Product.builder().name("product1").quantity(10L).build());
-        productsRepository.save(Product.builder().name("product12").quantity(10L).build());
+        productsRepository.deleteAll();
+        productsRepository.save(Product.builder()
+                .upc("43cfa7bd-a382-4e6d-8eb2-e0fdfea37cb5")
+                .name("product1")
+                .price(new BigDecimal("1234.99"))
+                .discount(30)
+                .description("description1")
+                .brand("abibas")
+                .quantity(10L)
+                .countryOfOrigin("Russia")
+                .sizeUS(42)
+                .sizeUK(42)
+                .sizeEUR(42)
+                .height(42)
+                .length(42)
+                .width(42)
+                .weight(42)
+                .build());
+        productsRepository.save(Product.builder()
+                .upc("43cfa7bd-a382-4e6d-8eb2-e0fdfea37adf")
+                .name("product2")
+                .price(new BigDecimal("12354.99"))
+                .discount(30)
+                .description("description2")
+                .brand("noik")
+                .quantity(10L)
+                .countryOfOrigin("Russia")
+                .sizeUS(42)
+                .sizeUK(42)
+                .sizeEUR(42)
+                .height(42)
+                .length(42)
+                .width(42)
+                .weight(42)
+                .build());
         productsRepository.flush();
+    }
+
+    @Test
+    public void contextLoads() {
+        assertEquals(2, productsRepository.findAll().size());
+    }
+
+    @Test
+    public void testDeleted() {
+        var products = productsRepository.findAll();
+
+        assertEquals(false, products.get(0).getDeleted());
+        assertEquals(false, products.get(1).getDeleted());
     }
 
     @Test
@@ -44,7 +89,8 @@ public class ElaraProductsApplicationTests {
                 OrderedItemRequestDTO.builder().productId(uuid1).quantity(5L).build(),
                 OrderedItemRequestDTO.builder().productId(uuid2).quantity(5L).build())));
 
-        assertEquals("Invalid product ids: " + List.of(uuid1, uuid2), thrown.getMessage());
+        assertEquals(2, productsRepository.findAll().size());
+        assertEquals("Allocation failed. Incorrect id found.", thrown.getMessage());
     }
 
     @Test
@@ -57,7 +103,8 @@ public class ElaraProductsApplicationTests {
                 OrderedItemRequestDTO.builder().productId(uuid1).quantity(100L).build(),
                 OrderedItemRequestDTO.builder().productId(uuid2).quantity(100L).build())));
 
-        assertEquals("Insufficient quantity of these products: " + List.of(uuid1, uuid2), thrown.getMessage());
+        assertEquals(2, productsRepository.findAll().size());
+        assertEquals("Allocation failed. Insufficient quantity found.", thrown.getMessage());
     }
 
     @Test
@@ -71,9 +118,9 @@ public class ElaraProductsApplicationTests {
                 OrderedItemRequestDTO.builder().productId(uuid2).quantity(5L).build()));
 
         assertEquals(List.of(uuid1, uuid2), allocatedProducts);
-        //todo fix LazyInitializationException
-//        assertEquals(5L, productsRepository.getReferenceById(uuid1).getQuantity());
-//        assertEquals(5L, productsRepository.getReferenceById(uuid2).getQuantity());
+        assertEquals(2, productsRepository.findAll().size());
+        assertEquals(5L, productsRepository.findById(uuid1).orElseThrow().getQuantity());
+        assertEquals(5L, productsRepository.findById(uuid2).orElseThrow().getQuantity());
     }
 
     @Test
@@ -85,7 +132,8 @@ public class ElaraProductsApplicationTests {
                 OrderedItemRequestDTO.builder().productId(uuid1).quantity(5L).build(),
                 OrderedItemRequestDTO.builder().productId(uuid2).quantity(5L).build())));
 
-        assertEquals("Invalid product ids: " + List.of(uuid1, uuid2), thrown.getMessage());
+        assertEquals(2, productsRepository.findAll().size());
+        assertEquals("Deallocation failed. Incorrect id found.", thrown.getMessage());
     }
     @Test
     public void testDeallocateProducts() {
@@ -98,8 +146,8 @@ public class ElaraProductsApplicationTests {
                 OrderedItemRequestDTO.builder().productId(uuid2).quantity(5L).build()));
 
         assertEquals(List.of(uuid1, uuid2), deallocatedProducts);
-        //todo fix LazyInitializationException
-//        assertEquals(15L, productsRepository.getReferenceById(uuid2).getQuantity());
-//        assertEquals(15L, productsRepository.getReferenceById(uuid2).getQuantity());
+        assertEquals(2, productsRepository.findAll().size());
+        assertEquals(15L, productsRepository.findById(uuid1).orElseThrow().getQuantity());
+        assertEquals(15L, productsRepository.findById(uuid2).orElseThrow().getQuantity());
     }
 }

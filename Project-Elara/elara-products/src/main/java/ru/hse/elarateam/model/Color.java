@@ -1,12 +1,20 @@
 package ru.hse.elarateam.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-@Data
-@Entity
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Builder
 @Table(name = "colors")
 public class Color {
 
@@ -14,7 +22,26 @@ public class Color {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String name;
 
+    @Column(length = 7, columnDefinition = "varchar(7)", nullable = false)
     private String hex;
+
+    @ManyToMany(mappedBy = "colors")
+    @ToString.Exclude
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Color color = (Color) o;
+        return getId() != null && Objects.equals(getId(), color.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

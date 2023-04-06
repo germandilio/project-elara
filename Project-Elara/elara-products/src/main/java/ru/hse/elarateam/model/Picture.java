@@ -1,14 +1,18 @@
 package ru.hse.elarateam.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import java.util.UUID;
+import java.util.Objects;
 
-@Data
-@Entity
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Builder
 @Table(name = "pictures")
 public class Picture {
 
@@ -16,7 +20,23 @@ public class Picture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private UUID productId;
-
+    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String uri;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false, unique = true)
+    private Product product;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Picture picture = (Picture) o;
+        return getId() != null && Objects.equals(getId(), picture.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
