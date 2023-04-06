@@ -28,7 +28,7 @@ public class Color {
     @Column(length = 7, columnDefinition = "varchar(7)", nullable = false)
     private String hex;
 
-    @ManyToMany(mappedBy = "colors")
+    @ManyToMany(mappedBy = "colors", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Product> products = new LinkedHashSet<>();
 

@@ -25,7 +25,7 @@ public class Sport {
     @Column(length = 32, columnDefinition = "varchar(32)", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "sports")
+    @ManyToMany(mappedBy = "sports", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Product> products = new LinkedHashSet<>();
 

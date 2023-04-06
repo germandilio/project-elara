@@ -43,6 +43,9 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    /**
+     * Discount in percents
+     */
     private Integer discount;
 
     @Column(length = 1024, columnDefinition = "varchar(1024)", nullable = false)
@@ -66,28 +69,28 @@ public class Product {
     @Column(nullable = false)
     private Integer sizeEUR;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "products_sports",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "sports_id"))
     @ToString.Exclude
     private Set<Sport> sports = new LinkedHashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "products_colors",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "colors_id"))
     @ToString.Exclude
     private Set<Color> colors = new LinkedHashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "products_features",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "features_id"))
     @ToString.Exclude
     private Set<Feature> features = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Picture> pictures = new LinkedHashSet<>();
 

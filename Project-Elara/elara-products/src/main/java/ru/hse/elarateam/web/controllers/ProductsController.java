@@ -22,9 +22,10 @@ public class ProductsController {
         // проверка соответствия userId в запросе с полученным
         // аллокация (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
+        var allocatedProducts = productsService.allocateProducts(requiredProducts);
         return new ResponseEntity<>(ResponsePayloadDTO.builder()
                 .message("Products allocated.")
-                .data(productsService.allocateProducts(requiredProducts))
+                .data(allocatedProducts)
                 .build(), HttpStatus.OK);
     }
 
@@ -35,9 +36,10 @@ public class ProductsController {
         // проверка соответствия userId в запросе с полученным
         // деаллокация (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
+        var deallocatedProducts = productsService.deallocateProducts(requiredProducts);
         return new ResponseEntity<>(ResponsePayloadDTO.builder()
                 .message("Products deallocated.")
-                .data(productsService.deallocateProducts(requiredProducts))
+                .data(deallocatedProducts)
                 .build(), HttpStatus.OK);
     }
 }

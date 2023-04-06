@@ -20,11 +20,12 @@ public class Picture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
+    @Column(length = 256, columnDefinition = "varchar(256)", nullable = false)
     private String uri;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false, unique = true)
+    @ToString.Exclude
     private Product product;
 
     @Override

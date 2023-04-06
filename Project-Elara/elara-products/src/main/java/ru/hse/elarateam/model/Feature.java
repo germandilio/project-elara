@@ -28,7 +28,7 @@ public class Feature {
     @Column(length = 256, columnDefinition = "varchar(256)", nullable = false)
     private String description;
 
-    @ManyToMany(mappedBy = "features")
+    @ManyToMany(mappedBy = "features", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Product> products = new LinkedHashSet<>();
 
