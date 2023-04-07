@@ -21,8 +21,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "elarateam")
+@Table(name = "products")
 @Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id = ?")
 public class Product {
     @Id
     @GeneratedValue(generator = "UUID")

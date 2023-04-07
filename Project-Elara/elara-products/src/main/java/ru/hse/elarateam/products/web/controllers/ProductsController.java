@@ -8,6 +8,9 @@ import ru.hse.elarateam.products.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.products.dto.response.ResponsePayloadDTO;
 import ru.hse.elarateam.products.services.ProductsService;
 
+import java.util.List;
+import java.util.UUID;
+
 @RequestMapping("/v1/products")
 @RestController
 @RequiredArgsConstructor
@@ -16,30 +19,28 @@ public class ProductsController {
     private final ProductsService productsService;
 
     @PostMapping("/allocate")
-    public ResponseEntity<?> placeOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> placeOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         // todo доделать
         // проверка jwt token'a, получение userId
         // проверка соответствия userId в запросе с полученным
         // аллокация (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
         var allocatedProducts = productsService.allocateProducts(requiredProducts);
-        return new ResponseEntity<>(ResponsePayloadDTO.builder()
-                .message("Products allocated.")
-                .data(allocatedProducts)
-                .build(), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ResponsePayloadDTO<>("Products allocated.", allocatedProducts),
+                HttpStatus.OK);
     }
 
     @PostMapping("/deallocate")
-    public ResponseEntity<?> deallocateProducts(@RequestBody OrderRequestDTO orderRequestDTO) {
+    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> deallocateProducts(@RequestBody OrderRequestDTO orderRequestDTO) {
         // todo доделать
         // проверка jwt token'a, получение userId
         // проверка соответствия userId в запросе с полученным
         // деаллокация (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
         var deallocatedProducts = productsService.deallocateProducts(requiredProducts);
-        return new ResponseEntity<>(ResponsePayloadDTO.builder()
-                .message("Products deallocated.")
-                .data(deallocatedProducts)
-                .build(), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ResponsePayloadDTO<>("Products deallocated.", deallocatedProducts),
+                HttpStatus.OK);
     }
 }

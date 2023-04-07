@@ -1,4 +1,4 @@
-package ru.hse.elarateam.admin_console;
+package ru.hse.elarateam.adminconsole;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

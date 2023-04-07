@@ -1,11 +1,13 @@
 package ru.hse.elarateam.products.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ResponsePayloadDTO {
+@AllArgsConstructor
+public class ResponsePayloadDTO<T> {
     private String message;
-    private Object data;
+    private T data;
 }

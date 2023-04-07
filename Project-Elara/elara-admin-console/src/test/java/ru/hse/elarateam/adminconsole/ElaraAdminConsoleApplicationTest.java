@@ -1,4 +1,4 @@
-package ru.hse.elarateam.admin_console;
+package ru.hse.elarateam.adminconsole;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
