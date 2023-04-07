@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.users.dto.*;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
+import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
 import ru.hse.elarateam.users.web.services.UsersService;
+import ru.hse.elarateam.users.web.services.tokens.ServiceTokenUtils;
+import ru.hse.elarateam.users.web.services.tokens.emailservice.EmailServiceInfo;
 
 import java.util.UUID;
 
@@ -20,11 +23,12 @@ public class UsersController {
 
     private final UsersService usersService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody @Valid UserRegisterRequestDTO userRegisterRequest) {
+    private final ServiceTokenUtils serviceTokenUtils;
 
-        // TODO call login service and return jwt token as response
+    @PostMapping
+    public ResponseEntity<UserInfoDTO> register(@RequestBody @Valid UserRegisterRequestDTO userRegisterRequest) {
+        var userInfo = usersService.saveUser(userRegisterRequest);
+        return new ResponseEntity<>(userInfo, HttpStatus.CREATED);
     }
 
     @PostMapping("/login-available")
@@ -43,48 +47,62 @@ public class UsersController {
 
     // TODO rate limiter
     @PostMapping("/forgot-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void forgotPassword(@RequestParam String login) {
-        // TODO create token and send email
+        usersService.forgotPassword(login);
     }
 
     @PostMapping("/reset-password")
-    public void resetPassword(@RequestParam String token) {
-
-        // call login service and return jwt token as response
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resetPassword(@RequestBody @Valid ResetPasswordRequestDTO resetPasswordRequest) {
+        usersService.resetPassword(resetPasswordRequest);
     }
 
+    // TODO NEED jwt token
     @PutMapping("/change-password")
-    public void changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest, @RequestHeader("Authorization") String jwtToken) {
-        // check to skip barer prefix
-        jwtToken = jwtToken.substring(7);
-
-        // TODO check if old password is correct
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest) {
+        usersService.changePassword(changePasswordRequest);
     }
 
     @PostMapping("/verify-email")
     public void verifyEmail(@RequestBody String verificationToken) {
-
+        usersService.verifyEmail(verificationToken);
     }
 
+    // TODO NEED jwt token
     @PutMapping
-    public void updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile, @RequestHeader("Authorization") String jwtToken) {
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile) {
+        usersService.updateUserProfile(userProfile);
     }
 
+    // TODO NEED jwt token
     @GetMapping("/profile/{userId}")
-    public UserProfileDTO getUserProfileById(@PathVariable UUID userId, @RequestHeader("Authorization") String jwtToken) {
-        return null;
+    public ResponseEntity<UserProfileDTO> getUserProfileById(@PathVariable UUID userId) {
+        var userProfile = usersService.getUserProfileById(userId);
+        return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
-    public UserInfoDTO getUserInfoById(@PathVariable UUID userId, @RequestHeader("Authorization") String jwtToken) {
-        // TODO check service token and return user info
-        return null;
+    public ResponseEntity<UserInfoDTO> getUserInfoById(@PathVariable UUID userId, @RequestHeader("Authorization") String serviceToken) {
+        if (serviceToken == null || !serviceToken.startsWith("Bearer: ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        boolean isValid = serviceTokenUtils.validateToken(serviceToken.substring(7), new EmailServiceInfo());
+        if (!isValid) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        var userInfo = usersService.getUserInfoById(userId);
+        return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
+    // TODO NEED jwt token
     @DeleteMapping("/{userId}")
-    public void deleteUserById(@PathVariable UUID userId, @RequestHeader("Authorization") String jwtToken) {
-        // soft delete
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUserById(@PathVariable UUID userId) {
+        usersService.deleteUserById(userId);
     }
 }

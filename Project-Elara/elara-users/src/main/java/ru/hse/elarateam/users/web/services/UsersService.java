@@ -3,6 +3,7 @@ package ru.hse.elarateam.users.web.services;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
 import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
+import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
 
@@ -10,9 +11,9 @@ import java.util.UUID;
 
 public interface UsersService {
 
-    void saveUser(UserRegisterRequestDTO userRegisterRequest);
+    UserInfoDTO saveUser(UserRegisterRequestDTO userRegisterRequest);
 
-    UserProfileDTO updateUserProfile(UserProfileUpdateRequestDTO userProfileUpdateRequest);
+    void updateUserProfile(UserProfileUpdateRequestDTO userProfileUpdateRequest);
 
     UserProfileDTO getUserProfileById(UUID userId);
 
@@ -21,8 +22,6 @@ public interface UsersService {
     void deleteUserById(UUID userId);
 
     void changePassword(ChangePasswordRequestDTO changePasswordRequest);
-
-    UserInfoDTO getUserInfoByResetPasswordToken(String token);
 
     void verifyEmail(String verificationToken);
 
@@ -33,5 +32,7 @@ public interface UsersService {
      */
     boolean checkLoginAvailability(String login);
 
-    void resetPassword(String email);
+    void forgotPassword(String email);
+
+    void resetPassword(ResetPasswordRequestDTO resetPasswordRequest);
 }

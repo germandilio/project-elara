@@ -2,6 +2,7 @@ package ru.hse.elarateam.users.web.controllers.advice;
 
 import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,6 +42,12 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> handleException(FeignException e) {
         log.warn("Feign exception: {}", e.getMessage());
         return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> handleException(ValidationException e) {
+        log.info("Validation exception: {}", e.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
 }

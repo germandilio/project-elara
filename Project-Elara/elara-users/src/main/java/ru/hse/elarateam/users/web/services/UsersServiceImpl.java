@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
 import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
+import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
 import ru.hse.elarateam.users.web.services.email.EmailService;
@@ -28,15 +29,16 @@ public class UsersServiceImpl implements UsersService {
     private final TokenGenerator tokenGenerator;
 
     @Override
-    public void saveUser(UserRegisterRequestDTO userRegisterRequest) {
+    public UserInfoDTO saveUser(UserRegisterRequestDTO userRegisterRequest) {
         final var user = usersDBService.saveUser(userRegisterRequest);
 
         final String token = tokenGenerator.generate();
         emailService.sendEmailVerification(user.getUserId(), token);
+        return user;
     }
 
     @Override
-    public UserProfileDTO updateUserProfile(UserProfileUpdateRequestDTO userProfileUpdateRequest) {
+    public void updateUserProfile(UserProfileUpdateRequestDTO userProfileUpdateRequest) {
         final var userBeforeUpdate = usersDBService.getUserInfoById(userProfileUpdateRequest.getUserId());
         final var userOldEmail = userBeforeUpdate.getEmail();
 
@@ -48,8 +50,6 @@ public class UsersServiceImpl implements UsersService {
             log.trace("Generated token: {}", token);
             emailService.sendEmailVerification(userBeforeUpdate.getUserId(), token);
         }
-
-        return userProfile;
     }
 
     @Override
@@ -73,11 +73,6 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserInfoDTO getUserInfoByResetPasswordToken(String token) {
-        return usersDBService.getUserInfoByResetPasswordToken(token);
-    }
-
-    @Override
     public void verifyEmail(String verificationToken) {
         usersDBService.verifyEmail(verificationToken);
     }
@@ -88,12 +83,22 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void resetPassword(String email) {
-        log.debug("Generate token for user with email {} and send reset password email", email);
+    public void forgotPassword(String login) {
+        if (login == null || login.isEmpty()) {
+            throw new IllegalArgumentException("Login cannot be null or empty");
+        }
+
+        log.debug("Generate token for user with login {} and send reset password login", login);
         final String token = tokenGenerator.generate();
         log.trace("Generated token: {}", token);
-        final var user = usersDBService.saveResetPasswordToken(token, passwordTokenExpirationTimeHours, email);
+        final var user = usersDBService.saveResetPasswordToken(token, passwordTokenExpirationTimeHours, login);
 
         emailService.sendResetPasswordEmail(user.getUserId(), token);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequestDTO resetPasswordRequest) {
+        log.debug("Reset password for user with token {}", resetPasswordRequest.getResetPasswordToken());
+        usersDBService.resetPassword(resetPasswordRequest);
     }
 }

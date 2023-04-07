@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
 import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
+import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
 import ru.hse.elarateam.users.model.RoleEnum;
@@ -174,24 +175,6 @@ public class UserDBServiceImpl implements UsersDBService {
         usersServiceInfoRepository.saveAndFlush(userInfo);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public UserInfoDTO getUserInfoByResetPasswordToken(final String token) {
-        final var persistentUserInfo = usersServiceInfoRepository.findByPasswordResetToken(token);
-        if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with reset password token " + token + " not found");
-        }
-
-        final var userInfo = persistentUserInfo.get();
-        // TODO check convert between LocalDateTime and Timestamp
-        if (userInfo.getPasswordResetTokenExpiredAt().toLocalDateTime().isBefore(LocalDateTime.now())) {
-            log.trace("Reset password token expired for user {}", userInfo.getLogin());
-            throw new IllegalArgumentException("Reset password token expired");
-        }
-
-        return userMapper.userServiceInfoToUserInfoDTO(userInfo);
-    }
-
     @Transactional
     @Override
     public void verifyEmail(final String verificationToken) {
@@ -226,10 +209,10 @@ public class UserDBServiceImpl implements UsersDBService {
 
     @Transactional
     @Override
-    public UserInfoDTO saveResetPasswordToken(String token, int expirationTimeHours, String email) {
-        final var persistentUserInfo = usersServiceInfoRepository.findByLogin(email);
+    public UserInfoDTO saveResetPasswordToken(String token, int expirationTimeHours, String login) {
+        final var persistentUserInfo = usersServiceInfoRepository.findByLogin(login);
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with email " + email + " not found");
+            throw new IllegalArgumentException("User with login " + login + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -243,4 +226,26 @@ public class UserDBServiceImpl implements UsersDBService {
         final var updatedUser = usersServiceInfoRepository.saveAndFlush(userInfo);
         return userMapper.userServiceInfoToUserInfoDTO(updatedUser);
     }
+
+    @Transactional
+    @Override
+    public void resetPassword(ResetPasswordRequestDTO resetPasswordRequest) {
+        final var persistentUserInfo = usersServiceInfoRepository.findByPasswordResetToken(resetPasswordRequest.getResetPasswordToken());
+        if (persistentUserInfo.isEmpty()) {
+            throw new IllegalArgumentException("User with reset password token " + resetPasswordRequest.getResetPasswordToken() + " not found");
+        }
+
+        final var userInfo = persistentUserInfo.get();
+        // TODO check convert between LocalDateTime and Timestamp
+        if (userInfo.getPasswordResetTokenExpiredAt().toLocalDateTime().isBefore(LocalDateTime.now())) {
+            log.trace("Reset password token expired for user {}", userInfo.getLogin());
+            throw new IllegalArgumentException("Reset password token expired");
+        }
+
+        userInfo.setPassword(resetPasswordRequest.getNewPassword());
+        log.trace("Changed password for user {}", userInfo.getLogin());
+
+        usersServiceInfoRepository.saveAndFlush(userInfo);
+    }
+
 }
