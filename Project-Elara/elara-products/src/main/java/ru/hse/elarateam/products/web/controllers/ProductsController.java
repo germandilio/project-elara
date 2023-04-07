@@ -11,8 +11,8 @@ import ru.hse.elarateam.products.services.ProductsService;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/v1/products")
 @RestController
+@RequestMapping("/v1/products")
 @RequiredArgsConstructor
 public class ProductsController {
 
