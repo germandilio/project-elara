@@ -11,7 +11,8 @@ import ru.hse.elarateam.adminconsole.dto.SportInfoDTO;
 import java.util.List;
 import java.util.UUID;
 
-@Controller("/v1/adminconsole")
+@RequestMapping("/v1/admin-console")
+@RestController
 public class AdminConsoleController {
     @PostMapping("/create-product")
     public ResponseEntity<ProductInfoDTO> createProduct(@RequestBody ProductInfoDTO productInfoDTO) {
