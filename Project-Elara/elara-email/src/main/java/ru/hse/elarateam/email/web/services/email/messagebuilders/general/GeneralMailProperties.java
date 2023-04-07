@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * General properties for all types of transactional emails.
@@ -15,16 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 @Setter
 @ToString
 @NoArgsConstructor
+@Component
 public class GeneralMailProperties {
-    @Value("${elara.mailing-service.emails.from-email}")
-    private String fromEmail;
-
-    @Value("${elara.mailiing-service.emails.product-name}")
-    private String productName;
-
-    @Value("${elara.mailiing-service.emails.company-name}")
-    private String companyName;
-
-    @Value("${elara.mailiing-service.emails.company-address}")
-    private String companyAddress;
 }

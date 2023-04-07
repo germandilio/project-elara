@@ -16,8 +16,8 @@ public class UserServiceFeign implements UserService {
 
     @Override
     public UserDTO getUserById(UUID userId) {
-        var userDTO = userServiceFeignClient.getUserEmailById(userId);
-        if (userDTO.getUserId() != userId) {
+        var userDTO = userServiceFeignClient.getUserById(userId);
+        if (!userDTO.getUserId().equals(userId)) {
             log.error("User ID mismatch, got {} from users service, expected {}", userDTO.getUserId(), userId);
         }
         log.debug("User is {}", userDTO);
