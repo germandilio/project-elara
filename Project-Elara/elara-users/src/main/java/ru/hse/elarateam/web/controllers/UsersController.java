@@ -1,5 +1,6 @@
 package ru.hse.elarateam.web.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,9 @@ public class UsersController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody UserRegisterRequestDTO userRegisterRequest) {
+    public void register(@RequestBody @Valid UserRegisterRequestDTO userRegisterRequest) {
 
+        // TODO call login service and return jwt token as response
     }
 
     @PostMapping("/login-available")
@@ -35,14 +37,14 @@ public class UsersController {
         if (isAvailable) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Login is not available", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Login is not unavailable", HttpStatus.CONFLICT);
         }
     }
 
     // TODO rate limiter
     @PostMapping("/forgot-password")
     public void forgotPassword(@RequestParam String login) {
-
+        // TODO create token and send email
     }
 
     @PostMapping("/reset-password")
@@ -52,7 +54,7 @@ public class UsersController {
     }
 
     @PutMapping("/change-password")
-    public void changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequest, @RequestHeader("Authorization") String jwtToken) {
+    public void changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest, @RequestHeader("Authorization") String jwtToken) {
         // check to skip barer prefix
         jwtToken = jwtToken.substring(7);
 
@@ -65,7 +67,7 @@ public class UsersController {
     }
 
     @PutMapping
-    public void updateProfile(@RequestBody UserProfileUpdateRequestDTO userProfile, @RequestHeader("Authorization") String jwtToken) {
+    public void updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile, @RequestHeader("Authorization") String jwtToken) {
 
     }
 

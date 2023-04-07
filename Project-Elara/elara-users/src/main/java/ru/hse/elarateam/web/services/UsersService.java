@@ -24,8 +24,6 @@ public interface UsersService {
 
     UserInfoDTO getUserInfoByResetPasswordToken(String token);
 
-    UserInfoDTO getUserInfoById();
-
     void verifyEmail(String verificationToken);
 
     /**
@@ -34,4 +32,6 @@ public interface UsersService {
      * @return true if login is available, false otherwise
      */
     boolean checkLoginAvailability(String login);
+
+    void resetPassword(String email);
 }

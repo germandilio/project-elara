@@ -1,8 +1,12 @@
 package ru.hse.elarateam.web.services.validation;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-public class SimplePasswordValidator implements PasswordValidator {
+@Component
+public class SimplePasswordValidator implements ConstraintValidator<PasswordConstraint, String> {
     @Value("${elara.validation.password.min-length}")
     private int minPasswordLength;
 
@@ -10,10 +14,11 @@ public class SimplePasswordValidator implements PasswordValidator {
     private int maxPasswordLength;
 
     @Override
-    public boolean isValid(String password) {
+    public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext) {
         if (password == null) {
             return false;
         }
         return password.length() >= 6 && password.length() <= 80 && !password.isBlank();
+
     }
 }

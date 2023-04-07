@@ -1,5 +1,6 @@
 package ru.hse.elarateam.web.repositories;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,10 @@ import java.util.UUID;
 
 public interface UsersServiceInfoRepository extends JpaRepository<UserServiceInfo, UUID> {
     Optional<UserServiceInfo> findByLogin(@NonNull String login);
+
+    Optional<UserServiceInfo> findByEmailVerificationToken(@NotNull String verificationToken);
+
+    Optional<UserServiceInfo> findByPasswordResetToken(@NonNull String passwordResetToken);
 
     @Override
     @Query("UPDATE UserServiceInfo user SET user.deleted = true WHERE user.id = ?1")
