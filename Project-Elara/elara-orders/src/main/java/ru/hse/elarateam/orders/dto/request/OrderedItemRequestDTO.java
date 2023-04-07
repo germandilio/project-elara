@@ -1,4 +1,4 @@
-package ru.hse.elarateam.products.dto.request;
+package ru.hse.elarateam.orders.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
