@@ -22,8 +22,8 @@ public class OrdersController {
         return null;
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<OrderResponseDTO> getOrderById(@RequestParam("orderId") UUID orderId) {
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable("orderId") UUID orderId) {
         return null;
     }
 
