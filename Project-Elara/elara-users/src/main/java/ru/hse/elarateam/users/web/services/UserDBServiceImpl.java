@@ -48,12 +48,10 @@ public class UserDBServiceImpl implements UsersDBService {
                 .orElseThrow(() -> new IllegalStateException("Role " + RoleEnum.EMAIL_NOT_VERIFIED + " not found"));
 
         final var userProfile = userMapper.userRegisterRequestDTOtoUserProfile(userRegisterRequest);
-        final var savedProfile = usersProfileRepository.saveAndFlush(userProfile);
 
         final var userServiceInfo = UserServiceInfo.builder()
                 .login(userRegisterRequest.getLogin())
                 .password(userRegisterRequest.getPassword())
-                .userProfile(savedProfile)
                 .role(initialRole)
                 .build();
 
@@ -61,6 +59,9 @@ public class UserDBServiceImpl implements UsersDBService {
         log.trace("Set default role {} to user with login {}", initialRole.getRole(), userRegisterRequest.getLogin());
 
         final var persistentUser = usersServiceInfoRepository.saveAndFlush(userServiceInfo);
+        userProfile.setId(persistentUser.getId());
+        final var savedProfile = usersProfileRepository.saveAndFlush(userProfile);
+
         return userMapper.userServiceInfoToUserInfoDTO(persistentUser);
     }
 
@@ -246,6 +247,18 @@ public class UserDBServiceImpl implements UsersDBService {
         log.trace("Changed password for user {}", userInfo.getLogin());
 
         usersServiceInfoRepository.saveAndFlush(userInfo);
+    }
+
+    @Transactional
+    @Override
+    public void saveVerificationToken(UUID userId, String token) {
+        usersServiceInfoRepository.findById(userId)
+                .ifPresentOrElse(userInfo -> {
+                    userInfo.setEmailVerificationToken(token);
+                    usersServiceInfoRepository.saveAndFlush(userInfo);
+                }, () -> {
+                    throw new IllegalArgumentException("User with id " + userId + " not found");
+                });
     }
 
 }

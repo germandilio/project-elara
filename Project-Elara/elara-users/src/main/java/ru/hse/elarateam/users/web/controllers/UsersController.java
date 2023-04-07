@@ -66,7 +66,7 @@ public class UsersController {
     }
 
     @PostMapping("/verify-email")
-    public void verifyEmail(@RequestBody String verificationToken) {
+    public void verifyEmail(@RequestParam("token") String verificationToken) {
         usersService.verifyEmail(verificationToken);
     }
 
@@ -86,7 +86,7 @@ public class UsersController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserInfoDTO> getUserInfoById(@PathVariable UUID userId, @RequestHeader("Authorization") String serviceToken) {
-        if (serviceToken == null || !serviceToken.startsWith("Bearer: ")) {
+        if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 

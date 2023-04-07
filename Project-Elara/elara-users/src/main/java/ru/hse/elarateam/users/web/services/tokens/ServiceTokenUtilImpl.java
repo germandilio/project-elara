@@ -10,6 +10,7 @@ import ru.hse.elarateam.users.web.services.tokens.emailservice.EmailServiceInfo;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 
@@ -36,13 +37,11 @@ public class ServiceTokenUtilImpl implements ServiceTokenUtils {
 
     @Override
     public boolean validateToken(String token, EmailServiceInfo emailServiceInfo) {
-        final String subject = getClaimFromToken(token, Claims::getSubject);
-        final String issuer = getClaimFromToken(token, Claims::getIssuer);
-        final String audience = getClaimFromToken(token, Claims::getAudience);
+        final var body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 
-        return (subject.equals(emailServiceInfo.getSub()) &&
-                issuer.equals(emailServiceInfo.getIss()) &&
-                audience.equals(emailServiceInfo.getAud()));
+        return (Objects.equals(body.getSubject(), emailServiceInfo.getSub()) &&
+                Objects.equals(body.getIssuer(), emailServiceInfo.getIss()) &&
+                Objects.equals(body.getAudience(),emailServiceInfo.getAud()));
 
     }
 

@@ -49,8 +49,6 @@ public class Role {
     @UpdateTimestamp
     private Timestamp lastUpdateTime;
 
-    @Version
-    private Integer version;
 
     @Override
     public boolean equals(Object o) {

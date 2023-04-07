@@ -17,12 +17,14 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
         log.warn("Exception: {}", e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handleException(ConstraintViolationException e) {
         log.warn("Constraint violation exception : {}", e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
@@ -35,12 +37,14 @@ public class CustomExceptionHandler {
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<?> handleException(IllegalStateException e) {
         log.warn("Illegal state exception: {}", e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<?> handleException(FeignException e) {
         log.warn("Feign exception: {}", e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
