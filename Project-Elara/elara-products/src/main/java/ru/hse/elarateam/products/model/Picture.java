@@ -1,4 +1,4 @@
-package ru.hse.products.model;
+package ru.hse.elarateam.products.model;
 
 import jakarta.persistence.*;
 import lombok.*;

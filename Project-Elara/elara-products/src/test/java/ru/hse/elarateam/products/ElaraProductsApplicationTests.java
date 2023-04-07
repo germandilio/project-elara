@@ -1,4 +1,4 @@
-package ru.hse.products;
+package ru.hse.elarateam.products;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import ru.hse.products.dto.request.OrderedItemRequestDTO;
-import ru.hse.products.model.Product;
-import ru.hse.products.repositories.ProductsRepository;
-import ru.hse.products.services.ProductsService;
+import ru.hse.elarateam.products.dto.request.OrderedItemRequestDTO;
+import ru.hse.elarateam.products.model.Product;
+import ru.hse.elarateam.products.repositories.ProductsRepository;
+import ru.hse.elarateam.products.services.ProductsService;
 
 import java.math.BigDecimal;
 import java.util.List;

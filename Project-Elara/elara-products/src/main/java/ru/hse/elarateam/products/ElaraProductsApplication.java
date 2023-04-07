@@ -1,12 +1,12 @@
-package ru.hse.products;
+package ru.hse.elarateam.products;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import ru.hse.products.model.Product;
-import ru.hse.products.repositories.ProductsRepository;
+import ru.hse.elarateam.products.repositories.ProductsRepository;
+import ru.hse.elarateam.products.model.Product;
 
 import java.math.BigDecimal;
 
@@ -56,7 +56,7 @@ public class ElaraProductsApplication {
                     .weight(42)
                     .build());
             productsRepository.flush();
-            log.info(productsRepository.findAll().size() + " products were added to database");
+            log.info(productsRepository.findAll().size() + " elarateam were added to database");
         };
     }
 }

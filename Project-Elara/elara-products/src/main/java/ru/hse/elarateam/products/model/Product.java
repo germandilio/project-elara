@@ -1,4 +1,4 @@
-package ru.hse.products.model;
+package ru.hse.elarateam.products.model;
 
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "products")
+@Table(name = "elarateam")
 @Where(clause = "deleted = false")
 public class Product {
     @Id

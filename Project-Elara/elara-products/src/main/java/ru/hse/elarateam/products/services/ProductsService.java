@@ -1,12 +1,12 @@
-package ru.hse.products.services;
+package ru.hse.elarateam.products.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hse.products.dto.request.OrderedItemRequestDTO;
-import ru.hse.products.model.Product;
-import ru.hse.products.repositories.ProductsRepository;
+import ru.hse.elarateam.products.dto.request.OrderedItemRequestDTO;
+import ru.hse.elarateam.products.model.Product;
+import ru.hse.elarateam.products.repositories.ProductsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +21,13 @@ public class ProductsService {
     private final ProductsRepository productsRepository;
 
     /**
-     * Checks if required products exist (exists by id)
+     * Checks if required elarateam exist (exists by id)
      * Checks if required quantities are suitable (product quantity > required quantity)
-     * Allocates products (product quantity -= required quantity)
-     * returns list of allocated products (ids)
+     * Allocates elarateam (product quantity -= required quantity)
+     * returns list of allocated elarateam (ids)
      *
      * @param requiredProducts list of required order items (unchecked)
-     * @return allocated products ids list
+     * @return allocated elarateam ids list
      * <p>
      * If any of the above conditions is unsatisfied (e.g. invalid id or quantity)
      * the transaction is rolled back and runtime exception is thrown
@@ -56,7 +56,7 @@ public class ProductsService {
             throw new IllegalArgumentException("Allocation failed. Insufficient quantity found.");
         }
 
-        // products allocation
+        // elarateam allocation
         var updatedProducts = new ArrayList<Product>();
         for (var item : requiredProducts) {
             var productId = item.getProductId();
@@ -65,9 +65,9 @@ public class ProductsService {
             product.setQuantity(product.getQuantity() - requiredQuantity);
             updatedProducts.add(product);
         }
-        log.debug("Updated products to allocate: " + updatedProducts);
+        log.debug("Updated elarateam to allocate: " + updatedProducts);
 
-        // return allocated products ids
+        // return allocated elarateam ids
         var allocatedProducts = productsRepository.saveAllAndFlush(updatedProducts).stream()
                 .map(Product::getId)
                 .collect(Collectors.toList());
@@ -78,12 +78,12 @@ public class ProductsService {
     }
 
     /**
-     * Checks if required products exist (exists by id)
-     * Deallocates products (product quantity += required quantity)
-     * returns list of deallocated products (ids)
+     * Checks if required elarateam exist (exists by id)
+     * Deallocates elarateam (product quantity += required quantity)
+     * returns list of deallocated elarateam (ids)
      *
      * @param requiredProducts list of required order items (unchecked)
-     * @return deallocated products ids list
+     * @return deallocated elarateam ids list
      *
      * <p>
      * If any of the above conditions is unsatisfied (e.g. invalid id)
@@ -99,7 +99,7 @@ public class ProductsService {
             throw new IllegalArgumentException("Deallocation failed. Incorrect id found.");
         }
 
-        // products deallocation
+        // elarateam deallocation
         var updatedProducts = new ArrayList<Product>();
         for (var item : requiredProducts) {
             var productId = item.getProductId();
@@ -108,9 +108,9 @@ public class ProductsService {
             product.setQuantity(product.getQuantity() + requiredQuantity);
             updatedProducts.add(product);
         }
-        log.debug("Updated products to deallocate: " + updatedProducts);
+        log.debug("Updated elarateam to deallocate: " + updatedProducts);
 
-        // return deallocated products ids
+        // return deallocated elarateam ids
         var deallocatedProducts = productsRepository.saveAllAndFlush(updatedProducts).stream()
                 .map(Product::getId)
                 .collect(Collectors.toList());
@@ -121,7 +121,7 @@ public class ProductsService {
     }
 
     /**
-     * checks if required products exist (exists by id)
+     * checks if required elarateam exist (exists by id)
      *
      * @param requiredProducts list of required order items (unchecked)
      */

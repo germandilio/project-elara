@@ -1,12 +1,12 @@
-package ru.hse.products.web.controllers;
+package ru.hse.elarateam.products.web.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.products.dto.request.OrderRequestDTO;
-import ru.hse.products.dto.response.ResponsePayloadDTO;
-import ru.hse.products.services.ProductsService;
+import ru.hse.elarateam.products.dto.request.OrderRequestDTO;
+import ru.hse.elarateam.products.dto.response.ResponsePayloadDTO;
+import ru.hse.elarateam.products.services.ProductsService;
 
 @RequestMapping("/v1/products")
 @RestController
