@@ -19,6 +19,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE roles SET deleted=true WHERE id=?")
 @Table(name = "roles")
 public class Role {
     @Id
@@ -38,6 +39,7 @@ public class Role {
     @Column(length = 1024, columnDefinition = "varchar(1024)")
     private String roleDescription;
 
+    @Builder.Default
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = Boolean.FALSE;
 

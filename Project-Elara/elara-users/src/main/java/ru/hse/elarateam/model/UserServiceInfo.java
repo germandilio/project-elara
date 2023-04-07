@@ -21,6 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
+@SQLDelete(sql = "UPDATE user_service_info SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
 @Table(name = "user_service_info")
 public class UserServiceInfo {
@@ -48,7 +49,7 @@ public class UserServiceInfo {
     private String passwordResetToken = null;
 
     @Column(columnDefinition = "timestamp")
-    private Timestamp passwordResetTokenExpirationTime;
+    private Timestamp passwordResetTokenExpiredAt = null;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

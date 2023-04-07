@@ -21,6 +21,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Where(clause = "deleted=false")
+@SQLDelete(sql = "UPDATE user_profiles SET deleted=true WHERE id=?")
 @Table(name = "user_profiles")
 public class UserProfile {
     @Id
