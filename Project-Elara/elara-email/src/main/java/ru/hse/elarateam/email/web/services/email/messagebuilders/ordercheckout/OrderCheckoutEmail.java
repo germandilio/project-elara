@@ -1,12 +1,8 @@
 package ru.hse.elarateam.email.web.services.email.messagebuilders.ordercheckout;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.postmarkapp.postmark.client.data.model.templates.TemplatedMessage;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +11,6 @@ import org.springframework.stereotype.Component;
 import ru.hse.elarateam.email.dto.OrderCheckoutDTO;
 import ru.hse.elarateam.email.web.services.email.messagebuilders.general.EmailBuilder;
 import ru.hse.elarateam.email.web.services.email.messagebuilders.ordercheckout.model.OrderCheckoutModel;
-
-import java.util.Date;
 
 @Slf4j
 @ToString
