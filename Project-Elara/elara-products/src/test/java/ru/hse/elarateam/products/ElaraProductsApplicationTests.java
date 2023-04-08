@@ -136,6 +136,7 @@ public class ElaraProductsApplicationTests {
         assertEquals(2, productsRepository.findAll().size());
         assertEquals("Deallocation failed. Incorrect id found.", thrown.getMessage());
     }
+
     @Test
     public void testDeallocateProducts() {
         var products = productsRepository.findAll();

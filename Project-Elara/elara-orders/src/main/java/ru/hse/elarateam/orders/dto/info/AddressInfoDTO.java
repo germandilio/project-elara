@@ -1,4 +1,4 @@
-package ru.hse.elarateam.orders.dto.response;
+package ru.hse.elarateam.orders.dto.info;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class AddressResponseDTO {
+public class AddressInfoDTO {
     private UUID id;
     private String postalCode;
     private String city;

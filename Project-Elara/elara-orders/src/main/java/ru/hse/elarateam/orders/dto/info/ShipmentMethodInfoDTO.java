@@ -1,4 +1,4 @@
-package ru.hse.elarateam.orders.dto.response;
+package ru.hse.elarateam.orders.dto.info;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class ShipmentMethodResponseDTO {
+public class ShipmentMethodInfoDTO {
     private Integer tariffCode;
     private String tariffName;
     private String tariffDescription;

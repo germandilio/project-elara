@@ -1,8 +1,12 @@
-package ru.hse.elarateam.email.web.services.email;
+package ru.hse.elarateam.web.services.email;
 
 import com.postmarkapp.postmark.client.exception.PostmarkException;
-import ru.hse.elarateam.email.dto.OrderCheckoutDTO;
-import ru.hse.elarateam.email.dto.UserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.hse.elarateam.dto.OrderCheckoutDTO;
+import ru.hse.elarateam.dto.UserDTO;
+import ru.hse.elarateam.web.services.email.messagebuilders.ordercheckout.OrderCheckoutEmailBuilder;
+import ru.hse.elarateam.web.services.email.messagebuilders.resetpassword.ResetPasswordEmailBuilder;
+import ru.hse.elarateam.web.services.email.messagebuilders.verifyemail.VerifyEmailBuilder;
 
 import java.io.IOException;
 

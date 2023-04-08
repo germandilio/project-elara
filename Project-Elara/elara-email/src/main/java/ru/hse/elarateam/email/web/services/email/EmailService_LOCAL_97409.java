@@ -17,8 +17,8 @@ public interface EmailService {
 
 
     /**
-     * @param user    UserDTO object containing user data
-     * @param token   token from user database
+     * @param user  UserDTO object containing user data
+     * @param token token from user database
      * @throws PostmarkException if there is an error while building the message (@see <a href="https://postmarkapp.com/developer/api/overview#error-codes">API Error codes</a>)
      * @throws IOException       if it is internal error while sending message
      */

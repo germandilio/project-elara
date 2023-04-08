@@ -3,7 +3,10 @@ package ru.hse.elarateam.products.web.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.hse.elarateam.products.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.products.dto.response.ResponsePayloadDTO;
 import ru.hse.elarateam.products.services.ProductsService;
@@ -11,8 +14,8 @@ import ru.hse.elarateam.products.services.ProductsService;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/v1/products")
 @RestController
+@RequestMapping("/v1/products")
 @RequiredArgsConstructor
 public class ProductsController {
 
