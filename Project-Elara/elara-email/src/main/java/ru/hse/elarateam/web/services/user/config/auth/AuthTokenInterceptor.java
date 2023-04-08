@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Class which adds authorization header to request.
+ * Class which adds authorization header to info.
  * Default authentication header type is Bearer.
  * <p>
  * For more info about JWT:
@@ -26,6 +26,6 @@ public class AuthTokenInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         requestTemplate.header("Authorization", authType + " " + authToken);
-        log.debug("Added authorization header {} , with token to request: {}", authToken, requestTemplate);
+        log.debug("Added authorization header {} , with token to info: {}", authToken, requestTemplate);
     }
 }

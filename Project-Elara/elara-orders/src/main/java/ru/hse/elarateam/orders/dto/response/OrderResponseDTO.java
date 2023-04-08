@@ -2,6 +2,7 @@ package ru.hse.elarateam.orders.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.hse.elarateam.orders.dto.info.PaymentDetailsInfoDTO;
 import ru.hse.elarateam.orders.model.OrderStatus;
 
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class OrderResponseDTO {
     private BigDecimal totalWithDiscount;
     private BigDecimal totalWithoutDiscount;
     private ShipmentDetailsResponseDTO shipmentDetails;
-    private PaymentDetailsResponseDTO paymentDetails;
+    private PaymentDetailsInfoDTO paymentDetails;
     private OrderStatus status;
     private Integer totalHeight;
     private Integer totalLength;
