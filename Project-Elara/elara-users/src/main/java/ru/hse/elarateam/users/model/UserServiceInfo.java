@@ -25,11 +25,6 @@ import java.util.UUID;
 @Table(name = "user_service_info")
 public class UserServiceInfo {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
@@ -38,7 +33,7 @@ public class UserServiceInfo {
     private String login;
 
     @Convert(converter = PasswordConverter.class)
-    @Column(columnDefinition = "varchar(80)", nullable = false)
+    @Column(columnDefinition = "varchar(256)", nullable = false)
     private String password;
 
     @Column(length = 128, columnDefinition = "varchar(128)", unique = true)

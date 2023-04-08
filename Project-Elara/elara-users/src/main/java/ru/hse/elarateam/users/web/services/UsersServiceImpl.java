@@ -50,6 +50,9 @@ public class UsersServiceImpl implements UsersService {
             log.debug("Generate token for user with id {} and send email verification", userBeforeUpdate.getUserId());
             final String token = tokenGenerator.generate();
             log.trace("Generated token: {}", token);
+
+            usersDBService.saveVerificationToken(userBeforeUpdate.getUserId(), token);
+
             emailService.sendEmailVerification(userBeforeUpdate.getUserId(), token);
         }
     }

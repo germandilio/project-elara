@@ -2,6 +2,7 @@ package ru.hse.elarateam.users.web.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
@@ -12,6 +13,7 @@ import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
 import ru.hse.elarateam.users.model.RoleEnum;
 import ru.hse.elarateam.users.model.UserServiceInfo;
+import ru.hse.elarateam.users.web.converters.PasswordConverter;
 import ru.hse.elarateam.users.web.mappers.UserMapper;
 import ru.hse.elarateam.users.web.repositories.RoleRepository;
 import ru.hse.elarateam.users.web.repositories.UsersProfileRepository;
@@ -35,6 +37,8 @@ public class UserDBServiceImpl implements UsersDBService {
 
     private final UserMapper userMapper;
 
+    private final PasswordConverter passwordConverter;
+
     @Transactional
     @Override
     public UserInfoDTO saveUser(final UserRegisterRequestDTO userRegisterRequest) {
@@ -49,7 +53,11 @@ public class UserDBServiceImpl implements UsersDBService {
 
         final var userProfile = userMapper.userRegisterRequestDTOtoUserProfile(userRegisterRequest);
 
+        final var savedProfile = usersProfileRepository.saveAndFlush(userProfile);
+
         final var userServiceInfo = UserServiceInfo.builder()
+                .id(savedProfile.getId())
+                .userProfile(savedProfile)
                 .login(userRegisterRequest.getLogin())
                 .password(userRegisterRequest.getPassword())
                 .role(initialRole)
@@ -59,8 +67,6 @@ public class UserDBServiceImpl implements UsersDBService {
         log.trace("Set default role {} to user with login {}", initialRole.getRole(), userRegisterRequest.getLogin());
 
         final var persistentUser = usersServiceInfoRepository.saveAndFlush(userServiceInfo);
-        userProfile.setId(persistentUser.getId());
-        final var savedProfile = usersProfileRepository.saveAndFlush(userProfile);
 
         return userMapper.userServiceInfoToUserInfoDTO(persistentUser);
     }
@@ -153,7 +159,16 @@ public class UserDBServiceImpl implements UsersDBService {
     @Transactional
     @Override
     public void deleteUserById(final UUID userId) {
-        usersServiceInfoRepository.deleteById(userId);
+        final var persistentUserInfo = usersServiceInfoRepository.findById(userId);
+        if (persistentUserInfo.isEmpty()) {
+            throw new IllegalArgumentException("User with id " + userId + " not found");
+        }
+
+        final var userInfo = persistentUserInfo.get();
+        userInfo.setDeleted(true);
+        userInfo.getUserProfile().setDeleted(true);
+
+        usersServiceInfoRepository.saveAndFlush(userInfo);
     }
 
     @Transactional
@@ -166,7 +181,8 @@ public class UserDBServiceImpl implements UsersDBService {
 
         final var userInfo = persistentUserInfo.get();
 
-        if (!userInfo.getPassword().equals(changePasswordRequest.getOldPassword())) {
+        if (!passwordConverter.getPasswordEncoder().matches(changePasswordRequest.getOldPassword(), userInfo.getPassword())) {
+            log.trace("password from db {}, provided old password {}", userInfo.getPassword(), passwordConverter.convertToDatabaseColumn(changePasswordRequest.getOldPassword()));
             throw new IllegalArgumentException("Old password is incorrect");
         }
 
@@ -245,6 +261,8 @@ public class UserDBServiceImpl implements UsersDBService {
 
         userInfo.setPassword(resetPasswordRequest.getNewPassword());
         log.trace("Changed password for user {}", userInfo.getLogin());
+        userInfo.setPasswordResetToken(null);
+        log.trace("Set password reset token to null for user {}", userInfo.getLogin());
 
         usersServiceInfoRepository.saveAndFlush(userInfo);
     }
