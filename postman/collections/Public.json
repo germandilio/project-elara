@@ -50,7 +50,7 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:8085/api/v1/users/login-available?login=example@gmail.com",
