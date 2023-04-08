@@ -16,11 +16,21 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJlbGFyYS1sb2dpbiIsImF1ZCI6ImVsYXJhIiwiaWF0IjoxNjgwOTgxMTA4LCJzdWIiOiJnbG1pa2hheWxvdkBlZHUuaHNlLnJ1In0.0tBOl6IV_bOorj0CMdpwkL0mmVWGUMgEpxXhfPQu9aT5x6xN4vHRk6-pS-F2JFTHz8lUWaJ9Z8FfDKZYlCkE8w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": \"ac7492d8-52f3-4a1c-85cf-b248dcbf6283\",\n    \"email\": \"glmikhaylov@edu.hse.ru\",\n    \"firstName\": \"Mister\",\n    \"lastName\": \"Incognito\"\n}",
+							"raw": "{\n    \"userId\": \"2ae75234-505d-48d9-88c0-68aba0956c1c\",\n    \"email\": \"glmikhaylov@edu.hse.ru\",\n    \"firstName\": \"Misterrrrrr\",\n    \"lastName\": \"Incognito\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -50,6 +60,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJlbGFyYS1sb2dpbiIsImF1ZCI6ImVsYXJhIiwiaWF0IjoxNjgwOTgxMTA4LCJzdWIiOiJnbG1pa2hheWxvdkBlZHUuaHNlLnJ1In0.0tBOl6IV_bOorj0CMdpwkL0mmVWGUMgEpxXhfPQu9aT5x6xN4vHRk6-pS-F2JFTHz8lUWaJ9Z8FfDKZYlCkE8w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -90,7 +110,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/api/v1/users/ac7492d8-52f3-4a1c-85cf-b248dcbf6283",
+							"raw": "http://localhost:8085/api/v1/users/2ae75234-505d-48d9-88c0-68aba0956c1c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -100,7 +120,7 @@
 								"api",
 								"v1",
 								"users",
-								"ac7492d8-52f3-4a1c-85cf-b248dcbf6283"
+								"2ae75234-505d-48d9-88c0-68aba0956c1c"
 							]
 						}
 					},
@@ -113,11 +133,21 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJlbGFyYS1sb2dpbiIsImF1ZCI6ImVsYXJhIiwiaWF0IjoxNjgwOTgxMTA4LCJzdWIiOiJnbG1pa2hheWxvdkBlZHUuaHNlLnJ1In0.0tBOl6IV_bOorj0CMdpwkL0mmVWGUMgEpxXhfPQu9aT5x6xN4vHRk6-pS-F2JFTHz8lUWaJ9Z8FfDKZYlCkE8w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": \"2ae75234-505d-48d9-88c0-68aba0956c1c\",\n    \"oldPassword\": \"123456\",\n    \"newPassword\": \"88888888\"\n}",
+							"raw": "{\n    \"userId\": \"2ae75234-505d-48d9-88c0-68aba0956c1c\",\n    \"oldPassword\": \"88888888\",\n    \"newPassword\": \"11111111\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -148,6 +178,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJlbGFyYS1sb2dpbiIsImF1ZCI6ImVsYXJhIiwiaWF0IjoxNjgwOTgxMTA4LCJzdWIiOiJnbG1pa2hheWxvdkBlZHUuaHNlLnJ1In0.0tBOl6IV_bOorj0CMdpwkL0mmVWGUMgEpxXhfPQu9aT5x6xN4vHRk6-pS-F2JFTHz8lUWaJ9Z8FfDKZYlCkE8w",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -218,6 +258,28 @@
 				}
 			],
 			"id": "1781c1f3-78e3-448b-adcf-b33b8159eb88"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e1e0842a-2127-42e7-a263-9ce061f65a53",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b480248f-6957-4a2b-af61-9dd2ced150c0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
