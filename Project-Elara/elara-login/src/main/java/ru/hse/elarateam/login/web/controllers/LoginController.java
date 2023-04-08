@@ -41,9 +41,13 @@ public class LoginController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        final var login = jwtUtils.getUserLoginFromToken(token);
-        final var user = usersService.getUserInfoByLogin(login);
+        try {
+            final var login = jwtUtils.getUserLoginFromToken(token);
+            final var user = usersService.getUserInfoByLogin(login);
+            return ResponseEntity.ok(user);
 
-        return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 }
