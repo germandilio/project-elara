@@ -33,6 +33,8 @@ public class UsersServiceImpl implements UsersService {
         final var user = usersDBService.saveUser(userRegisterRequest);
 
         final String token = tokenGenerator.generate();
+        usersDBService.saveVerificationToken(user.getUserId(), token);
+
         emailService.sendEmailVerification(user.getUserId(), token);
         return user;
     }

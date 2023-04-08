@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface UsersServiceInfoRepository extends JpaRepository<UserServiceInfo, UUID> {
     Optional<UserServiceInfo> findByLogin(@NonNull String login);
 
-    Optional<UserServiceInfo> findByEmailVerificationToken(@NotNull String verificationToken);
+    Optional<UserServiceInfo> findByEmailVerificationToken(@NotNull String emailVerificationToken);
 
     Optional<UserServiceInfo> findByPasswordResetToken(@NonNull String passwordResetToken);
 

@@ -34,4 +34,6 @@ public interface UsersDBService {
     void changePassword(final ChangePasswordRequestDTO changePasswordRequest);
 
     void resetPassword(ResetPasswordRequestDTO resetPasswordRequest);
+
+    void saveVerificationToken(UUID userId, String token);
 }
