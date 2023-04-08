@@ -24,6 +24,7 @@ public interface UsersDBService {
 
     /**
      * Checks if login is available
+     *
      * @param login login to check
      * @return true if login is available, false otherwise
      */

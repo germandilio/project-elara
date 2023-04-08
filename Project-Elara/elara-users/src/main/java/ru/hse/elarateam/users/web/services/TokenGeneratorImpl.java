@@ -32,6 +32,7 @@ public class TokenGeneratorImpl implements TokenGenerator {
     /**
      * Generates a random string of the specified length.
      * Does not contain any special characters.
+     *
      * @return a random string of the specified length
      */
     private String generateSimple() {

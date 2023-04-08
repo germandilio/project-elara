@@ -2,7 +2,6 @@ package ru.hse.elarateam.users.web.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
@@ -215,6 +214,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
     /**
      * Checks if login is available
+     *
      * @param login login to check
      * @return true if login is available, false otherwise
      */

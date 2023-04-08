@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.elarateam.users.dto.*;
+import ru.hse.elarateam.users.dto.UserInfoDTO;
+import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
@@ -34,7 +35,7 @@ public class UsersController {
         return new ResponseEntity<>(userInfo, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login-available")
+    @GetMapping("/login-available")
     public ResponseEntity<String> checkLoginAvailability(@RequestParam @NotNull @Email String login) {
         if (login == null || login.isEmpty()) {
             return new ResponseEntity<>("Login is empty", HttpStatus.BAD_REQUEST);

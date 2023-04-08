@@ -12,6 +12,6 @@ public interface EmailServiceFeignClient {
     @RequestMapping(method = RequestMethod.POST, value = "/api/v1/email/reset-password", produces = "application/json")
     void sendResetPasswordEmail(@RequestParam("userId") UUID userId, @RequestParam String token);
 
-@RequestMapping(method = RequestMethod.POST, value = "/api/v1/email/confirm-registration", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "/api/v1/email/confirm-registration", produces = "application/json")
     void sendConfirmRegistrationEmail(@RequestParam("userId") UUID userId, @RequestParam String token);
 }
