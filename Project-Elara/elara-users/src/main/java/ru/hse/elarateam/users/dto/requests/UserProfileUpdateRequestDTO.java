@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import java.sql.Date;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class UserProfileUpdateRequestDTO {
     private UUID userId;
 
     @NotNull
+    @Length(min = 1, max = 255)
     @Email
     private String email;
 

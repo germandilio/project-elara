@@ -1,6 +1,9 @@
 package ru.hse.elarateam.users.web.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +35,7 @@ public class UsersController {
     }
 
     @PostMapping("/login-available")
-    public ResponseEntity<String> checkLoginAvailability(@RequestParam String login) {
+    public ResponseEntity<String> checkLoginAvailability(@RequestParam @NotNull @Email String login) {
         if (login == null || login.isEmpty()) {
             return new ResponseEntity<>("Login is empty", HttpStatus.BAD_REQUEST);
         }
@@ -48,7 +51,7 @@ public class UsersController {
     // TODO rate limiter
     @PostMapping("/forgot-password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void forgotPassword(@RequestParam String login) {
+    public void forgotPassword(@RequestParam @NotNull @Size(min = 1, max = 128) @Email String login) {
         usersService.forgotPassword(login);
     }
 
@@ -66,7 +69,7 @@ public class UsersController {
     }
 
     @PostMapping("/verify-email")
-    public void verifyEmail(@RequestParam("token") String verificationToken) {
+    public void verifyEmail(@RequestParam("token") @NotNull @Size(min = 1, max = 128) String verificationToken) {
         usersService.verifyEmail(verificationToken);
     }
 

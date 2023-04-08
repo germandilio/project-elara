@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class CustomExceptionHandler {
 
     // TODO add more precise exception handlers
+    // TODO pretify error messages for validation
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
@@ -25,7 +26,7 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> handleException(ConstraintViolationException e) {
         log.warn("Constraint violation exception : {}", e.getMessage());
         e.printStackTrace();
-        return ResponseEntity.internalServerError().body(e.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

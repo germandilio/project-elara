@@ -15,6 +15,7 @@ public class ChangePasswordRequestDTO {
     private UUID userId;
 
     @NotNull
+    @PasswordConstraint
     private String oldPassword;
 
     @NotNull
