@@ -25,7 +25,7 @@ public class DeliveryController {
         return null;
     }
 
-    @GetMapping("/get-saved-addresses")
+    @GetMapping("/saved-addresses")
     public ResponseEntity<Page<AddressInfoDTO>> getSavedAddresses(@RequestParam("pageNumber") int pageNumber,
                                                                   @RequestParam("pageSize") int pageSize,
                                                                   @RequestParam("userId") UUID userId) {

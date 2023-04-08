@@ -9,6 +9,7 @@ import ru.hse.elarateam.adminconsole.dto.SportInfoDTO;
 
 import java.util.List;
 import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/admin-console")
 public class AdminConsoleController {
@@ -98,7 +99,7 @@ public class AdminConsoleController {
 
     @PutMapping("/remove-features-from-product")
     public ResponseEntity<ProductInfoDTO> removeFeaturesFromProduct(@RequestParam("productID") UUID productId,
-                                                       @RequestParam("featureIDs") List<Long> featureIds) {
+                                                                    @RequestParam("featureIDs") List<Long> featureIds) {
         return null;
     }
 
