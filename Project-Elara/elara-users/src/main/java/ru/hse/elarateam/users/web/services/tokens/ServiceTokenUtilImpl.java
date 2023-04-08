@@ -1,6 +1,5 @@
 package ru.hse.elarateam.users.web.services.tokens;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 
 @Slf4j
@@ -44,21 +42,10 @@ public class ServiceTokenUtilImpl implements ServiceTokenUtils {
 
             return (Objects.equals(body.getSubject(), emailServiceInfo.getSub()) &&
                     Objects.equals(body.getIssuer(), emailServiceInfo.getIss()) &&
-                    Objects.equals(body.getAudience(),emailServiceInfo.getAud()));
+                    Objects.equals(body.getAudience(), emailServiceInfo.getAud()));
         } catch (Exception e) {
             log.debug("Token validation error: {}", e.getMessage());
             return false;
         }
-    }
-
-
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
-    }
-
-    //for retrieving any information from token we will need the secret key
-    private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 }

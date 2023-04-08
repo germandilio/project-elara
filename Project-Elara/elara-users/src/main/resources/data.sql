@@ -50,6 +50,8 @@ CREATE TABLE user_service_info
     CONSTRAINT pk_user_service_info PRIMARY KEY (id)
 );
 
+CREATE UNIQUE INDEX idx_userserviceinfo_login_unq ON user_service_info (login);
+
 ALTER TABLE user_service_info
     ADD CONSTRAINT uc_user_service_info_emailverificationtoken UNIQUE (email_verification_token);
 
@@ -65,6 +67,10 @@ ALTER TABLE user_service_info
 ALTER TABLE user_service_info
     ADD CONSTRAINT FK_USER_SERVICE_INFO_ON_USERPROFILE FOREIGN KEY (user_profile_id) REFERENCES user_profiles (id);
 
-INSERT INTO roles (id, role, role_description, creation_time, last_update_time) VALUES ('aec35e77-4c97-4807-853f-7de96617c00b', 'EMAIL_NOT_VERIFIED', 'Initial role, no access to orders', NOW(), NOW());
-INSERT INTO roles (id, role, role_description, creation_time, last_update_time) VALUES ('f82c4d8a-c4c4-4122-9a3a-72b7251c08f1', 'USER', 'User access', NOW(), NOW());
-INSERT INTO roles (id, role, role_description, creation_time, last_update_time) VALUES ('f52318ca-8734-442e-b0df-a26693c2ba2f', 'ADMIN', 'Admin access. Full access to functionality', NOW(), NOW());
+INSERT INTO roles (id, role, role_description, creation_time, last_update_time)
+VALUES ('aec35e77-4c97-4807-853f-7de96617c00b', 'EMAIL_NOT_VERIFIED', 'Initial role, no access to orders', NOW(),
+        NOW());
+INSERT INTO roles (id, role, role_description, creation_time, last_update_time)
+VALUES ('f82c4d8a-c4c4-4122-9a3a-72b7251c08f1', 'USER', 'User access', NOW(), NOW());
+INSERT INTO roles (id, role, role_description, creation_time, last_update_time)
+VALUES ('f52318ca-8734-442e-b0df-a26693c2ba2f', 'ADMIN', 'Admin access. Full access to functionality', NOW(), NOW());

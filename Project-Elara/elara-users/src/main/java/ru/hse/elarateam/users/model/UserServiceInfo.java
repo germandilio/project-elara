@@ -1,9 +1,10 @@
 package ru.hse.elarateam.users.model;
 
 
-import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.*;
@@ -22,7 +23,9 @@ import java.util.UUID;
 @Entity
 @SQLDelete(sql = "UPDATE user_service_info SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
-@Table(name = "user_service_info")
+@Table(name = "user_service_info", indexes = {
+        @Index(name = "idx_userserviceinfo_login_unq", columnList = "login", unique = true)
+})
 public class UserServiceInfo {
     @Id
     @JdbcTypeCode(java.sql.Types.VARCHAR)
