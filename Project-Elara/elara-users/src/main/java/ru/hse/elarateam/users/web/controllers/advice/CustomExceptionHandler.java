@@ -42,6 +42,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
+    // TODO custom fallback with email service and login service
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<?> handleException(FeignException e) {
         log.warn("Feign exception: {}", e.getMessage());
