@@ -2,7 +2,7 @@ package ru.hse.elarateam.orders.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.hse.elarateam.orders.dto.model.OrderStatus;
+import ru.hse.elarateam.orders.model.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -2,14 +2,16 @@ package ru.hse.elarateam.orders.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.hse.elarateam.orders.dto.info.AddressInfoDTO;
+import ru.hse.elarateam.orders.dto.info.ShipmentMethodInfoDTO;
 
 import java.math.BigDecimal;
 
 @Data
 @Builder
 public class ShipmentDetailsResponseDTO {
-    private AddressResponseDTO fromAddress;
-    private AddressResponseDTO toAddress;
+    private AddressInfoDTO fromAddress;
+    private AddressInfoDTO toAddress;
     private BigDecimal deliveryCost;
-    private ShipmentMethodResponseDTO shipmentMethod;
+    private ShipmentMethodInfoDTO shipmentMethod;
 }
