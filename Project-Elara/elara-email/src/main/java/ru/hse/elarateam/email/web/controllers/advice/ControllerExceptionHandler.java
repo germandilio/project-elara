@@ -14,20 +14,34 @@ import java.io.IOException;
 public class ControllerExceptionHandler {
     @ExceptionHandler(PostmarkException.class)
     public ResponseEntity<String> handlePostmarkException(PostmarkException e) {
-        log.warn("Postmark exception: {}", e.getMessage());
+        log.error("Postmark exception: {}", e.getMessage());
         e.printStackTrace();
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handlePostmarkException(IOException e) {
-        log.warn("Mailing provider is unavailable: {}", e.getMessage());
+        log.error("Mailing provider is unavailable: {}", e.getMessage());
         return new ResponseEntity<>("Mailing provider is unavailable", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Void> handlePostmarkException(Exception e) {
-        log.warn("Internal server error: {}", e.getMessage());
+        log.error("Internal server error: {}", e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Void> handlePostmarkException(IllegalArgumentException e) {
+        log.warn("Bad request: {}", e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Void> handlePostmarkException(IllegalStateException e) {
+        log.error("Internal server error: {}", e.getMessage());
         e.printStackTrace();
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

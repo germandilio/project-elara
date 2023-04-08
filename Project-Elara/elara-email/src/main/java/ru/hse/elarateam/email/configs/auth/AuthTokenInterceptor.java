@@ -4,7 +4,6 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.hse.elarateam.email.configs.UserServiceConfig;
 
 /**
  * Class which adds authorization header to request.

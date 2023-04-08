@@ -1,5 +1,6 @@
 package ru.hse.elarateam.email.web.services.user;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,11 +17,34 @@ public class UserServiceFeign implements UserService {
 
     @Override
     public UserDTO getUserById(UUID userId) {
-        var userDTO = userServiceFeignClient.getUserById(userId);
-        if (!userDTO.getUserId().equals(userId)) {
-            log.error("User ID mismatch, got {} from users service, expected {}", userDTO.getUserId(), userId);
+        try {
+            var userDTO = userServiceFeignClient.getUserById(userId);
+            if (!userDTO.getUserId().equals(userId)) {
+                log.error("User ID mismatch, got {} from users service, expected {}", userDTO.getUserId(), userId);
+            }
+            log.debug("User is {}", userDTO);
+            return userDTO;
+
+        } catch (FeignException ex) {
+            if (ex.status() == 404) {
+                log.error("User with ID {} not found", userId);
+                throw new IllegalArgumentException("User with ID " + userId + " not found", ex);
+            }
+
+            if (ex.status() == 401) {
+                log.error("Authorization in users service failed");
+                throw new IllegalStateException("Authorization in users service failed", ex);
+            }
+
+            if (ex.status() == 500) {
+                log.error("Users service is unavailable");
+                throw new IllegalStateException("Users service is unavailable", ex);
+            }
+        } catch (Exception ex) {
+            log.error("Error while getting user by ID", ex);
+            throw new IllegalStateException("Error while getting user by ID", ex);
         }
-        log.debug("User is {}", userDTO);
-        return userDTO;
+
+        return null;
     }
 }

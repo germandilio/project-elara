@@ -1,9 +1,8 @@
-package ru.hse.elarateam.email.configs;
+package ru.hse.elarateam.email.configs.auth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.hse.elarateam.email.configs.auth.AuthTokenInterceptor;
 
 /**
  * Configuration class for calling user service.
