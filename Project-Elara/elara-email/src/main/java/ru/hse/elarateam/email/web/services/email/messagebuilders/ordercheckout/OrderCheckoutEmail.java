@@ -42,11 +42,6 @@ public class OrderCheckoutEmail implements Email {
     private final OrderCheckoutDTO orderDetails;
 
     /**
-     * Helper class for building JSON Message model.
-     * Model is used by Postmark to render email and should contain placeholders according to email template.
-     */
-
-    /**
      * Builds {@link TemplatedMessage} from the data provided.
      *
      * @return {@link TemplatedMessage} that can be sent via {@link com.postmarkapp.postmark.client.ApiClient}
