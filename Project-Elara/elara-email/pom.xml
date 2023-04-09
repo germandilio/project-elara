@@ -26,6 +26,13 @@
             <artifactId>postmark</artifactId>
             <version>1.10.21</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-loadbalancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+            <version>4.0.2</version>
+        </dependency>
     </dependencies>
 
 </project>
