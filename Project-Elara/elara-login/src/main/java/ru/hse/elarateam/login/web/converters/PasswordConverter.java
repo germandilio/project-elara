@@ -12,11 +12,15 @@ import org.springframework.stereotype.Component;
  * Converts password to its hash using provided {@link PasswordEncoder}.
  */
 @Getter
-@Setter(onMethod_ = @Autowired)
 @Component
 @Converter
 public class PasswordConverter implements AttributeConverter<String, String> {
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Converts password to its hash using provided {@link PasswordEncoder}.

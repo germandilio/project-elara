@@ -9,11 +9,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Getter
-@Setter(onMethod_ = @Autowired)
 @Component
 @Converter
 public class PasswordConverter implements AttributeConverter<String, String> {
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public String convertToDatabaseColumn(String attribute) {
