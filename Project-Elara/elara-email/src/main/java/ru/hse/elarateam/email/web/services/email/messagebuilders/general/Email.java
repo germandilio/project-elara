@@ -3,7 +3,7 @@ package ru.hse.elarateam.email.web.services.email.messagebuilders.general;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.postmarkapp.postmark.client.data.model.templates.TemplatedMessage;
 
-public interface EmailBuilder {
+public interface Email {
     /**
      * Builds {@link TemplatedMessage} from the data provided.
      *

@@ -8,7 +8,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.hse.elarateam.email.web.services.email.messagebuilders.general.EmailBuilder;
+import ru.hse.elarateam.email.web.services.email.messagebuilders.general.Email;
 import ru.hse.elarateam.email.web.services.email.messagebuilders.verifyemail.model.VerifyEmailModel;
 
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ import ru.hse.elarateam.email.web.services.email.messagebuilders.verifyemail.mod
 @ToString
 @Component
 @Scope("prototype")
-public class VerifyEmail implements EmailBuilder {
+public class VerifyEmail implements Email {
 
     private final String fromEmail;
 

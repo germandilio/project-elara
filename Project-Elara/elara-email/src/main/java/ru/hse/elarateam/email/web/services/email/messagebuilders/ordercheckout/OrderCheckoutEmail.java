@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.hse.elarateam.email.dto.OrderCheckoutDTO;
-import ru.hse.elarateam.email.web.services.email.messagebuilders.general.EmailBuilder;
+import ru.hse.elarateam.email.web.services.email.messagebuilders.general.Email;
 import ru.hse.elarateam.email.web.services.email.messagebuilders.ordercheckout.model.OrderCheckoutModel;
 
 @Slf4j
@@ -17,7 +17,7 @@ import ru.hse.elarateam.email.web.services.email.messagebuilders.ordercheckout.m
 @RequiredArgsConstructor
 @Component
 @Scope("prototype")
-public class OrderCheckoutEmail implements EmailBuilder {
+public class OrderCheckoutEmail implements Email {
     private final String fromEmail;
 
     private final String productName;

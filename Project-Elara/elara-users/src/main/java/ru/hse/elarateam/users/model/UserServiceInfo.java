@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -40,13 +40,13 @@ public class UserServiceInfo {
     private String password;
 
     @Column(length = 128, columnDefinition = "varchar(128)", unique = true)
-    private String emailVerificationToken = null;
+    private String emailVerificationToken;
 
     @Column(length = 128, columnDefinition = "varchar(128)", unique = true)
-    private String passwordResetToken = null;
+    private String passwordResetToken;
 
     @Column(columnDefinition = "timestamp")
-    private Timestamp passwordResetTokenExpiredAt = null;
+    private Timestamp passwordResetTokenExpiredAt;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

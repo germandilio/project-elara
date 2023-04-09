@@ -8,7 +8,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.hse.elarateam.email.web.services.email.messagebuilders.general.EmailBuilder;
+import ru.hse.elarateam.email.web.services.email.messagebuilders.general.Email;
 import ru.hse.elarateam.email.web.services.email.messagebuilders.resetpassword.model.ResetPasswordEmailModel;
 
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ import ru.hse.elarateam.email.web.services.email.messagebuilders.resetpassword.m
 @ToString
 @Component
 @Scope("prototype")
-public class ResetPasswordEmail implements EmailBuilder {
+public class ResetPasswordEmail implements Email {
     private final String fromEmail;
 
     private final String productName;
