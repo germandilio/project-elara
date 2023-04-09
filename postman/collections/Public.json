@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "a89e5491-1508-48cd-8764-07129ba540e8",
+		"name": "Public",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "23734800-a89e5491-1508-48cd-8764-07129ba540e8"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "sign up",
+					"id": "f24dbaa8-6cfc-4e15-9658-3380afcb8092",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"glmikhaylov@edu.hse.ru\",\n    \"password\": \"123456\",\n    \"firstName\": \"germandilio\",\n    \"lastName\": \"-\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check login available",
+					"id": "bf7f2141-2301-4517-95ed-f950d061d85a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/users/login-available?login=example@gmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login-available"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "example@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify email",
+					"id": "602f41e0-79e7-4559-84a2-11abffbcb8d6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/users/verify-email?token=6ZUVaDHxkxCj748chEjdWnPzZ9HuDBgozehkOO7VuKMLJga2BkZdsXkh7D5P7lAUbopCPhKGI9mshmIVp6TeirVwlUQtzPSZ8Ppk",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"verify-email"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "6ZUVaDHxkxCj748chEjdWnPzZ9HuDBgozehkOO7VuKMLJga2BkZdsXkh7D5P7lAUbopCPhKGI9mshmIVp6TeirVwlUQtzPSZ8Ppk",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"id": "3c515949-ceb2-4868-af4c-8ad40f2fb78a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/users/forgot-password?login=glmikhaylov@edu.hse.ru",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"forgot-password"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "glmikhaylov@edu.hse.ru"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"id": "61a779ef-5e78-41f9-aaa1-1313cb20f721",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resetPasswordToken\": \"HefykWe6jMXP2i3wxP8X04f4IsUnnMHqajBvDkZgt8zB5GhfCkhYPJZECm2JTru0oRP6pUhUU4VavQxkrOFfrjjOGIrPgUaqP7EP\",\n    \"newPassword\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/users/reset-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "37b3a0ff-66a6-418a-a15f-dc74a2d6516e"
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"id": "17eaeffa-57fe-422b-ac8a-766ee5ced834",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8086/api/v1/auth/login?login=glmikhaylov@edu.hse.ru",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "glmikhaylov@edu.hse.ru",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "79a37f5d-76a6-4dbc-9913-7c4689528137"
+		}
+	]
+}
