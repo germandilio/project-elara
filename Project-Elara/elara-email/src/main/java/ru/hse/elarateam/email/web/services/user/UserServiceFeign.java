@@ -1,5 +1,6 @@
 package ru.hse.elarateam.email.web.services.user;
 
+import feign.Feign;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,21 +26,17 @@ public class UserServiceFeign implements UserService {
             log.debug("User is {}", userDTO);
             return userDTO;
 
-        } catch (FeignException ex) {
-            if (ex.status() == 404) {
-                log.error("User with ID {} not found", userId);
-                throw new IllegalArgumentException("User with ID " + userId + " not found", ex);
-            }
-
-            if (ex.status() == 401) {
-                log.error("Authorization in users service failed");
-                throw new IllegalStateException("Authorization in users service failed", ex);
-            }
-
-            if (ex.status() == 500) {
-                log.error("Users service is unavailable");
-                throw new IllegalStateException("Users service is unavailable", ex);
-            }
+        } catch (FeignException.NotFound ex) {
+            log.error("User with ID {} not found", userId);
+            throw new IllegalArgumentException("User with ID " + userId + " not found", ex);
+        } catch (FeignException.Unauthorized ex) {
+            log.error("Authorization in users service failed");
+            throw new IllegalStateException("Authorization in users service failed", ex);
+        } catch (FeignException.BadRequest ex) {
+            log.error("Bad request to users service ", ex);
+        } catch (FeignException.InternalServerError ex) {
+            log.error("Users service is unavailable");
+            throw new IllegalStateException("Users service is unavailable", ex);
         } catch (Exception ex) {
             log.error("Error while getting user by ID", ex);
             throw new IllegalStateException("Error while getting user by ID", ex);

@@ -18,15 +18,14 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Setter(onMethod_ = @Autowired)
 public class EmailServiceImpl implements EmailService {
     private final ApiClient emailApiClient;
 
-    private OrderCheckoutInitializer orderCheckoutInitializer;
+    private final OrderCheckoutInitializer orderCheckoutInitializer;
 
-    private ResetPasswordInitializer resetPasswordInitializer;
+    private final ResetPasswordInitializer resetPasswordInitializer;
 
-    private VerifyEmailInitializer verifyEmailInitializer;
+    private final VerifyEmailInitializer verifyEmailInitializer;
 
 
     @Override

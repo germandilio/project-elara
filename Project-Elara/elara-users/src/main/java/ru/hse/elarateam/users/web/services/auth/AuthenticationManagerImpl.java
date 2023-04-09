@@ -10,7 +10,6 @@ import ru.hse.elarateam.users.web.services.auth.loginservice.LoginServiceFeignCl
 /**
  * Implementation of {@link AuthenticationManager}.
  * Uses {@link LoginServiceFeignClient} to authenticate user.
- * Handles exceptions from login service.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
      * @param jwtToken token to authenticate
      * @return user info
      * @throws IllegalArgumentException if token is invalid
-     * @throws IllegalStateException    if cannot connect to login service
+     * @throws IllegalStateException    if cannot connect to login service or internal error
      */
     @Override
     public UserServiceInfoDTO authenticate(String jwtToken) {
@@ -35,10 +34,19 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
         try {
             return loginServiceFeignClient.getUserInfoByToken(jwtToken);
         } catch (FeignException.Unauthorized ex) {
+            // indicates that token is invalid
             throw new IllegalArgumentException(ex);
-        } catch (IllegalStateException ex) {
+        } catch (FeignException.BadRequest ex) {
+            // internal error
+            log.error("Bad request to login service ", ex);
+            throw new IllegalStateException("Bad request to login service", ex);
+        } catch (FeignException.InternalServerError ex) {
+            // internal fatal error
+            log.error("Login service is unavailable");
+            throw new IllegalStateException("Login service is unavailable", ex);
+        } catch (Exception ex) {
             log.error("Error while getting user info by token", ex);
-            throw new IllegalStateException("Cannot connect to login service", ex);
+            throw new IllegalStateException(ex);
         }
     }
 }
