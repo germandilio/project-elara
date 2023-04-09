@@ -1,6 +1,5 @@
 package ru.hse.elarateam.email.web.services.user;
 
-import feign.Feign;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

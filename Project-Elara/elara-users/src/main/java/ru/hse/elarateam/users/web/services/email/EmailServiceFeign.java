@@ -35,11 +35,12 @@ public class EmailServiceFeign implements EmailService {
 
     /**
      * Sends email using provided consumer.
+     *
      * @param consumer consumer that accepts two parameters
-     * @param t first parameter
-     * @param u second parameter
-     * @param <T> type of first parameter
-     * @param <U> type of second parameter
+     * @param t        first parameter
+     * @param u        second parameter
+     * @param <T>      type of first parameter
+     * @param <U>      type of second parameter
      * @throws IllegalStateException if mailing service is unavailable or error while sending email verification
      */
     private <T, U> void sendEmail(BiConsumer<T, U> consumer, T t, U u) {
