@@ -53,6 +53,7 @@ public class UsersServiceImpl implements UsersService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserServiceInfoDTO findUserByLogin(String login) {
         final var persistentUser = usersRepository.findByLogin(login);
