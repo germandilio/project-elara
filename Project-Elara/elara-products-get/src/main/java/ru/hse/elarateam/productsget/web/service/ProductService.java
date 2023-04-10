@@ -23,6 +23,7 @@ public interface ProductService {
 
     /**
      * Find all products by filters and query
+     *
      * @param sports
      * @param colors
      * @param features
@@ -33,7 +34,7 @@ public interface ProductService {
      * @param sizeUK
      * @param minPrice
      * @param maxPrice
-     * @param query search query over name
+     * @param query     search query over name
      * @param pageable
      * @return page of products
      */
@@ -52,6 +53,7 @@ public interface ProductService {
 
     /**
      * Find all products that were added recently
+     *
      * @param pageable
      * @return page of products
      */
@@ -59,17 +61,21 @@ public interface ProductService {
 
     /**
      * Find price range of all products in store.
+     *
      * @return price range object.
      */
     PriceRangeDTO getPriceRange();
 
     ColorInfoDTO getColor(Long id);
+
     List<ColorInfoDTO> getAllColors();
 
 
     FeatureInfoDTO getFeature(Long id);
+
     List<FeatureInfoDTO> getAllFeatures();
 
     SportInfoDTO getSport(Long id);
+
     List<SportInfoDTO> getAllSports();
 }

@@ -9,7 +9,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.productsget.dto.PriceRangeDTO;
@@ -17,7 +16,10 @@ import ru.hse.elarateam.productsget.dto.ProductInfoDTO;
 import ru.hse.elarateam.productsget.web.service.ProductService;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/products")
@@ -46,9 +48,10 @@ public class ProductsGetController {
     /**
      * Get products by ids or upcs or name
      * Note: If ids is present, then upcs and name are ignored etc.
-     * @param ids  product ids
-     * @param upcs product Universal Product Codes
-     * @param name product name (will find all products with name containing this string)
+     *
+     * @param ids      product ids
+     * @param upcs     product Universal Product Codes
+     * @param name     product name (will find all products with name containing this string)
      * @param pageable page info
      * @return page of products
      */
@@ -79,21 +82,22 @@ public class ProductsGetController {
     /**
      * Get products by filters and search query.
      * All parameters are optional.
-     *
+     * <p>
      * Note: if filters are present, query will find products that match all specified filters.
      * Search query will run over name only.
-     * @param sports sports, can be multiple
-     * @param colors colors, can be multiple
-     * @param features features, can be multiple
+     *
+     * @param sports    sports, can be multiple
+     * @param colors    colors, can be multiple
+     * @param features  features, can be multiple
      * @param countries countries, can be multiple
-     * @param brands brands, can be multiple
-     * @param sizeUS sizeUS, can be multiple
-     * @param sizeEUR sizeEUR, can be multiple
-     * @param sizeUK sizeUK, can be multiple
-     * @param minPrice min price (should be less or equal than maxPrice)
-     * @param maxPrice max price (should be greater or equal than minPrice)
-     * @param query search query
-     * @param pageable page info
+     * @param brands    brands, can be multiple
+     * @param sizeUS    sizeUS, can be multiple
+     * @param sizeEUR   sizeEUR, can be multiple
+     * @param sizeUK    sizeUK, can be multiple
+     * @param minPrice  min price (should be less or equal than maxPrice)
+     * @param maxPrice  max price (should be greater or equal than minPrice)
+     * @param query     search query
+     * @param pageable  page info
      * @return page of products
      */
     @ApiResponses(value = {
@@ -130,6 +134,7 @@ public class ProductsGetController {
 
     /**
      * Get products that were added recently.
+     *
      * @param pageable page info
      * @return page of products
      */
@@ -148,6 +153,7 @@ public class ProductsGetController {
 
     /**
      * Get products price range.
+     *
      * @return object with min and max price
      */
     @ApiResponses(value = {

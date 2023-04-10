@@ -23,7 +23,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ProductServiceImpl  implements ProductService {
+public class ProductServiceImpl implements ProductService {
     private final ProductsRepository productRepository;
     private final FeatureRepository featureRepository;
     private final ColorsRepository colorsRepository;
@@ -83,7 +83,7 @@ public class ProductServiceImpl  implements ProductService {
                 countries, brands, sizeUS, sizeEUR, sizeUK, minPrice, maxPrice, query);
 
         return productRepository.findAllByFiltersAndQueryNullable(
-                sports, colors, features, countries, brands, sizeUS, sizeEUR, sizeUK, minPrice, maxPrice, query, pageable)
+                        sports, colors, features, countries, brands, sizeUS, sizeEUR, sizeUK, minPrice, maxPrice, query, pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 

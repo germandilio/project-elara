@@ -20,6 +20,7 @@ public class SportsGetController {
 
     /**
      * Get sport by id
+     *
      * @param id sport id
      * @return sport info
      */
@@ -30,6 +31,7 @@ public class SportsGetController {
 
     /**
      * Get all sports
+     *
      * @return list of sports
      */
     @GetMapping

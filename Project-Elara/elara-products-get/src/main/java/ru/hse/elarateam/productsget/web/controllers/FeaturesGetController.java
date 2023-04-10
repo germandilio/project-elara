@@ -20,6 +20,7 @@ public class FeaturesGetController {
 
     /**
      * Get feature by id
+     *
      * @param id feature id
      * @return feature info
      */
@@ -30,6 +31,7 @@ public class FeaturesGetController {
 
     /**
      * Get all features
+     *
      * @return list of features
      */
     @GetMapping

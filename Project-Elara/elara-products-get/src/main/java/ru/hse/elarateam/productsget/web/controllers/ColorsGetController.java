@@ -20,6 +20,7 @@ public class ColorsGetController {
 
     /**
      * Get color by id
+     *
      * @param id color id
      * @return color info
      */
@@ -30,6 +31,7 @@ public class ColorsGetController {
 
     /**
      * Get all colors
+     *
      * @return list of colors
      */
     @GetMapping
