@@ -85,7 +85,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/api/v1/users/verify-email?token=6ZUVaDHxkxCj748chEjdWnPzZ9HuDBgozehkOO7VuKMLJga2BkZdsXkh7D5P7lAUbopCPhKGI9mshmIVp6TeirVwlUQtzPSZ8Ppk",
+							"raw": "http://localhost:8085/api/v1/users/verify-email?token=oCyiq4nvjTZeJmcvXISYMnTg5a8PYEkzFEugbJN8l8yuVwLCbCPXcBasLSLUzg7yjGVlkyfMabBvgIsV0gPGCmT2dtvJEmFJdVEo",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -100,8 +100,7 @@
 							"query": [
 								{
 									"key": "token",
-									"value": "6ZUVaDHxkxCj748chEjdWnPzZ9HuDBgozehkOO7VuKMLJga2BkZdsXkh7D5P7lAUbopCPhKGI9mshmIVp6TeirVwlUQtzPSZ8Ppk",
-									"type": "text"
+									"value": "oCyiq4nvjTZeJmcvXISYMnTg5a8PYEkzFEugbJN8l8yuVwLCbCPXcBasLSLUzg7yjGVlkyfMabBvgIsV0gPGCmT2dtvJEmFJdVEo"
 								}
 							]
 						}
@@ -216,6 +215,261 @@
 				}
 			],
 			"id": "79a37f5d-76a6-4dbc-9913-7c4689528137"
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "get by id",
+					"id": "8b2adeb0-ffeb-4c54-b4f5-3c7d639b2f46",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/products/2ae75234-505d-48d9-88c0-68aba0a56c1f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"2ae75234-505d-48d9-88c0-68aba0a56c1f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get products by id, upc or name",
+					"id": "0dfa4d87-fc53-4786-843b-e533640163cf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/products/service?ids=&upcs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"service"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "",
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "upcs",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get products by filters and query",
+					"id": "a4010503-112d-4fde-848f-94529f08f0a5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/products?sports&colors&features&countries&brands&sizeUS&sizeEUR&sizeUK&minPrice&maxPrice&query&page&size&sort",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "sports",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "colors",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "features",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "countries",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "brands",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "sizeUS",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "sizeEUR",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "sizeUK",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "minPrice",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "maxPrice",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "query",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "page",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "size",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "sort",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get new products",
+					"id": "ea05f39b-47bb-4940-a6f6-6b2a8d81da76",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/products/recent?page=0&size=20&sort",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"recent"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "optional",
+									"type": "text"
+								},
+								{
+									"key": "sort",
+									"value": null,
+									"description": "optional",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get price range",
+					"id": "d695d039-ee6a-4f15-b9ad-eb53fa48d536",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/v1/products/price=range",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"price=range"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "c1c3ecdb-ba29-48aa-bbbf-6d337faf248f"
 		}
 	]
 }
