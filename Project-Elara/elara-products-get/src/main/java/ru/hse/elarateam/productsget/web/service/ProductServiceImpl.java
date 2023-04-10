@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.productsget.dto.*;
 import ru.hse.elarateam.productsget.web.mappers.ColorMapper;
 import ru.hse.elarateam.productsget.web.mappers.FeatureMapper;
@@ -37,35 +38,41 @@ public class ProductServiceImpl implements ProductService {
 
     private final SportMapper sportMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public ProductInfoDTO getProductInfo(UUID id) {
         return productsMapper.productToProductInfoDTO(productRepository.findById(id).orElse(null));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> getAllProductsByIds(Collection<UUID> ids, Pageable pageable) {
         return productRepository.findAllByIdIn(ids, pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> getAllProductsByUPCs(Collection<String> upcs, Pageable pageable) {
         return productRepository.findAllByUpcIn(upcs, pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> getProductsByNames(String name, Pageable pageable) {
         return productRepository.findAllByNameContainingIgnoreCase(name, pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> finaAllByFiltersAndQuery(Collection<String> sports,
                                                          Collection<String> colors,
@@ -87,12 +94,14 @@ public class ProductServiceImpl implements ProductService {
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> findAllRecentAddedProducts(Pageable pageable) {
         return productRepository.findAllByOrderByCreatedDateDesc(pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PriceRangeDTO getPriceRange() {
         return PriceRangeDTO.builder()
@@ -101,6 +110,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ColorInfoDTO getColor(Long id) {
         return colorsRepository.findById(id)
@@ -108,6 +118,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(null);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ColorInfoDTO> getAllColors() {
         return colorsRepository.findAll().stream()
@@ -115,6 +126,7 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public FeatureInfoDTO getFeature(Long id) {
         return featureRepository.findById(id)
@@ -122,6 +134,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(null);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<FeatureInfoDTO> getAllFeatures() {
         return featureRepository.findAll().stream()
@@ -129,6 +142,7 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public SportInfoDTO getSport(Long id) {
         return sportsRepository.findById(id)
@@ -136,6 +150,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(null);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<SportInfoDTO> getAllSports() {
         return sportsRepository.findAll().stream()
