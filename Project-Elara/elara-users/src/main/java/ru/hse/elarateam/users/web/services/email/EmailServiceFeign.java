@@ -50,11 +50,11 @@ public class EmailServiceFeign implements EmailService {
             log.error("Error while sending email verification", ex);
             throw new IllegalStateException("Error while sending email verification", ex);
         } catch (FeignException.InternalServerError ex) {
-            log.error("Mailing service unavailable", ex);
+            log.error("Error while sending email verification", ex);
             throw new IllegalStateException("Mailing service unavailable", ex);
         } catch (Exception ex) {
-            log.error("Error while sending email verification", ex);
-            throw new IllegalStateException(ex);
+            log.error("Mailing service unavailable", ex);
+            throw new IllegalStateException("Mailing service unavailable", ex);
         }
     }
 }

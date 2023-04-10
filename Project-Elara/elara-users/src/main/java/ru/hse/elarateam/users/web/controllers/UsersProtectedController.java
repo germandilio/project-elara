@@ -27,11 +27,10 @@ public class UsersProtectedController {
 
     private final AuthenticationManager authenticationManager;
 
-    // TODO NEED jwt token
     @PutMapping("/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest,
                                                @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -39,11 +38,10 @@ public class UsersProtectedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // TODO NEED jwt token
     @PutMapping
     public ResponseEntity<Void> updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile,
                                               @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -52,11 +50,10 @@ public class UsersProtectedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // TODO NEED jwt token
     @GetMapping("/profile/{userId}")
     public ResponseEntity<UserProfileDTO> getUserProfileById(@PathVariable UUID userId,
                                                              @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -64,11 +61,10 @@ public class UsersProtectedController {
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
-    // TODO NEED jwt token
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable UUID userId,
                                                @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -93,15 +89,15 @@ public class UsersProtectedController {
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    private boolean isAuthenticated(String token) {
+    private boolean notAuthenticated(String token) {
         if (token == null || !token.startsWith("Bearer ")) {
-            return false;
+            return true;
         }
         try {
             authenticationManager.authenticate(token.substring(7));
         } catch (IllegalArgumentException e) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

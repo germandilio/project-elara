@@ -14,10 +14,19 @@ public interface UsersService {
     UserServiceInfoDTO getUserInfoById(UUID userId);
 
     /**
+     * Perform login operation.
+     * If login and password are correct, returns user info.
+     *
+     * @param login user login
+     * @return user info
+     */
+    UserServiceInfoDTO login(String login, String password);
+
+    /**
      * Returns user info by user login
      *
      * @param login user login
      * @return user info
      */
-    UserServiceInfoDTO getUserInfoByLogin(String login);
+    UserServiceInfoDTO findUserByLogin(String login);
 }
