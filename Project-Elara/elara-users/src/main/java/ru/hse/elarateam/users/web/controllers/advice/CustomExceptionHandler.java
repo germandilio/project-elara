@@ -4,6 +4,7 @@ import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,43 +18,46 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
-        log.warn("Exception: {}", e.getMessage());
-        e.printStackTrace();
+        log.warn("Exception: {}", e.getMessage(), e);
         return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handleException(ConstraintViolationException e) {
-        log.warn("Constraint violation exception : {}", e.getMessage());
-        e.printStackTrace();
+        log.warn("Constraint violation exception : {}", e.getMessage(), e);
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> handleException(IllegalArgumentException e) {
-        log.info("Send response with Illegal argument exception: {}", e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<?> handleException(IllegalStateException e) {
-        log.warn("Illegal state exception: {}", e.getMessage());
-        e.printStackTrace();
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
-    // TODO custom fallback with email service and login service
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<?> handleException(FeignException e) {
-        log.warn("Feign exception: {}", e.getMessage());
-        e.printStackTrace();
-        return ResponseEntity.internalServerError().body(e.getMessage());
-    }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<?> handleException(ValidationException e) {
         log.info("Validation exception: {}", e.getMessage());
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleException(DataIntegrityViolationException e) {
+        log.warn("Data integrity exception : {}", e.getMessage(), e);
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleException(IllegalArgumentException e) {
+        log.info("Send response with Illegal argument exception: {}", e.getMessage(), e);
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<?> handleException(IllegalStateException e) {
+        log.error("Illegal state exception: {}", e.getMessage(), e);
+        return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
+    // TODO custom fallback with email service and login service
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<?> handleException(FeignException e) {
+        log.error("Feign exception: {}", e.getMessage(), e);
+        return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
 }
