@@ -1,5 +1,9 @@
 package ru.hse.elarateam.users.web.controllers;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,11 +31,27 @@ public class UsersProtectedController {
 
     private final AuthenticationManager authenticationManager;
 
-    // TODO NEED jwt token
+    /**
+     * Change password request.
+     *
+     * @param changePasswordRequest request with old and new password
+     * @param token                 JWT token
+     * @return status indicating if password was changed
+     * @apiNote This method is protected by JWT token.
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Password changed"),
+            @ApiResponse(responseCode = "400", description = "Invalid password",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PutMapping("/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest,
                                                @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -39,11 +59,27 @@ public class UsersProtectedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // TODO NEED jwt token
+    /**
+     * Update user profile.
+     *
+     * @param userProfile user profile to update
+     * @param token       JWT token
+     * @return status indicating if profile was updated
+     * @apiNote This method is protected by JWT token.
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Profile updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid profile",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PutMapping
     public ResponseEntity<Void> updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile,
                                               @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -52,11 +88,28 @@ public class UsersProtectedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // TODO NEED jwt token
+    /**
+     * Get user profile by id.
+     *
+     * @param userId user id
+     * @param token  JWT token
+     * @return user profile
+     * @apiNote This method is protected by JWT token.
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Profile found",
+                    content = @Content(schema = @Schema(implementation = UserProfileDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "Profile not found",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/profile/{userId}")
     public ResponseEntity<UserProfileDTO> getUserProfileById(@PathVariable UUID userId,
                                                              @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -64,11 +117,27 @@ public class UsersProtectedController {
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
-    // TODO NEED jwt token
+    /**
+     * Delete user by id.
+     *
+     * @param userId user id
+     * @param token  JWT token
+     * @return status indicating if user was deleted
+     * @apiNote This method is protected by JWT token.
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable UUID userId,
                                                @RequestHeader("Authorization") String token) {
-        if (!isAuthenticated(token)) {
+        if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -77,6 +146,24 @@ public class UsersProtectedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Get user info by id.
+     *
+     * @param userId       user id
+     * @param serviceToken service token
+     * @return user info
+     * @apiNote This method is service (protected by service token).
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User info found",
+                    content = @Content(schema = @Schema(implementation = UserInfoDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "User info not found",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{userId}")
     public ResponseEntity<UserInfoDTO> getUserInfoById(@PathVariable UUID userId,
                                                        @RequestHeader("Authorization") String serviceToken) {
@@ -93,15 +180,15 @@ public class UsersProtectedController {
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    private boolean isAuthenticated(String token) {
+    private boolean notAuthenticated(String token) {
         if (token == null || !token.startsWith("Bearer ")) {
-            return false;
+            return true;
         }
         try {
             authenticationManager.authenticate(token.substring(7));
         } catch (IllegalArgumentException e) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }
