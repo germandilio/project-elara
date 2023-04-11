@@ -96,16 +96,16 @@ public class Product {
     private Set<Picture> pictures = new LinkedHashSet<>();
 
     @Column(nullable = false)
-    private Integer height;
+    private Double height;
 
     @Column(nullable = false)
-    private Integer length;
+    private Double length;
 
     @Column(nullable = false)
-    private Integer width;
+    private Double width;
 
     @Column(nullable = false)
-    private Integer weight;
+    private Double weight;
 
     @Column(columnDefinition = "boolean default false")
     @Builder.Default

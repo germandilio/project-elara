@@ -32,8 +32,8 @@ public class ProductInfoDTO {
 
     private Set<String> pictures;
 
-    private Integer height;
-    private Integer width;
-    private Integer length;
-    private Integer weight;
+    private Double height;
+    private Double width;
+    private Double length;
+    private Double weight;
 }
