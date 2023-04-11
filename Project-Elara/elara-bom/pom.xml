@@ -59,6 +59,7 @@
         <spring-boot-starter-validation.version>3.0.5</spring-boot-starter-validation.version>
         <spring-cloud-starter-openfeign.version>4.0.2</spring-cloud-starter-openfeign.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
+        <springdoc-openapi-javadoc.version>1.7.0</springdoc-openapi-javadoc.version>
         <sl4j.version>1.0.13.5</sl4j.version>
     </properties>
 
@@ -208,6 +209,14 @@
             <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-javadoc -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-javadoc</artifactId>
+            <version>${springdoc-openapi-javadoc.version}</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/com.guicedee.services/sl4j -->
         <dependency>
             <groupId>com.guicedee.services</groupId>
@@ -239,6 +248,11 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
                             <version>0.2.0</version>
+                        </path>
+                        <path>
+                            <groupId>com.github.therapi</groupId>
+                            <artifactId>therapi-runtime-javadoc-scribe</artifactId>
+                            <version>0.15.0</version>
                         </path>
                     </annotationProcessorPaths>
                     <!-- due to problem in maven-compiler-plugin, for verbose mode add showWarnings -->

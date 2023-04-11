@@ -191,7 +191,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/api/v1/users/437019f6-9f37-4f6e-9211-6237d89dc80c",
+							"raw": "http://localhost:8085/api/v1/users/2ae75234-505d-48d9-88c0-68aba0956c1c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -201,7 +201,7 @@
 								"api",
 								"v1",
 								"users",
-								"437019f6-9f37-4f6e-9211-6237d89dc80c"
+								"2ae75234-505d-48d9-88c0-68aba0956c1c"
 							]
 						}
 					},

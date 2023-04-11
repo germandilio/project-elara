@@ -12,6 +12,8 @@ import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
 import ru.hse.elarateam.users.model.RoleEnum;
 import ru.hse.elarateam.users.model.UserServiceInfo;
+import ru.hse.elarateam.users.web.controllers.advice.ConflictException;
+import ru.hse.elarateam.users.web.controllers.advice.UserNotFountException;
 import ru.hse.elarateam.users.web.converters.PasswordConverter;
 import ru.hse.elarateam.users.web.mappers.UserMapper;
 import ru.hse.elarateam.users.web.repositories.RoleRepository;
@@ -44,7 +46,7 @@ public class UserDBServiceImpl implements UsersDBService {
         // login should not be already assigned
         usersServiceInfoRepository.findByLogin(userRegisterRequest.getLogin())
                 .ifPresent(user -> {
-                    throw new IllegalArgumentException("User with login " + userRegisterRequest.getLogin() + " already exists");
+                    throw new ConflictException("User with login " + userRegisterRequest.getLogin() + " already exists");
                 });
 
         final var initialRole = roleRepository.findOneByRole(RoleEnum.EMAIL_NOT_VERIFIED)
@@ -76,7 +78,7 @@ public class UserDBServiceImpl implements UsersDBService {
         // check if user exists
         final var persistentUserInfo = usersServiceInfoRepository.findById(userProfileUpdateRequest.getUserId());
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with id " + userProfileUpdateRequest.getUserId() + " not found");
+            throw new UserNotFountException("User with id " + userProfileUpdateRequest.getUserId() + " not found");
         }
 
         final var userProfile = persistentUserInfo.get().getUserProfile();
@@ -132,7 +134,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public UserProfileDTO getUserProfileById(final UUID userId) {
         final var persistentUserProfile = usersProfileRepository.findById(userId);
         if (persistentUserProfile.isEmpty()) {
-            throw new IllegalArgumentException("User with id " + userId + " not found");
+            throw new UserNotFountException("User with id " + userId + " not found");
         }
 
         final var userProfile = persistentUserProfile.get();
@@ -146,7 +148,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public UserInfoDTO getUserInfoById(final UUID userId) {
         final var persistentUserInfo = usersServiceInfoRepository.findById(userId);
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with id " + userId + " not found");
+            throw new UserNotFountException("User with id " + userId + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -160,7 +162,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public void deleteUserById(final UUID userId) {
         final var persistentUserInfo = usersServiceInfoRepository.findById(userId);
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with id " + userId + " not found");
+            throw new UserNotFountException("User with id " + userId + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -175,7 +177,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public void changePassword(final ChangePasswordRequestDTO changePasswordRequest) {
         final var persistentUserInfo = usersServiceInfoRepository.findById(changePasswordRequest.getUserId());
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with id " + changePasswordRequest.getUserId() + " not found");
+            throw new UserNotFountException("User with id " + changePasswordRequest.getUserId() + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -196,7 +198,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public void verifyEmail(final String verificationToken) {
         final var persistentUserInfo = usersServiceInfoRepository.findByEmailVerificationToken(verificationToken);
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with verification token " + verificationToken + " not found");
+            throw new UserNotFountException("User with verification token " + verificationToken + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -229,7 +231,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public UserInfoDTO saveResetPasswordToken(String token, int expirationTimeHours, String login) {
         final var persistentUserInfo = usersServiceInfoRepository.findByLogin(login);
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with login " + login + " not found");
+            throw new UserNotFountException("User with login " + login + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -249,7 +251,7 @@ public class UserDBServiceImpl implements UsersDBService {
     public void resetPassword(ResetPasswordRequestDTO resetPasswordRequest) {
         final var persistentUserInfo = usersServiceInfoRepository.findByPasswordResetToken(resetPasswordRequest.getResetPasswordToken());
         if (persistentUserInfo.isEmpty()) {
-            throw new IllegalArgumentException("User with reset password token " + resetPasswordRequest.getResetPasswordToken() + " not found");
+            throw new UserNotFountException("User with reset password token " + resetPasswordRequest.getResetPasswordToken() + " not found");
         }
 
         final var userInfo = persistentUserInfo.get();
@@ -275,7 +277,7 @@ public class UserDBServiceImpl implements UsersDBService {
                     userInfo.setEmailVerificationToken(token);
                     usersServiceInfoRepository.saveAndFlush(userInfo);
                 }, () -> {
-                    throw new IllegalArgumentException("User with id " + userId + " not found");
+                    throw new UserNotFountException("User with id " + userId + " not found");
                 });
     }
 
