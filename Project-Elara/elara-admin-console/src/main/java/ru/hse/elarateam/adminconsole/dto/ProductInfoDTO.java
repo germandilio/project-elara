@@ -11,23 +11,28 @@ import java.util.UUID;
 @Builder
 public class ProductInfoDTO {
     private UUID id;
-    private Integer upc;
+    private String upc;
+
     private String name;
     private BigDecimal price;
     private Integer discount;
+    private Integer quantity;
+
     private String description;
     private String brand;
-    private Integer quantity;
     private String countryOfOrigin;
-    private Integer sizeUS;
-    private Integer sizeEUR;
-    private Integer sizeUK;
+
+    private Double sizeUS;
+    private Double sizeEUR;
+    private Double sizeUK;
+
     private Set<SportInfoDTO> sports;
     private Set<ColorInfoDTO> colors;
     private Set<FeatureInfoDTO> features;
     private Set<String> pictures;
-    private Integer height;
-    private Integer width;
-    private Integer length;
-    private Integer weight;
+
+    private Double height;
+    private Double width;
+    private Double length;
+    private Double weight;
 }

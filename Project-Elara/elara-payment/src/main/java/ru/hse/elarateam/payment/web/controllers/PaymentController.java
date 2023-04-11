@@ -8,7 +8,7 @@ import ru.hse.elarateam.payment.dto.info.PaymentDetailsInfoDTO;
 @RequestMapping("/v1/payment")
 public class PaymentController {
 
-    @PostMapping("/register")
+    @PostMapping("/")
     @ResponseStatus(code = HttpStatus.OK, reason = "Payment was registered.")
     public void registerPayment(@RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
     }

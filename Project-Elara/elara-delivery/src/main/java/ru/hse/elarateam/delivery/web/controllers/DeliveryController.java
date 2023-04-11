@@ -20,7 +20,7 @@ public class DeliveryController {
     }
 
     // todo подумать над типом возврата
-    @PostMapping("/select")
+    @PutMapping("/select")
     public ResponseEntity<?> selectShipmentMethod(@RequestBody SelectShipmentMethodRequestDTO selectShipmentMethodRequestDTO) {
         return null;
     }

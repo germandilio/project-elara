@@ -3,7 +3,8 @@ package ru.hse.elarateam.orders.dto.response;
 import lombok.Builder;
 import lombok.Data;
 import ru.hse.elarateam.orders.dto.info.PaymentDetailsInfoDTO;
-import ru.hse.elarateam.orders.model.OrderStatus;
+import ru.hse.elarateam.orders.dto.info.ShipmentDetailsInfoDTO;
+import ru.hse.elarateam.orders.model.status.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,11 +18,11 @@ public class OrderResponseDTO {
     private List<OrderedItemResponseDTO> positions;
     private BigDecimal totalWithDiscount;
     private BigDecimal totalWithoutDiscount;
-    private ShipmentDetailsResponseDTO shipmentDetails;
+    private ShipmentDetailsInfoDTO shipmentDetails;
     private PaymentDetailsInfoDTO paymentDetails;
     private OrderStatus status;
-    private Integer totalHeight;
-    private Integer totalLength;
-    private Integer totalWidth;
-    private Integer totalWeight;
+    private Double totalHeight;
+    private Double totalLength;
+    private Double totalWidth;
+    private Double totalWeight;
 }

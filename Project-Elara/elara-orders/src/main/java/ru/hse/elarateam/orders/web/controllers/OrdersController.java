@@ -3,6 +3,8 @@ package ru.hse.elarateam.orders.web.controllers;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.elarateam.orders.dto.info.PaymentDetailsInfoDTO;
+import ru.hse.elarateam.orders.dto.info.ShipmentDetailsInfoDTO;
 import ru.hse.elarateam.orders.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.orders.dto.response.OrderResponseDTO;
 
@@ -17,7 +19,21 @@ public class OrdersController {
         return null;
     }
 
-    @PostMapping("/cancel")
+    // delivery service target endpoint
+    @PutMapping
+    public ResponseEntity<OrderResponseDTO> changeDeliveryDetails(@RequestParam("orderId") UUID orderId,
+                                                                  @RequestBody ShipmentDetailsInfoDTO shipmentDetailsInfoDTO) {
+        return null;
+    }
+
+    // delivery service target endpoint
+    @PutMapping
+    public ResponseEntity<OrderResponseDTO> changePaymentDetails(@RequestParam("orderId") UUID orderId,
+                                                                  @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
+        return null;
+    }
+
+    @PutMapping("/cancel")
     public ResponseEntity<OrderResponseDTO> cancelOrder(@RequestParam("orderId") UUID orderId) {
         return null;
     }
@@ -35,7 +51,7 @@ public class OrdersController {
         return null;
     }
 
-    @PostMapping("/change-status")
+    @PutMapping("/change-status")
     public ResponseEntity<OrderResponseDTO> changeOrderStatus(@RequestParam("orderId") UUID orderId,
                                                               @RequestParam("status") String status) {
         return null;

@@ -2,7 +2,7 @@ package ru.hse.elarateam.orders.dto.info;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.hse.elarateam.orders.model.PaymentStatus;
+import ru.hse.elarateam.orders.model.status.PaymentStatus;
 
 import java.util.Date;
 import java.util.UUID;

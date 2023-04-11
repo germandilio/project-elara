@@ -1,4 +1,4 @@
-package ru.hse.elarateam.orders.model;
+package ru.hse.elarateam.orders.model.status;
 
 public enum OrderStatus {
     ALLOCATED,
