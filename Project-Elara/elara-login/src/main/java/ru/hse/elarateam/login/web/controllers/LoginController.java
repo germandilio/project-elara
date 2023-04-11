@@ -29,7 +29,8 @@ public class LoginController {
 
     /**
      * Perform login operation.
-     * @param login user login (should match email validation rules)
+     *
+     * @param login    user login (should match email validation rules)
      * @param password user password
      * @return JWT token if login and password are correct
      */
@@ -52,7 +53,8 @@ public class LoginController {
 
     /**
      * Get user info by token.
-     * @param token JWT token
+     *
+     * @param token        JWT token
      * @param serviceToken service token
      * @return user info
      */

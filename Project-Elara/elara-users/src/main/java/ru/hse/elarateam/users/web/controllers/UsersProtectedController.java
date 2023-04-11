@@ -33,11 +33,12 @@ public class UsersProtectedController {
 
     /**
      * Change password request.
+     * <p>
+     * Note: This method is protected by JWT token.
      *
      * @param changePasswordRequest request with old and new password
      * @param token                 JWT token
      * @return status indicating if password was changed
-     * @apiNote This method is protected by JWT token.
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Password changed"),
@@ -61,11 +62,12 @@ public class UsersProtectedController {
 
     /**
      * Update user profile.
+     * <p>
+     * Note: This method is protected by JWT token.
      *
      * @param userProfile user profile to update
      * @param token       JWT token
      * @return status indicating if profile was updated
-     * @apiNote This method is protected by JWT token.
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Profile updated"),
@@ -90,11 +92,12 @@ public class UsersProtectedController {
 
     /**
      * Get user profile by id.
+     * <p>
+     * Note: This method is protected by JWT token.
      *
      * @param userId user id
      * @param token  JWT token
      * @return user profile
-     * @apiNote This method is protected by JWT token.
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile found",
@@ -119,11 +122,12 @@ public class UsersProtectedController {
 
     /**
      * Delete user by id.
+     * <p>
+     * Note: This method is protected by JWT token.
      *
      * @param userId user id
      * @param token  JWT token
      * @return status indicating if user was deleted
-     * @apiNote This method is protected by JWT token.
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deleted"),
@@ -148,11 +152,12 @@ public class UsersProtectedController {
 
     /**
      * Get user info by id.
+     * <p>
+     * Note: This method is service (protected by service token).
      *
      * @param userId       user id
      * @param serviceToken service token
      * @return user info
-     * @apiNote This method is service (protected by service token).
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User info found",
