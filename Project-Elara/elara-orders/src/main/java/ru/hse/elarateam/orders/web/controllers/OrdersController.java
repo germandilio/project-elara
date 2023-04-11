@@ -29,7 +29,7 @@ public class OrdersController {
     // payment service target endpoint
     @PutMapping("/payment")
     public ResponseEntity<OrderResponseDTO> changePaymentDetails(@RequestParam("orderId") UUID orderId,
-                                                                  @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
+                                                                 @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
         return null;
     }
 

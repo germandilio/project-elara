@@ -97,9 +97,9 @@ public class UsersPublicController {
 
     /**
      * Reset password with reset token.
+     * Note: Method should be called after user clicked on link in email.
      *
      * @param resetPasswordRequest
-     * @apiNote Method should be called after user clicked on link in email.
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Password reset"),
@@ -118,9 +118,10 @@ public class UsersPublicController {
 
     /**
      * Verify email with verification token.
+     * <p>
+     * Note: Method should be called after user clicked on link in email.
      *
      * @param verificationToken verification token
-     * @apiNote Method should be called after user clicked on link in email.
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Email verified"),
