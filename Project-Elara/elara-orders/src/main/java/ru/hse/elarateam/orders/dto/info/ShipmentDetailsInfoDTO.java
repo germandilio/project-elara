@@ -2,8 +2,6 @@ package ru.hse.elarateam.orders.dto.info;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.hse.elarateam.orders.dto.info.AddressInfoDTO;
-import ru.hse.elarateam.orders.dto.info.ShipmentMethodInfoDTO;
 
 import java.math.BigDecimal;
 

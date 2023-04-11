@@ -20,14 +20,14 @@ public class OrdersController {
     }
 
     // delivery service target endpoint
-    @PutMapping
+    @PutMapping("/delivery")
     public ResponseEntity<OrderResponseDTO> changeDeliveryDetails(@RequestParam("orderId") UUID orderId,
                                                                   @RequestBody ShipmentDetailsInfoDTO shipmentDetailsInfoDTO) {
         return null;
     }
 
-    // delivery service target endpoint
-    @PutMapping
+    // payment service target endpoint
+    @PutMapping("/payment")
     public ResponseEntity<OrderResponseDTO> changePaymentDetails(@RequestParam("orderId") UUID orderId,
                                                                   @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
         return null;

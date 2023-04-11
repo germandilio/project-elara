@@ -32,8 +32,9 @@ public class OrderedItem {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
-    private UUID orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID productId;
@@ -53,10 +54,6 @@ public class OrderedItem {
 
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
 
     @Override
     public boolean equals(Object o) {
