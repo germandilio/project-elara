@@ -1,7 +1,7 @@
 package ru.hse.elarateam.users.web.services;
 
+import ru.hse.elarateam.users.dto.UserDTO;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
-import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
@@ -12,9 +12,9 @@ import java.util.UUID;
 public interface UsersDBService {
     UserInfoDTO saveUser(final UserRegisterRequestDTO userRegisterRequest);
 
-    UserProfileDTO updateUserProfile(final UserProfileUpdateRequestDTO userProfileUpdateRequest);
+    UserDTO updateUserProfile(final UserProfileUpdateRequestDTO userProfileUpdateRequest);
 
-    UserProfileDTO getUserProfileById(final UUID userId);
+    UserDTO getUserById(final UUID userId);
 
     UserInfoDTO getUserInfoById(final UUID userId);
 

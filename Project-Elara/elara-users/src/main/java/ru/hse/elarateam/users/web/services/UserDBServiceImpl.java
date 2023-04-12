@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hse.elarateam.users.dto.UserDTO;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
-import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
@@ -74,7 +74,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
     @Transactional
     @Override
-    public UserProfileDTO updateUserProfile(final UserProfileUpdateRequestDTO userProfileUpdateRequest) {
+    public UserDTO updateUserProfile(final UserProfileUpdateRequestDTO userProfileUpdateRequest) {
         // check if user exists
         final var persistentUserInfo = usersServiceInfoRepository.findById(userProfileUpdateRequest.getUserId());
         if (persistentUserInfo.isEmpty()) {
@@ -102,7 +102,7 @@ public class UserDBServiceImpl implements UsersDBService {
         log.trace("Updated user service info: {}", updatedPersistentUserInfo);
         log.trace("Updated user profile: {}", updatedPersistentUserInfo.getUserProfile());
 
-        return userMapper.userProfileToUserProfileDTO(updatedPersistentUserInfo.getUserProfile());
+        return userMapper.userProfileToUserDTO(updatedPersistentUserInfo.getUserProfile());
     }
 
     private void updateEmail(final Optional<UserServiceInfo> persistentUserInfo, final String newEmail) {
@@ -131,7 +131,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserProfileDTO getUserProfileById(final UUID userId) {
+    public UserDTO getUserById(final UUID userId) {
         final var persistentUserProfile = usersProfileRepository.findById(userId);
         if (persistentUserProfile.isEmpty()) {
             throw new UserNotFountException("User with id " + userId + " not found");
@@ -140,7 +140,7 @@ public class UserDBServiceImpl implements UsersDBService {
         final var userProfile = persistentUserProfile.get();
 
         log.debug("Found user profile: {}", userProfile);
-        return userMapper.userProfileToUserProfileDTO(userProfile);
+        return userMapper.userProfileToUserDTO(userProfile);
     }
 
     @Transactional(readOnly = true)
