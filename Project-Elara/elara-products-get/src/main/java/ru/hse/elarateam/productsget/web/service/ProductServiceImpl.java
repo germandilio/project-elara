@@ -103,11 +103,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     @Override
-    public PriceRangeDTO getPriceRange() {
-        return PriceRangeDTO.builder()
-                .min(productRepository.findMinPrice())
-                .max(productRepository.findMaxPrice())
-                .build();
+    public PriceRangeDTO getPriceRange(Collection<String> sports,
+                                       Collection<String> colors,
+                                       Collection<String> features,
+                                       Collection<String> countries,
+                                       Collection<String> brands,
+                                       Collection<Double> sizeUS,
+                                       Collection<Double> sizeEUR,
+                                       Collection<Double> sizeUK,
+                                       String query) {
+        return productRepository.findPriceRangeNullable(sports, colors, features, countries, brands, sizeUS, sizeEUR, sizeUK, query);
     }
 
     @Transactional(readOnly = true)

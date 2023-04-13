@@ -1,6 +1,7 @@
 package ru.hse.elarateam.login.web.services.users;
 
 import ru.hse.elarateam.login.dto.UserServiceInfoDTO;
+import ru.hse.elarateam.login.model.UserServiceInfo;
 
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public interface UsersService {
      * @param login user login
      * @return user info
      */
-    UserServiceInfoDTO login(String login, String password);
+    UserServiceInfo login(String login, String password);
 
     /**
      * Returns user info by user login

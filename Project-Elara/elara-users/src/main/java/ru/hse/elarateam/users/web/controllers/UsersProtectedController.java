@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.elarateam.users.dto.UpdateProfileResponse;
+import ru.hse.elarateam.users.dto.UserDTO;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
 import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
@@ -17,6 +19,7 @@ import ru.hse.elarateam.users.web.services.UsersService;
 import ru.hse.elarateam.users.web.services.auth.AuthenticationManager;
 import ru.hse.elarateam.users.web.services.tokens.ServiceTokenUtils;
 import ru.hse.elarateam.users.web.services.tokens.emailservice.EmailServiceInfo;
+import ru.hse.elarateam.users.web.services.tokens.jwt.JWTUtils;
 
 import java.util.UUID;
 
@@ -30,6 +33,8 @@ public class UsersProtectedController {
     private final ServiceTokenUtils serviceTokenUtils;
 
     private final AuthenticationManager authenticationManager;
+
+    private final JWTUtils jwtUtils;
 
     /**
      * Change password request.
@@ -79,15 +84,20 @@ public class UsersProtectedController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PutMapping
-    public ResponseEntity<Void> updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile,
-                                              @RequestHeader("Authorization") String token) {
+    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody @Valid UserProfileUpdateRequestDTO userProfile,
+                                                               @RequestHeader("Authorization") String token) {
         if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        final var user = usersService.updateUserProfile(userProfile);
+        final var newToken = jwtUtils.generateToken(user.getEmail());
 
-        usersService.updateUserProfile(userProfile);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        final var response = UpdateProfileResponse.builder()
+                .token(newToken)
+                .user(user)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -97,7 +107,7 @@ public class UsersProtectedController {
      *
      * @param userId user id
      * @param token  JWT token
-     * @return user profile
+     * @return user profile, id and role
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile found",
@@ -110,14 +120,14 @@ public class UsersProtectedController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/profile/{userId}")
-    public ResponseEntity<UserProfileDTO> getUserProfileById(@PathVariable UUID userId,
-                                                             @RequestHeader("Authorization") String token) {
+    public ResponseEntity<UserDTO> getUserProfileById(@PathVariable UUID userId,
+                                                      @RequestHeader("Authorization") String token) {
         if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        var userProfile = usersService.getUserProfileById(userId);
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+        var user = usersService.getUserProfileById(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     /**

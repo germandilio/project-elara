@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import ru.hse.elarateam.users.web.services.tokens.emailservice.EmailServiceInfo;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -24,9 +22,7 @@ public class ServiceTokenUtilImpl implements ServiceTokenUtils {
     public String generateToken() {
         final var emailServiceInfo = new EmailServiceInfo();
 
-        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(emailServiceInfo.getSub())
                 .setIssuer(emailServiceInfo.getIss())
                 .setAudience(emailServiceInfo.getAud())
