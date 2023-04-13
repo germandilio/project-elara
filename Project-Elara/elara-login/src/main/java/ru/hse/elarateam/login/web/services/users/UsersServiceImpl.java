@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.login.dto.UserServiceInfoDTO;
+import ru.hse.elarateam.login.model.UserServiceInfo;
 import ru.hse.elarateam.login.web.controllers.advice.UnauthorizedException;
 import ru.hse.elarateam.login.web.mappers.UsersMapper;
 import ru.hse.elarateam.login.web.repositories.UsersRepository;
@@ -37,7 +38,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserServiceInfoDTO login(String login, String password) {
+    public UserServiceInfo login(String login, String password) {
         final var persistentUser = usersRepository.findByLogin(login);
         if (persistentUser.isEmpty()) {
             throw new UnauthorizedException("User with login " + login + " not found");
@@ -46,7 +47,7 @@ public class UsersServiceImpl implements UsersService {
 
         if (passwordEncoder.matches(password, persistentUser.get().getPassword())) {
             log.debug("User with login {} logged in", login);
-            return usersMapper.userServiceInfoToUserServiceInfoDTO(persistentUser.get());
+            return persistentUser.get();
         } else {
             log.debug("User with login {} failed to log in", login);
             throw new UnauthorizedException("Wrong password");
