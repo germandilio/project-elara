@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.delivery.dto.info.AddressInfoDTO;
@@ -63,10 +65,9 @@ public class DeliveryController {
     /**
      * Get users saved addresses. Paginated.
      *
-     * @param token      JWT token.
-     * @param pageNumber page number.
-     * @param pageSize   page size.
-     * @param userId     user id.
+     * @param token    JWT token.
+     * @param pageable automatically parses page parameters.
+     * @param userId   user id.
      * @return page of saved addresses.
      */
     @ApiResponses(value = {
@@ -77,10 +78,9 @@ public class DeliveryController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/saved-addresses")
-    public ResponseEntity<Page<AddressInfoDTO>> getSavedAddresses(@RequestHeader("Authorization") String token,
-                                                                  @RequestParam("pageNumber") int pageNumber,
-                                                                  @RequestParam("pageSize") int pageSize,
-                                                                  @RequestParam("userId") UUID userId) {
+    public Page<AddressInfoDTO> getSavedAddresses(@RequestHeader("Authorization") String token,
+                                                  @ParameterObject Pageable pageable,
+                                                  @RequestParam("userId") UUID userId) {
         //todo pagination https://youtu.be/oq-c3D67WqM?t=1931
         return null;
     }
