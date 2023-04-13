@@ -1,10 +1,13 @@
 package ru.hse.elarateam.productsget.web.repository;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
@@ -12,13 +15,10 @@ import ru.hse.elarateam.productsget.dto.PriceRangeDTO;
 import ru.hse.elarateam.productsget.model.Product;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
-public interface ProductsRepository extends JpaRepository<Product, UUID> {
+public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
     @NonNull
     @Override
     Optional<Product> findById(@NonNull UUID uuid);
@@ -36,6 +36,11 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
 
     Page<Product> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
+    public interface PriceRangeProjection {
+        BigDecimal getMin();
+        BigDecimal getMax();
+    }
+
     @Query(value = """
                 SELECT MIN(p.price) AS min, MAX(p.price) AS max FROM products p
                 LEFT JOIN products_colors pc ON pc.product_id = p.id
@@ -52,9 +57,9 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                             (:sizeUS IS NULL OR p.sizeus IN :sizeUS) AND
                              (:sizeUK IS NULL OR p.sizeuk IN :sizeUK) AND
                               (:sizeEUR IS NULL OR p.sizeeur IN :sizeEUR) AND
-                               (:query IS NULL OR p.name LIKE CONCAT('%', :query, '%') OR c.name LIKE CONCAT('%', :query, '%'))
+                                 (:query IS NULL OR p.name ILIKE CONCAT('%', :query, '%'))
             """, nativeQuery = true)
-    PriceRangeDTO findPriceRange(Collection<String> sports,
+    PriceRangeProjection findPriceRange(Collection<String> sports,
                                  Collection<String> colors,
                                  Collection<String> features,
                                  Collection<String> countries,
@@ -73,7 +78,6 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                                                  Collection<Double> sizeEUR,
                                                  Collection<Double> sizeUK,
                                                  String query) {
-        // verification part
         Collection<String> prSports = sports == null ? Collections.emptyList() : sports;
         Collection<String> prColors = colors == null ? Collections.emptyList() : colors;
         Collection<String> prFeatures = features == null ? Collections.emptyList() : features;
@@ -83,10 +87,32 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
         Collection<Double> prSizeEUR = sizeEUR == null ? Collections.emptyList() : sizeEUR;
         Collection<Double> prSizeUK = sizeUK == null ? Collections.emptyList() : sizeUK;
         String prQuery = query == null ? "" : query;
-        return findPriceRange(prSports, prColors, prFeatures, prCountries, prBrands, prSizeUS, prSizeEUR, prSizeUK, prQuery);
+
+        var priceRange = findPriceRange(prSports, prColors, prFeatures, prCountries, prBrands, prSizeUS, prSizeEUR, prSizeUK, prQuery);
+        return new PriceRangeDTO(priceRange.getMin(), priceRange.getMax());
     }
 
-    Page<Product> findAllBySports_NameInAndColors_NameInAndFeatures_NameInAndCountryOfOriginInAndBrandInAndSizeUSInAndSizeEURInAndSizeUKInAndPriceBetweenAndNameContainingIgnoreCase(
+    @Query(value = """
+                SELECT p.* FROM products p
+                LEFT JOIN products_colors pc ON pc.product_id = p.id
+                LEFT JOIN colors c ON pc.colors_id = c.id
+                JOIN products_features pf on p.id = pf.product_id
+                JOIN features f on f.id = pf.features_id
+                JOIN products_sports ps on p.id = ps.product_id
+                JOIN sports s on ps.sports_id = s.id
+                 WHERE (:sports IS NULL OR s.name IN :sports) AND
+                        (:colors IS NULL OR c.name IN :colors) AND
+                         (:features IS NULL OR f.name IN :features) AND
+                          (:countries IS NULL OR p.country_of_origin IN :countries) AND
+                           (:brands IS NULL OR p.brand IN :brands) AND
+                            (:sizeUS IS NULL OR p.sizeus IN :sizeUS) AND
+                             (:sizeEUR IS NULL OR p.sizeeur IN :sizeEUR) AND
+                              (:sizeUK IS NULL OR p.sizeuk IN :sizeUK) AND
+                               (:minPrice IS NULL OR p.price >= :minPrice) AND
+                                (:maxPrice IS NULL OR p.price <= :maxPrice) AND
+                                 (:query IS NULL OR p.name ILIKE CONCAT('%', :query, '%'))
+            """, nativeQuery = true)
+    Page<Product> findAllByFiltersAndQuery(
             Collection<String> sports,
             Collection<String> colors,
             Collection<String> features,
@@ -126,7 +152,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
         BigDecimal prMaxPrice = maxPrice == null ? BigDecimal.valueOf(Long.MAX_VALUE) : maxPrice;
         String prQuery = query == null ? "" : query;
 
-        return findAllBySports_NameInAndColors_NameInAndFeatures_NameInAndCountryOfOriginInAndBrandInAndSizeUSInAndSizeEURInAndSizeUKInAndPriceBetweenAndNameContainingIgnoreCase(
+        return findAllByFiltersAndQuery(
                 prSports,
                 prColors,
                 prFeatures,

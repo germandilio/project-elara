@@ -163,7 +163,7 @@ public class ProductsGetController {
      * @param sizeEUR   sizeEUR, can be multiple
      * @param sizeUK    sizeUK, can be multiple
      * @param query     search query
-     * @return price range (min and max)
+     * @return price range (min and max), if no products found - min and max will be null
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
