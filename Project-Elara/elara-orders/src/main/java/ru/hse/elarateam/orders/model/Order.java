@@ -33,7 +33,7 @@ public class Order {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
-    private UUID userID;
+    private UUID userId;
 
     @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
