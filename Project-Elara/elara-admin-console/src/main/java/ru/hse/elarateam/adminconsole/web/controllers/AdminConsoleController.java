@@ -1,20 +1,27 @@
 package ru.hse.elarateam.adminconsole.web.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.adminconsole.dto.ColorInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.FeatureInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.ProductInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.SportInfoDTO;
+import ru.hse.elarateam.adminconsole.services.ColorsService;
 
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/admin-console")
 public class AdminConsoleController {
+    private final ProductsService productsService;
+    private final ColorsService colorsService;
+
     @PostMapping("/product")
     public ResponseEntity<ProductInfoDTO> createProduct(@RequestBody ProductInfoDTO productInfoDTO) {
-        return null;
+
+        return ResponseEntity.ok(colorsService.createColor(colorInfoDTO));
     }
 
     @PutMapping("/product")
@@ -44,7 +51,7 @@ public class AdminConsoleController {
 
     @PostMapping("/color")
     public ResponseEntity<ColorInfoDTO> createColor(@RequestBody ColorInfoDTO colorInfoDTO) {
-        return null;
+        return ResponseEntity.ok(colorsService.createColor(colorInfoDTO));
     }
 
     @PutMapping("/color")

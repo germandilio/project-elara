@@ -56,7 +56,7 @@ public class ElaraProductsApplication {
                     .weight(42.0)
                     .build());
             productsRepository.flush();
-            log.info(productsRepository.findAll().size() + " elarateam were added to database");
+            log.info(productsRepository.findAll().size() + " were added to database");
         };
     }
 }
