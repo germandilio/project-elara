@@ -94,30 +94,6 @@ public class OrdersController {
         return null;
     }
 
-
-    /**
-     * Cancel order.
-     *
-     * @param token   JWT token.
-     * @param orderId order id.
-     * @return orderResponseDTO or string exception message.
-     */
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order canceled.",
-                    content = @Content(schema = @Schema(implementation = OrderResponseDTO.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized.",
-                    content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "404", description = "Order not found.",
-                    content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", description = "Internal server error.",
-                    content = @Content(schema = @Schema(implementation = String.class)))
-    })
-    @PutMapping("/cancel")
-    public ResponseEntity<OrderResponseDTO> cancelOrder(@RequestHeader("Authorization") String token,
-                                                        @RequestParam("orderId") UUID orderId) {
-        return null;
-    }
-
     /**
      * Get order by id.
      *
@@ -180,7 +156,7 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))})
-    @GetMapping("/all")
+    @GetMapping("/")
     public Page<OrderResponseDTO> getAllOrders(@RequestHeader("Authorization") String token,
                                                                @ParameterObject Pageable pageable) {
         //todo pagination https://youtu.be/oq-c3D67WqM?t=1931
@@ -205,7 +181,32 @@ public class OrdersController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @PutMapping("/change-status")
-    public ResponseEntity<OrderResponseDTO> changeOrderStatus(@RequestHeader("Authorization") String token,
+    public ResponseEntity<OrderResponseDTO> changeOrderStatusAdmin(@RequestHeader("Authorization") String token,
+                                                              @RequestParam("orderId") UUID orderId,
+                                                              @RequestParam("status") String status) {
+        return null;
+    }
+
+
+    /**
+     * SERVICE ENDPOINT.
+     *
+     * @param serviceToken JWT token.
+     * @param orderId     order id.
+     * @param status     new status.
+     * @return orderResponseDTO or string exception message.
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order status changed.",
+                    content = @Content(schema = @Schema(implementation = OrderResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "Order not found.",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error.",
+                    content = @Content(schema = @Schema(implementation = String.class)))})
+    @PutMapping("/service/change-status")
+    public ResponseEntity<OrderResponseDTO> changeOrderStatusSystem(@RequestHeader("Authorization") String serviceToken,
                                                               @RequestParam("orderId") UUID orderId,
                                                               @RequestParam("status") String status) {
         return null;
