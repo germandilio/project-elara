@@ -39,7 +39,7 @@ public class ProductsController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/allocate")
-    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> placeOrder(@RequestHeader("Authorization") String serviceToken,
+    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> allocateProducts(@RequestHeader("Authorization") String serviceToken,
                                                                      @RequestBody OrderRequestDTO orderRequestDTO) {
         // todo доделать
         // проверка jwt token'a, получение userId
