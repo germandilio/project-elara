@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: elara-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: elara-users
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/*/users/**
+
+        - id: elara-login
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/*/auth/**
+
+        - id: elara-products-get
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/*/products/**,/api/*/sports/**,/api/*/features/**,/api/*/colors/**
+            - Method=GET
+
+        - id: elara-orders
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/*/orders/**
+
+        - id: elara-admin-console
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/*/admin-console/**
+
+        - id: elara-delivery
+          uri: http://localhost:8089
+          predicates:
+            - Path=/api/*/delivery/**
+
+        - id: elara-payment
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/*/payment/**
