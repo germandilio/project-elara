@@ -1,11 +1,9 @@
 package ru.hse.elarateam.productsget.web.repository;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +13,10 @@ import ru.hse.elarateam.productsget.dto.PriceRangeDTO;
 import ru.hse.elarateam.productsget.model.Product;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
@@ -38,6 +39,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
 
     public interface PriceRangeProjection {
         BigDecimal getMin();
+
         BigDecimal getMax();
     }
 
@@ -60,14 +62,14 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
                                  (:query IS NULL OR p.name ILIKE CONCAT('%', :query, '%'))
             """, nativeQuery = true)
     PriceRangeProjection findPriceRange(Collection<String> sports,
-                                 Collection<String> colors,
-                                 Collection<String> features,
-                                 Collection<String> countries,
-                                 Collection<String> brands,
-                                 Collection<Double> sizeUS,
-                                 Collection<Double> sizeEUR,
-                                 Collection<Double> sizeUK,
-                                 String query);
+                                        Collection<String> colors,
+                                        Collection<String> features,
+                                        Collection<String> countries,
+                                        Collection<String> brands,
+                                        Collection<Double> sizeUS,
+                                        Collection<Double> sizeEUR,
+                                        Collection<Double> sizeUK,
+                                        String query);
 
     default PriceRangeDTO findPriceRangeNullable(Collection<String> sports,
                                                  Collection<String> colors,
