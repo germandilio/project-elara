@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.products.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.products.dto.response.ResponsePayloadDTO;
 import ru.hse.elarateam.products.services.ProductsService;
+import ru.hse.elarateam.products.services.jwt.service.ServiceTokenUtilsImpl;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class ProductsController {
 
     private final ProductsService productsService;
 
+    private final ServiceTokenUtilsImpl serviceTokenUtils;
 
     /**
      * SERVICE ENDPOINT.
@@ -40,10 +42,12 @@ public class ProductsController {
     })
     @PostMapping("/allocate")
     public ResponseEntity<ResponsePayloadDTO<List<UUID>>> allocateProducts(@RequestHeader("Authorization") String serviceToken,
-                                                                     @RequestBody OrderRequestDTO orderRequestDTO) {
-        // todo доделать
-        // проверка jwt token'a, получение userId
-        // проверка соответствия userId в запросе с полученным
+                                                                           @RequestBody OrderRequestDTO orderRequestDTO) {
+        // service token validation
+        if (!validateServiceToken(serviceToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         // аллокация (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
         var allocatedProducts = productsService.allocateProducts(requiredProducts);
@@ -70,14 +74,25 @@ public class ProductsController {
     @PostMapping("/deallocate")
     public ResponseEntity<ResponsePayloadDTO<List<UUID>>> deallocateProducts(@RequestHeader("Authorization") String serviceToken,
                                                                              @RequestBody OrderRequestDTO orderRequestDTO) {
-        // todo доделать
-        // проверка jwt token'a, получение userId
-        // проверка соответствия userId в запросе с полученным
-        // деаллокация (transactional)
+        // service token validation
+        if (!validateServiceToken(serviceToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // deallocation (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
         var deallocatedProducts = productsService.deallocateProducts(requiredProducts);
         return new ResponseEntity<>(
                 new ResponsePayloadDTO<>("Products deallocated.", deallocatedProducts),
                 HttpStatus.OK);
     }
+
+    private boolean validateServiceToken(String serviceToken) {
+        if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
+            return false;
+        }
+        return serviceTokenUtils.validateToken(serviceToken.substring(7));
+    }
+
 }
+
