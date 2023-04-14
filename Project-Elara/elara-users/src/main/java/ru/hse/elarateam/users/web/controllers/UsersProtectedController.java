@@ -161,6 +161,7 @@ public class UsersProtectedController {
     }
 
     /**
+     * SERVICE ENDPOINT
      * Get user info by id.
      * <p>
      * Note: This method is service (protected by service token).
