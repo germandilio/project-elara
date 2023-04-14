@@ -11,4 +11,5 @@ public class UserInfoDTO {
     private UUID userId;
     private String email;
     private String firstName;
+    private boolean emailVerified;
 }

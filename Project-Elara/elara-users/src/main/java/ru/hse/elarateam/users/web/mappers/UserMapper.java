@@ -24,6 +24,7 @@ public interface UserMapper {
     @Mapping(source = "login", target = "email")
     @Mapping(source = "id", target = "userId")
     @Mapping(source = "userProfile.firstName", target = "firstName")
+    @Mapping(target = "emailVerified", expression = "java(!userServiceInfo.getRole().getRole().toString().equals(\"EMAIL_NOT_VERIFIED\"))")
     UserInfoDTO userServiceInfoToUserInfoDTO(UserServiceInfo userServiceInfo);
 
     @Mapping(target = "role", source = "userServiceInfo.role.role")
