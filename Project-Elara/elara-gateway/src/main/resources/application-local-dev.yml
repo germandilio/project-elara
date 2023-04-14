@@ -12,7 +12,7 @@ spring:
           uri: http://localhost:8085
           predicates:
             - Path=/api/*/users/**
-            -
+
         - id: elara-login
           uri: http://localhost:8086
           predicates:
@@ -21,10 +21,7 @@ spring:
         - id: elara-products-get
           uri: http://localhost:8082
           predicates:
-            - Path=/api/*/products/**
-            - Path=/api/*/sports/**
-            - Path=/api/*/features/**
-            - Path=/api/*/colors/**
+            - Path=/api/*/products/**,/api/*/sports/**,/api/*/features/**,/api/*/colors/**
             - Method=GET
 
         - id: elara-orders
