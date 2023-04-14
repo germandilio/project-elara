@@ -61,6 +61,7 @@ public class LoginController {
     }
 
     /**
+     * SERVICE ENDPOINT
      * Get user info by token.
      *
      * @param token        JWT token
