@@ -1,0 +1,2816 @@
+openapi: 3.0.1
+info:
+  title: Project Elara API
+  description: "Prefinal version of API"
+  version: '1.0'
+servers:
+  - url: http://localhost:8080/api
+    description: Gateway url
+paths:
+  # prodcuts get
+  /v1/sports:
+    get:
+      tags:
+        - sports-get-controller
+      summary: Get all sports
+      description: Get all sports
+      operationId: getSports
+      responses:
+        '200':
+          description: list of sports
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SportInfoDTO'
+  /v1/sports/{id}:
+    get:
+      tags:
+        - sports-get-controller
+      summary: Get sport by id
+      description: Get sport by id
+      operationId: getSportById
+      parameters:
+        - name: id
+          in: path
+          description: sport id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: sport info
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SportInfoDTO'
+  /v1/products:
+    get:
+      tags:
+        - products-get-controller
+      summary: Get products by filters and search query
+      description: |-
+        Get products by filters and search query.
+         All parameters are optional.
+         <p>
+         Note: if filters are present, query will find products that match all specified filters.
+         Search query will run over name only.
+      operationId: getAllProductsByFilers
+      parameters:
+        - name: sports
+          in: query
+          description: sports, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: colors
+          in: query
+          description: colors, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: features
+          in: query
+          description: features, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: countries
+          in: query
+          description: countries, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: brands
+          in: query
+          description: brands, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: sizeUS
+          in: query
+          description: sizeUS, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
+              format: double
+        - name: sizeEUR
+          in: query
+          description: sizeEUR, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
+              format: double
+        - name: sizeUK
+          in: query
+          description: sizeUK, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
+              format: double
+        - name: minPrice
+          in: query
+          description: min price (should be less or equal than maxPrice)
+          required: false
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          description: max price (should be greater or equal than minPrice)
+          required: false
+          schema:
+            type: number
+        - name: query
+          in: query
+          description: search query
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: 'Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageProductInfoDTO'
+        '400':
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/products/{id}:
+    get:
+      tags:
+        - products-get-controller
+      summary: Get product by id
+      description: Get product by id
+      operationId: getProductById
+      parameters:
+        - name: id
+          in: path
+          description: product id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductInfoDTO'
+        '400':
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/products/service:
+    get:
+      tags:
+        - products-get-controller
+      summary: |-
+        Get products by ids or upcs or name
+         Note: If ids is present, then upcs and name are ignored etc.
+      description: |-
+        Get products by ids or upcs or name
+         Note: If ids is present, then upcs and name are ignored etc.
+      operationId: getAllProducts
+      parameters:
+        - name: ids
+          in: query
+          description: product ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: upcs
+          in: query
+          description: product Universal Product Codes
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: name
+          in: query
+          description: product name (will find all products with name containing this string)
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: 'Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageProductInfoDTO'
+        '400':
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/products/recent:
+    get:
+      tags:
+        - products-get-controller
+      summary: Get products that were added recently.
+      description: Get products that were added recently.
+      operationId: getAllRecentProducts
+      parameters:
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: 'Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageProductInfoDTO'
+        '400':
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/products/price-range:
+    get:
+      tags:
+        - products-get-controller
+      summary: Get price range for products that match filters and search query.
+      description: Get price range for products that match filters and search query.
+      operationId: getPriceRange
+      parameters:
+        - name: sports
+          in: query
+          description: sports, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: colors
+          in: query
+          description: colors, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: features
+          in: query
+          description: features, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: countries
+          in: query
+          description: countries, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: brands
+          in: query
+          description: brands, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: sizeUS
+          in: query
+          description: sizeUS, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
+              format: double
+        - name: sizeEUR
+          in: query
+          description: sizeEUR, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
+              format: double
+        - name: sizeUK
+          in: query
+          description: sizeUK, can be multiple
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
+              format: double
+        - name: query
+          in: query
+          description: search query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PriceRangeDTO'
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/features:
+    get:
+      tags:
+        - features-get-controller
+      summary: Get all features
+      description: Get all features
+      operationId: getFeatures
+      responses:
+        '200':
+          description: list of features
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeatureInfoDTO'
+  /v1/features/{id}:
+    get:
+      tags:
+        - features-get-controller
+      summary: Get feature by id
+      description: Get feature by id
+      operationId: getFeatureById
+      parameters:
+        - name: id
+          in: path
+          description: feature id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: feature info
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FeatureInfoDTO'
+  /v1/colors:
+    get:
+      tags:
+        - colors-get-controller
+      summary: Get all colors
+      description: Get all colors
+      operationId: getColors
+      responses:
+        '200':
+          description: list of colors
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ColorInfoDTO'
+  /v1/colors/{id}:
+    get:
+      tags:
+        - colors-get-controller
+      summary: Get color by id
+      description: Get color by id
+      operationId: getColorById
+      parameters:
+        - name: id
+          in: path
+          description: color id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: color info
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ColorInfoDTO'
+                
+  # admin console
+  /v1/admin-console/sport:
+    put:
+      tags:
+        - admin-console-controller
+      summary: Update sport by sportInfoDTO.
+      description: Update sport by sportInfoDTO.
+      operationId: updateSport
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: sport info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SportInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Sport updated.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SportInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - admin-console-controller
+      summary: Create sport by sportInfoDTO.
+      description: Create sport by sportInfoDTO.
+      operationId: createSport
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: sport info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SportInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Sport created.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SportInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - admin-console-controller
+      summary: Delete sport by id.
+      description: Delete sport by id.
+      operationId: deleteSport
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: sportID
+          in: query
+          description: sport id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Sport deleted.
+          content:
+            '*/*':
+              schema:
+                type: object
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  /v1/admin-console/product:
+    put:
+      tags:
+        - admin-console-controller
+      summary: Update product by productInfoDTO.
+      description: Update product by productInfoDTO.
+      operationId: updateProduct
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: product info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Product updated.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - admin-console-controller
+      summary: Create product by productInfoDTO.
+      description: Create product by productInfoDTO.
+      operationId: createProduct
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: product info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Product created.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - admin-console-controller
+      summary: Delete product by id.
+      description: Delete product by id.
+      operationId: deleteProduct
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: productID
+          in: query
+          description: product id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product deleted.
+          content:
+            '*/*':
+              schema:
+                type: object
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  /v1/admin-console/feature:
+    put:
+      tags:
+        - admin-console-controller
+      summary: Update feature by featureInfoDTO.
+      description: Update feature by featureInfoDTO.
+      operationId: updateFeature
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: feature info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Feature updated.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FeatureInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - admin-console-controller
+      summary: Create feature by featureInfoDTO.
+      description: Create feature by featureInfoDTO.
+      operationId: createFeature
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: feature info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Feature created.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FeatureInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - admin-console-controller
+      summary: Delete feature by id.
+      description: Delete feature by id.
+      operationId: deleteFeature
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: featureID
+          in: query
+          description: feature id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Feature deleted.
+          content:
+            '*/*':
+              schema:
+                type: object
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  /v1/admin-console/color:
+    put:
+      tags:
+        - admin-console-controller
+      summary: Update color by colorInfoDTO.
+      description: Update color by colorInfoDTO.
+      operationId: updateColor
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: color info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColorInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Color created.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FeatureInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - admin-console-controller
+      summary: Create color by colorInfoDTO.
+      description: Create color by colorInfoDTO.
+      operationId: createColor
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: color info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColorInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Color created.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ColorInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - admin-console-controller
+      summary: Delete color by id.
+      description: Delete color by id.
+      operationId: deleteColor
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: colorID
+          in: query
+          description: color id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Color deleted.
+          content:
+            '*/*':
+              schema:
+                type: object
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  /v1/products/deallocate:
+    post:
+      tags:
+        - products-controller
+      summary: SERVICE ENDPOINT.
+      description: |-
+        SERVICE ENDPOINT.
+         Deallocate products for order.
+      operationId: deallocateProducts
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: order deallocation request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: Products deallocated.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponsePayloadDTOListUUID'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  # products
+  /v1/products/allocate:
+    post:
+      tags:
+        - products-controller
+      summary: SERVICE ENDPOINT.
+      description: |-
+        SERVICE ENDPOINT.
+         Allocate products for order.
+      operationId: allocateOrder
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: order allocation request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: Products allocated.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponsePayloadDTOListUUID'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  # users
+  /v1/users:
+    put:
+      tags:
+        - users-protected-controller
+      summary: Update user profile
+      description: |-
+        Update user profile.
+         <p>
+         Note: This method is protected by JWT token.
+      operationId: updateProfile
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: user profile to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdateRequestDTO'
+        required: true
+      responses:
+        '204':
+          description: Profile updated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UpdateProfileResponse'
+        '400':
+          description: Invalid profile
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - users-public-controller
+      summary: Register new user
+      description: Register new user
+      operationId: register
+      requestBody:
+        description: user info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequestDTO'
+        required: true
+      responses:
+        '201':
+          description: User registered
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserInfoDTO'
+        '400':
+          description: Invalid user info
+          content:
+            '*/*':
+              schema:
+                type: string
+        '409':
+          description: Login is unavailable
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/change-password:
+    put:
+      tags:
+        - users-protected-controller
+      summary: Change password request
+      description: |-
+        Change password request.
+         <p>
+         Note: This method is protected by JWT token.
+      operationId: changePassword
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: request with old and new password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequestDTO'
+        required: true
+      responses:
+        '204':
+          description: Password changed
+        '400':
+          description: Invalid password
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/verify-email:
+    post:
+      tags:
+        - users-public-controller
+      summary: Verify email with verification token
+      description: |-
+        Verify email with verification token.
+         <p>
+         Note: Method should be called after user clicked on link in email.
+      operationId: verifyEmail
+      parameters:
+        - name: token
+          in: query
+          description: verification token
+          required: true
+          schema:
+            maxLength: 128
+            minLength: 1
+            type: string
+      responses:
+        '204':
+          description: Email verified
+        '400':
+          description: Invalid token
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/reset-password:
+    post:
+      tags:
+        - users-public-controller
+      summary: Reset password with reset token.
+      description: |-
+        Reset password with reset token.
+         Note: Method should be called after user clicked on link in email.
+      operationId: resetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequestDTO'
+        required: true
+      responses:
+        '204':
+          description: Password reset
+        '400':
+          description: Invalid request
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/forgot-password:
+    post:
+      tags:
+        - users-public-controller
+      summary: Send email with password reset link (forgot password feature)
+      description: Send email with password reset link (forgot password feature)
+      operationId: forgotPassword
+      parameters:
+        - name: login
+          in: query
+          description: user login (should be valid email)
+          required: true
+          schema:
+            maxLength: 128
+            minLength: 1
+            type: string
+      responses:
+        '204':
+          description: Email sent
+        '400':
+          description: Invalid login
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/{userId}:
+    get:
+      tags:
+        - users-protected-controller
+      summary: |-
+        SERVICE ENDPOINT
+         Get user info by id
+      description: |-
+        SERVICE ENDPOINT
+         Get user info by id.
+         <p>
+         Note: This method is service (protected by service token).
+      operationId: getUserInfoById
+      parameters:
+        - name: userId
+          in: path
+          description: user id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Authorization
+          in: header
+          description: service token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User info found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserInfoDTO'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: User info not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - users-protected-controller
+      summary: Delete user by id
+      description: |-
+        Delete user by id.
+         <p>
+         Note: This method is protected by JWT token.
+      operationId: deleteUserById
+      parameters:
+        - name: userId
+          in: path
+          description: user id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Authorization
+          in: header
+          description: JWT token
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/profile/{userId}:
+    get:
+      tags:
+        - users-protected-controller
+      summary: Get user profile by id
+      description: |-
+        Get user profile by id.
+         <p>
+         Note: This method is protected by JWT token.
+      operationId: getUserProfileById
+      parameters:
+        - name: userId
+          in: path
+          description: user id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Authorization
+          in: header
+          description: JWT token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserProfileDTO'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Profile not found
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/users/login-available:
+    get:
+      tags:
+        - users-public-controller
+      summary: Check if login is available
+      description: Check if login is available
+      operationId: checkLoginAvailability
+      parameters:
+        - name: login
+          in: query
+          description: login to check (should be valid email)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Login is available
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Invalid login
+          content:
+            '*/*':
+              schema:
+                type: string
+        '409':
+          description: Login is unavailable
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: string
+    
+  # auth
+  /v1/auth/user:
+    get:
+      tags:
+        - login-controller
+      summary: |-
+        SERVICE ENDPOINT
+         Get user info by token.
+      description: |-
+        SERVICE ENDPOINT
+         Get user info by token.
+      operationId: getUserByToken
+      parameters:
+        - name: token
+          in: query
+          description: JWT token
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: service token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Return user info
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserServiceInfoDTO'
+        '400':
+          description: Token is not provided
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Invalid service token
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Login service is unavailable
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/auth/login:
+    get:
+      tags:
+        - login-controller
+      summary: Perform login operation.
+      description: Perform login operation.
+      operationId: login
+      parameters:
+        - name: login
+          in: query
+          description: user login (should match email validation rules)
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: user password
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Login or password is not provided
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: Login or password is incorrect
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Login service is unavailable
+          content:
+            '*/*':
+              schema:
+                type: string
+  
+  # orders
+  /v1/orders/service/change-status:
+    put:
+      tags:
+        - orders-controller
+      summary: SERVICE ENDPOINT.
+      description: SERVICE ENDPOINT.
+      operationId: changeOrderStatusSystem
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: orderId
+          in: query
+          description: order id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          description: new status.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order status changed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Order not found.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/payment:
+    put:
+      tags:
+        - orders-controller
+      summary: SERVICE ENDPOINT.
+      description: |-
+        SERVICE ENDPOINT.
+         Payment service target endpoint.
+      operationId: changePaymentDetails
+      parameters:
+        - name: Authorization
+          in: header
+          description: service authorization.
+          required: true
+          schema:
+            type: string
+        - name: orderId
+          in: query
+          description: order id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: payment details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentDetailsInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Payment details changed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Order not found.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/delivery:
+    put:
+      tags:
+        - orders-controller
+      summary: SERVICE ENDPOINT.
+      description: |-
+        SERVICE ENDPOINT.
+         Delivery service target endpoint.
+      operationId: changeDeliveryDetails
+      parameters:
+        - name: Authorization
+          in: header
+          description: service authorization.
+          required: true
+          schema:
+            type: string
+        - name: orderId
+          in: query
+          description: order id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: shipment details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentDetailsInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Delivery details changed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Order not found.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/change-status:
+    put:
+      tags:
+        - orders-controller
+      summary: Change order status.
+      description: Change order status.
+      operationId: changeOrderStatusAdmin
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: orderId
+          in: query
+          description: order id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          description: new status.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order status changed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Order not found.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/place:
+    post:
+      tags:
+        - orders-controller
+      summary: Place order by orderRequestDTO.
+      description: |-
+        Place order by orderRequestDTO.
+         Allocated requested products, creates order and returns orderResponseDTO.
+      operationId: placeOrder
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: order request info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: Products allocated.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/{userId}:
+    get:
+      tags:
+        - orders-controller
+      summary: Get orders by user id.
+      description: Get orders by user id.
+      operationId: getOrdersByUserId
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          description: user id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: query
+          description: page number.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: page size.
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageOrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/{orderId}:
+    get:
+      tags:
+        - orders-controller
+      summary: Get order by id.
+      description: Get order by id.
+      operationId: getOrderById
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: orderId
+          in: path
+          description: order id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Order found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Order not found.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/orders/:
+    get:
+      tags:
+        - orders-controller
+      summary: Get all orders.
+      description: Get all orders.
+      operationId: getAllOrders
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: 'Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageOrderResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+  # delivery
+  /v1/delivery/select:
+    put:
+      tags:
+        - delivery-controller
+      summary: Select shipment methods by selectShipmentMethodRequestDTO.
+      description: Select shipment methods by selectShipmentMethodRequestDTO.
+      operationId: selectShipmentMethod
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: selected shipment method info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectShipmentMethodRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: Shipment method selected.
+          content:
+            '*/*':
+              schema:
+                type: object
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/delivery/get:
+    post:
+      tags:
+        - delivery-controller
+      summary: Get shipment methods by shipmentMethodsRequestDTO.
+      description: Get shipment methods by shipmentMethodsRequestDTO.
+      operationId: getShipmentMethods
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: shipment info.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentMethodsRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: Shipment methods were successfully received.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ShipmentMethodsResponseDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/delivery/saved-addresses:
+    get:
+      tags:
+        - delivery-controller
+      summary: Get users saved addresses.
+      description: Get users saved addresses. Paginated.
+      operationId: getSavedAddresses
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: 'Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: userId
+          in: query
+          description: user id.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageAddressInfoDTO'
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+  # payment
+  /v1/payment/:
+    post:
+      tags:
+        - payment-controller
+      summary: Register payment.
+      description: Register payment.
+      operationId: registerPayment
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: payment details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentDetailsInfoDTO'
+        required: true
+      responses:
+        '200':
+          description: Payment was registered.
+        '401':
+          description: Unauthorized.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '404':
+          description: Order not found.
+          content:
+            '*/*':
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
+          content:
+            '*/*':
+              schema:
+                type: string
+                
+components:
+  schemas:
+    SportInfoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      description: ''
+    ColorInfoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        hex:
+          type: string
+      description: ''
+    FeatureInfoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+      description: ''
+    PageProductInfoDTO:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInfoDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    ProductInfoDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        upc:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        discount:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        description:
+          type: string
+        brand:
+          type: string
+        countryOfOrigin:
+          type: string
+        sizeUS:
+          type: number
+          format: double
+        sizeEUR:
+          type: number
+          format: double
+        sizeUK:
+          type: number
+          format: double
+        sports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/SportInfoDTO'
+        colors:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ColorInfoDTO'
+        features:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureInfoDTO'
+        pictures:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        height:
+          type: number
+          format: double
+        width:
+          type: number
+          format: double
+        length:
+          type: number
+          format: double
+        weight:
+          type: number
+          format: double
+      description: ''
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+      description: ''
+    PriceRangeDTO:
+      type: object
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+      description: ''
+    OrderRequestDTO:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderedItemRequestDTO'
+      description: ''
+    OrderedItemRequestDTO:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          format: int64
+      description: ''
+    ResponsePayloadDTOListUUID:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: string
+            format: uuid
+      description: ''
+    UserProfileUpdateRequestDTO:
+      required:
+        - email
+        - firstName
+        - lastName
+        - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        pictureUrl:
+          type: string
+        birthDate:
+          type: string
+          format: date-time
+      description: ''
+    UpdateProfileResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        type:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserDTO'
+      description: ''
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum:
+            - EMAIL_NOT_VERIFIED
+            - USER
+            - ADMIN
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        pictureUrl:
+          type: string
+        birthDate:
+          type: string
+          format: date-time
+      description: ''
+    ChangePasswordRequestDTO:
+      required:
+        - newPassword
+        - oldPassword
+        - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+      description: ''
+    UserRegisterRequestDTO:
+      required:
+        - firstName
+        - lastName
+        - login
+        - password
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        pictureUrl:
+          type: string
+        birthDate:
+          type: string
+          format: date-time
+      description: ''
+    UserInfoDTO:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        email:
+          type: string
+        firstName:
+          type: string
+        emailVerified:
+          type: boolean
+      description: ''
+    ResetPasswordRequestDTO:
+      required:
+        - newPassword
+        - resetPasswordToken
+      type: object
+      properties:
+        resetPasswordToken:
+          type: string
+        newPassword:
+          type: string
+      description: ''
+    UserProfileDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        pictureUrl:
+          type: string
+        birthDate:
+          type: string
+          format: date-time
+      description: ''
+    UserServiceInfoDTO:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        login:
+          type: string
+        roleId:
+          type: string
+          format: uuid
+        roleName:
+          type: string
+          enum:
+            - EMAIL_NOT_VERIFIED
+            - USER
+            - ADMIN
+      description: ''
+    LoginResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        profile:
+          $ref: '#/components/schemas/UserProfileDTO'
+        role:
+          type: string
+          enum:
+            - EMAIL_NOT_VERIFIED
+            - USER
+            - ADMIN
+        token:
+          type: string
+        type:
+          type: string
+      description: ''
+    PaymentDetailsInfoDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - CREATED
+            - SAVED
+            - APPROVED
+            - VOIDED
+            - COMPLETED
+            - PAYER_ACTION_REQUIRED
+        userEmail:
+          type: string
+        updateTime:
+          type: string
+          format: date-time
+    AddressInfoDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        postalCode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        street:
+          type: string
+        buildingNumber:
+          type: string
+        apartmentNumber:
+          type: string
+        entranceNumber:
+          type: string
+    OrderResponseDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderedItemResponseDTO'
+        totalWithDiscount:
+          type: number
+        totalWithoutDiscount:
+          type: number
+        shipmentDetails:
+          $ref: '#/components/schemas/ShipmentDetailsInfoDTO'
+        paymentDetails:
+          $ref: '#/components/schemas/PaymentDetailsInfoDTO'
+        status:
+          type: string
+          enum:
+            - ALLOCATED
+            - DELIVERY_METHOD_SELECTED
+            - PAID
+            - PACKED
+            - IN_DELIVERY
+            - DELIVERED
+            - CANCELLED
+        totalHeight:
+          type: number
+          format: double
+        totalLength:
+          type: number
+          format: double
+        totalWidth:
+          type: number
+          format: double
+        totalWeight:
+          type: number
+          format: double
+      description: ''
+    OrderedItemResponseDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        price:
+          type: number
+        discount:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+    ShipmentDetailsInfoDTO:
+      type: object
+      properties:
+        fromAddress:
+          $ref: '#/components/schemas/AddressInfoDTO'
+        toAddress:
+          $ref: '#/components/schemas/AddressInfoDTO'
+        deliveryCost:
+          type: number
+        shipmentMethod:
+          $ref: '#/components/schemas/ShipmentMethodInfoDTO'
+    ShipmentMethodInfoDTO:
+      type: object
+      properties:
+        tariffCode:
+          type: integer
+          format: int32
+        tariffName:
+          type: string
+        tariffDescription:
+          type: string
+        deliveryMode:
+          type: integer
+          format: int32
+        deliverySum:
+          type: number
+        periodMin:
+          type: integer
+          format: int32
+        periodMax:
+          type: integer
+          format: int32
+    PageOrderResponseDTO:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderResponseDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        empty:
+          type: boolean
+    SelectShipmentMethodRequestDTO:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        shipmentMethod:
+          $ref: '#/components/schemas/ShipmentMethodInfoDTO'
+      description: ''
+    ShipmentMethodsRequestDTO:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        toAddress:
+          $ref: '#/components/schemas/AddressInfoDTO'
+      description: ''
+    ShipmentMethodsResponseDTO:
+      type: object
+      properties:
+        shipmentMethods:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentMethodInfoDTO'
+      description: ''
+    PageAddressInfoDTO:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressInfoDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        empty:
+          type: boolean
