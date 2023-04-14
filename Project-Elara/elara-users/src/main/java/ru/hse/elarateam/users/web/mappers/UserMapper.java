@@ -2,6 +2,7 @@ package ru.hse.elarateam.users.web.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.hse.elarateam.users.dto.UserDTO;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
 import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.UserRegisterRequestDTO;
@@ -23,6 +24,10 @@ public interface UserMapper {
     @Mapping(source = "login", target = "email")
     @Mapping(source = "id", target = "userId")
     @Mapping(source = "userProfile.firstName", target = "firstName")
+    @Mapping(target = "emailVerified", expression = "java(!userServiceInfo.getRole().getRole().toString().equals(\"EMAIL_NOT_VERIFIED\"))")
     UserInfoDTO userServiceInfoToUserInfoDTO(UserServiceInfo userServiceInfo);
+
+    @Mapping(target = "role", source = "userServiceInfo.role.role")
+    UserDTO userProfileToUserDTO(UserProfile userProfile);
 
 }

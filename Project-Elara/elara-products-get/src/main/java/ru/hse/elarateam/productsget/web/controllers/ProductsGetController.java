@@ -152,9 +152,18 @@ public class ProductsGetController {
     }
 
     /**
-     * Get products price range.
+     * Get price range for products that match filters and search query.
      *
-     * @return object with min and max price
+     * @param sports    sports, can be multiple
+     * @param colors    colors, can be multiple
+     * @param features  features, can be multiple
+     * @param countries countries, can be multiple
+     * @param brands    brands, can be multiple
+     * @param sizeUS    sizeUS, can be multiple
+     * @param sizeEUR   sizeEUR, can be multiple
+     * @param sizeUK    sizeUK, can be multiple
+     * @param query     search query
+     * @return price range (min and max), if no products found - min and max will be null
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -162,7 +171,15 @@ public class ProductsGetController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/price-range")
-    public ResponseEntity<PriceRangeDTO> getPriceRange() {
-        return ResponseEntity.ok(productService.getPriceRange());
+    public ResponseEntity<PriceRangeDTO> getPriceRange(@RequestParam(required = false) Collection<String> sports,
+                                                       @RequestParam(required = false) Collection<String> colors,
+                                                       @RequestParam(required = false) Collection<String> features,
+                                                       @RequestParam(required = false) Collection<String> countries,
+                                                       @RequestParam(required = false) Collection<String> brands,
+                                                       @RequestParam(required = false) Collection<Double> sizeUS,
+                                                       @RequestParam(required = false) Collection<Double> sizeEUR,
+                                                       @RequestParam(required = false) Collection<Double> sizeUK,
+                                                       @RequestParam(required = false) String query) {
+        return ResponseEntity.ok(productService.getPriceRange(sports, colors, features, countries, brands, sizeUS, sizeEUR, sizeUK, query));
     }
 }

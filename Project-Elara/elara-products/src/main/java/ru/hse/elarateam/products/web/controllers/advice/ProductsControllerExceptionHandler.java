@@ -1,4 +1,4 @@
-package ru.hse.elarateam.products.web.controllers;
+package ru.hse.elarateam.products.web.controllers.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

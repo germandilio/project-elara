@@ -5,6 +5,7 @@ ru.hse.elarateam.delivery
 ru.hse.elarateam.delivery.dto.info
 ru.hse.elarateam.delivery.dto.request
 ru.hse.elarateam.delivery.dto.response
+ru.hse.elarateam.delivery.model
 ru.hse.elarateam.delivery.web.controllers
 ru.hse.elarateam.email
 ru.hse.elarateam.email.configs
@@ -38,7 +39,12 @@ ru.hse.elarateam.orders.dto.info
 ru.hse.elarateam.orders.dto.request
 ru.hse.elarateam.orders.dto.response
 ru.hse.elarateam.orders.model
+ru.hse.elarateam.orders.model.status
 ru.hse.elarateam.orders.web.controllers
+ru.hse.elarateam.payment
+ru.hse.elarateam.payment.dto.info
+ru.hse.elarateam.payment.model
+ru.hse.elarateam.payment.web.controllers
 ru.hse.elarateam.products
 ru.hse.elarateam.products.dto.request
 ru.hse.elarateam.products.dto.response
@@ -46,6 +52,14 @@ ru.hse.elarateam.products.model
 ru.hse.elarateam.products.repositories
 ru.hse.elarateam.products.services
 ru.hse.elarateam.products.web.controllers
+ru.hse.elarateam.productsget
+ru.hse.elarateam.productsget.dto
+ru.hse.elarateam.productsget.model
+ru.hse.elarateam.productsget.web.controllers
+ru.hse.elarateam.productsget.web.controllers.advice
+ru.hse.elarateam.productsget.web.mappers
+ru.hse.elarateam.productsget.web.repository
+ru.hse.elarateam.productsget.web.service
 ru.hse.elarateam.users
 ru.hse.elarateam.users.configs
 ru.hse.elarateam.users.configs.auth

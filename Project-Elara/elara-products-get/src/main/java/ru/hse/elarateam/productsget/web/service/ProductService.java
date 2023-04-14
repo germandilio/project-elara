@@ -64,7 +64,15 @@ public interface ProductService {
      *
      * @return price range object.
      */
-    PriceRangeDTO getPriceRange();
+    PriceRangeDTO getPriceRange(Collection<String> sports,
+                                Collection<String> colors,
+                                Collection<String> features,
+                                Collection<String> countries,
+                                Collection<String> brands,
+                                Collection<Double> sizeUS,
+                                Collection<Double> sizeEUR,
+                                Collection<Double> sizeUK,
+                                String query);
 
     ColorInfoDTO getColor(Long id);
 

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.hse.elarateam.users.dto.UserDTO;
 import ru.hse.elarateam.users.dto.UserInfoDTO;
-import ru.hse.elarateam.users.dto.UserProfileDTO;
 import ru.hse.elarateam.users.dto.requests.ChangePasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.ResetPasswordRequestDTO;
 import ru.hse.elarateam.users.dto.requests.UserProfileUpdateRequestDTO;
@@ -40,13 +40,13 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void updateUserProfile(UserProfileUpdateRequestDTO userProfileUpdateRequest) {
+    public UserDTO updateUserProfile(UserProfileUpdateRequestDTO userProfileUpdateRequest) {
         final var userBeforeUpdate = usersDBService.getUserInfoById(userProfileUpdateRequest.getUserId());
         final var userOldEmail = userBeforeUpdate.getEmail();
 
-        final var userProfile = usersDBService.updateUserProfile(userProfileUpdateRequest);
+        final var user = usersDBService.updateUserProfile(userProfileUpdateRequest);
 
-        if (!userProfile.getEmail().equals(userOldEmail)) {
+        if (!user.getEmail().equals(userOldEmail)) {
             log.debug("Generate token for user with id {} and send email verification", userBeforeUpdate.getUserId());
             final String token = tokenGenerator.generate();
             log.trace("Generated token: {}", token);
@@ -55,11 +55,13 @@ public class UsersServiceImpl implements UsersService {
 
             emailService.sendEmailVerification(userBeforeUpdate.getUserId(), token);
         }
+
+        return user;
     }
 
     @Override
-    public UserProfileDTO getUserProfileById(UUID userId) {
-        return usersDBService.getUserProfileById(userId);
+    public UserDTO getUserProfileById(UUID userId) {
+        return usersDBService.getUserById(userId);
     }
 
     @Override

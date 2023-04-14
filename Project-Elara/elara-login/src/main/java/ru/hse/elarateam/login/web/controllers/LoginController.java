@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.elarateam.login.dto.JwtResponse;
+import ru.hse.elarateam.login.dto.LoginResponse;
 import ru.hse.elarateam.login.dto.UserServiceInfoDTO;
+import ru.hse.elarateam.login.web.mappers.UsersMapper;
 import ru.hse.elarateam.login.web.services.jwt.JWTUtils;
 import ru.hse.elarateam.login.web.services.jwt.service.ServiceTokenUtils;
 import ru.hse.elarateam.login.web.services.users.UsersService;
@@ -27,11 +28,14 @@ public class LoginController {
 
     private final ServiceTokenUtils serviceTokenUtils;
 
+    private final UsersMapper usersMapper;
+
     /**
      * Perform login operation.
-     * @param login user login (should match email validation rules)
+     *
+     * @param login    user login (should match email validation rules)
      * @param password user password
-     * @return JWT token if login and password are correct
+     * @return JWT token and user info if login and password are correct
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful"),
@@ -43,16 +47,24 @@ public class LoginController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/login")
-    public ResponseEntity<?> login(@RequestParam @NotNull @Email String login, @RequestParam @NotNull String password) {
+    public ResponseEntity<LoginResponse> login(@RequestParam @NotNull @Email String login, @RequestParam @NotNull String password) {
         final var user = usersService.login(login, password);
         final var token = jwtUtils.generateToken(user.getLogin());
 
-        return ResponseEntity.ok(new JwtResponse(token));
+        var loginResponse = LoginResponse.builder()
+                .id(user.getId())
+                .profile(usersMapper.userProfileToUserProfileDTO(user.getUserProfile()))
+                .role(user.getRole().getRole())
+                .token(token)
+                .build();
+        return ResponseEntity.ok(loginResponse);
     }
 
     /**
+     * SERVICE ENDPOINT
      * Get user info by token.
-     * @param token JWT token
+     *
+     * @param token        JWT token
      * @param serviceToken service token
      * @return user info
      */
