@@ -10,7 +10,7 @@ import ru.hse.elarateam.email.dto.UserDTO;
 
 import java.util.UUID;
 
-@FeignClient(name = "elara-users", configuration = UserServiceConfig.class, url = "http://localhost:8085")
+@FeignClient(name = "elara-users", configuration = UserServiceConfig.class)
 public interface UserServiceFeignClient {
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/users/{userId}", produces = "application/json")
     @ResponseBody
