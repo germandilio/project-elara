@@ -1,6 +1,8 @@
 package ru.hse.elarateam.adminconsole.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -22,14 +24,17 @@ public class Feature {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String name;
 
+    @NotBlank
     @Column(length = 256, columnDefinition = "varchar(256)", nullable = false)
     private String description;
 
     @ManyToMany(mappedBy = "features", fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonBackReference
     private Set<Product> products = new LinkedHashSet<>();
 
     @Override

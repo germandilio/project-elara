@@ -91,9 +91,9 @@ public class Product {
     @ToString.Exclude
     private Set<Feature> features = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<Picture> pictures = new LinkedHashSet<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Set<String> pictures = new LinkedHashSet<>();
 
     @Column(nullable = false)
     private Double height;

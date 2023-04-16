@@ -1,6 +1,8 @@
 package ru.hse.elarateam.adminconsole.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -18,18 +20,23 @@ import java.util.Set;
 @Table(name = "colors")
 public class Color {
 
+    // todo решить, нужно ли уникальное название цвета
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // при откате транзакции счетчик все равно увеличивается на 1
     private Long id;
 
+    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String name;
 
+    @NotBlank
     @Column(length = 7, columnDefinition = "varchar(7)", nullable = false)
     private String hex;
 
     @ManyToMany(mappedBy = "colors", fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonBackReference
     private Set<Product> products = new LinkedHashSet<>();
 
     @Override

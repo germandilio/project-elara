@@ -1,6 +1,8 @@
 package ru.hse.elarateam.adminconsole.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -23,11 +25,13 @@ public class Sport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(length = 32, columnDefinition = "varchar(32)", nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "sports", fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonBackReference
     private Set<Product> products = new LinkedHashSet<>();
 
     @Override
