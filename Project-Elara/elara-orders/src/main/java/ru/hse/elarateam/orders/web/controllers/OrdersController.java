@@ -146,7 +146,7 @@ public class OrdersController {
     /**
      * Get all orders.
      *
-     * @param token      JWT token.
+     * @param token    JWT token.
      * @param pageable automatically parses page parameters.
      * @return page of orderResponseDTO or string exception message.
      */
@@ -158,7 +158,7 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @GetMapping("/")
     public Page<OrderResponseDTO> getAllOrders(@RequestHeader("Authorization") String token,
-                                                               @ParameterObject Pageable pageable) {
+                                               @ParameterObject Pageable pageable) {
         //todo pagination https://youtu.be/oq-c3D67WqM?t=1931
         return null;
     }
@@ -182,8 +182,8 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @PutMapping("/change-status")
     public ResponseEntity<OrderResponseDTO> changeOrderStatusAdmin(@RequestHeader("Authorization") String token,
-                                                              @RequestParam("orderId") UUID orderId,
-                                                              @RequestParam("status") String status) {
+                                                                   @RequestParam("orderId") UUID orderId,
+                                                                   @RequestParam("status") String status) {
         return null;
     }
 
@@ -192,8 +192,8 @@ public class OrdersController {
      * SERVICE ENDPOINT.
      *
      * @param serviceToken JWT token.
-     * @param orderId     order id.
-     * @param status     new status.
+     * @param orderId      order id.
+     * @param status       new status.
      * @return orderResponseDTO or string exception message.
      */
     @ApiResponses(value = {
@@ -207,8 +207,8 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @PutMapping("/service/change-status")
     public ResponseEntity<OrderResponseDTO> changeOrderStatusSystem(@RequestHeader("Authorization") String serviceToken,
-                                                              @RequestParam("orderId") UUID orderId,
-                                                              @RequestParam("status") String status) {
+                                                                    @RequestParam("orderId") UUID orderId,
+                                                                    @RequestParam("status") String status) {
         return null;
     }
 
