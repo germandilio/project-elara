@@ -164,10 +164,10 @@ public class UsersProtectedController {
      * SERVICE ENDPOINT
      * Get user info by id.
      * <p>
-     * Note: This method is service (protected by service token).
+     * Note: This method is jwt (protected by jwt token).
      *
      * @param userId       user id
-     * @param serviceToken service token
+     * @param serviceToken jwt token
      * @return user info
      */
     @ApiResponses(value = {

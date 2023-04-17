@@ -9,7 +9,7 @@ import ru.hse.elarateam.adminconsole.auth.dto.UserServiceInfoDTO;
 import ru.hse.elarateam.adminconsole.configs.auth.LoginServiceConfig;
 
 /**
- * Feign client for calling login (auth) service.
+ * Feign client for calling login (auth) jwt.
  */
 @FeignClient(name = "elara-login", url = "http://localhost:8086", configuration = LoginServiceConfig.class)
 public interface LoginServiceFeignClient {

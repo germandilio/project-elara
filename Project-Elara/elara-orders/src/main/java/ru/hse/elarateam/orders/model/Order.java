@@ -1,6 +1,8 @@
 package ru.hse.elarateam.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -32,41 +34,53 @@ public class Order {
     @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
+
+    @NotBlank
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID userId;
 
+    @JsonManagedReference
     @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "shipment_details_id")
     private ShipmentDetails shipmentDetails;
 
+    @JsonManagedReference
     @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "payment_details_id")
     private PaymentDetails paymentDetails;
 
+    @JsonManagedReference
     @ToString.Exclude
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderedItem> orderedItems = new LinkedHashSet<>();
 
+    @NotBlank
     @Column(nullable = false)
     private BigDecimal totalWithDiscount;
 
+    @NotBlank
     @Column(nullable = false)
     private BigDecimal total;
 
+    @NotBlank
     @Column(nullable = false)
     private OrderStatus status;
 
+    @NotBlank
     @Column(nullable = false)
     private Double totalHeight;
 
+    @NotBlank
     @Column(nullable = false)
     private Double totalLength;
 
+    @NotBlank
     @Column(nullable = false)
     private Double totalWidth;
 
+    @NotBlank
     @Column(nullable = false)
     private Double totalWeight;
 

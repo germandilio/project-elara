@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,12 +14,18 @@ import ru.hse.elarateam.orders.dto.info.PaymentDetailsInfoDTO;
 import ru.hse.elarateam.orders.dto.info.ShipmentDetailsInfoDTO;
 import ru.hse.elarateam.orders.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.orders.dto.response.OrderResponseDTO;
+import ru.hse.elarateam.orders.model.status.OrderStatus;
+import ru.hse.elarateam.orders.services.OrdersService;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/orders")
+@RequiredArgsConstructor
 public class OrdersController {
+    // todo authorization everywhere
+
+    private final OrdersService ordersService;
 
     /**
      * Place order by orderRequestDTO.
@@ -44,11 +51,11 @@ public class OrdersController {
 
     /**
      * SERVICE ENDPOINT.
-     * Delivery service target endpoint.
+     * Delivery jwt target endpoint.
      *
-     * @param serviceToken           service authorization.
+     * @param serviceToken           jwt authorization.
      * @param orderId                order id.
-     * @param shipmentDetailsInfoDTO shipment details.
+     * @param shipmentDetailsInfoDTO shipment details - must be saved in orders db beforehand.
      * @return orderResponseDTO or string exception message.
      */
     @ApiResponses(value = {
@@ -62,19 +69,19 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PutMapping("/delivery")
-    public ResponseEntity<OrderResponseDTO> changeDeliveryDetails(@RequestHeader("Authorization") String serviceToken,
+    public ResponseEntity<OrderResponseDTO> changeShipmentDetails(@RequestHeader("Authorization") String serviceToken,
                                                                   @RequestParam("orderId") UUID orderId,
                                                                   @RequestBody ShipmentDetailsInfoDTO shipmentDetailsInfoDTO) {
-        return null;
+        return ResponseEntity.ok(ordersService.changeShipmentDetails(shipmentDetailsInfoDTO, orderId));
     }
 
     /**
      * SERVICE ENDPOINT.
-     * Payment service target endpoint.
+     * Payment jwt target endpoint.
      *
-     * @param serviceToken          service authorization.
+     * @param serviceToken          jwt authorization.
      * @param orderId               order id.
-     * @param paymentDetailsInfoDTO payment details.
+     * @param paymentDetailsInfoDTO payment details - must be saved in orders db beforehand.
      * @return orderResponseDTO or string exception message.
      */
     @ApiResponses(value = {
@@ -91,7 +98,7 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changePaymentDetails(@RequestHeader("Authorization") String serviceToken,
                                                                  @RequestParam("orderId") UUID orderId,
                                                                  @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
-        return null;
+        return ResponseEntity.ok(ordersService.changePaymentDetails(paymentDetailsInfoDTO, orderId));
     }
 
     /**
@@ -114,7 +121,7 @@ public class OrdersController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDTO> getOrderById(@RequestHeader("Authorization") String token,
                                                          @PathVariable("orderId") UUID orderId) {
-        return null;
+        return ResponseEntity.ok(ordersService.getOrderById(orderId));
     }
 
 
@@ -123,8 +130,7 @@ public class OrdersController {
      *
      * @param token      JWT token.
      * @param userId     user id.
-     * @param pageNumber page number.
-     * @param pageSize   page size.
+     * @param pageable automatically parses page parameters.
      * @return page of orderResponseDTO or string exception message.
      */
     @ApiResponses(value = {
@@ -135,12 +141,11 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/{userId}")
-    public ResponseEntity<Page<OrderResponseDTO>> getOrdersByUserId(@RequestHeader("Authorization") String token,
+    //todo подумать над response entity
+    public Page<OrderResponseDTO> getOrdersByUserId(@RequestHeader("Authorization") String token,
                                                                     @PathVariable("userId") UUID userId,
-                                                                    @RequestParam("pageNumber") int pageNumber,
-                                                                    @RequestParam("pageSize") int pageSize) {
-        //todo pagination https://youtu.be/oq-c3D67WqM?t=1931
-        return null;
+                                                                    @ParameterObject Pageable pageable) {
+        return ordersService.getOrdersByUserId(userId, pageable);
     }
 
     /**
@@ -157,10 +162,10 @@ public class OrdersController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @GetMapping("/")
+    //todo подумать над response entity
     public Page<OrderResponseDTO> getAllOrders(@RequestHeader("Authorization") String token,
                                                @ParameterObject Pageable pageable) {
-        //todo pagination https://youtu.be/oq-c3D67WqM?t=1931
-        return null;
+        return ordersService.getAllOrders(pageable);
     }
 
     /**
@@ -184,7 +189,8 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changeOrderStatusAdmin(@RequestHeader("Authorization") String token,
                                                                    @RequestParam("orderId") UUID orderId,
                                                                    @RequestParam("status") String status) {
-        return null;
+        var statusEnum = OrderStatus.valueOf(status);
+        return ResponseEntity.ok(ordersService.changeOrderStatus(orderId, statusEnum));
     }
 
 
@@ -209,7 +215,8 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changeOrderStatusSystem(@RequestHeader("Authorization") String serviceToken,
                                                                     @RequestParam("orderId") UUID orderId,
                                                                     @RequestParam("status") String status) {
-        return null;
+        var statusEnum = OrderStatus.valueOf(status);
+        return ResponseEntity.ok(ordersService.changeOrderStatus(orderId, statusEnum));
     }
 
 }

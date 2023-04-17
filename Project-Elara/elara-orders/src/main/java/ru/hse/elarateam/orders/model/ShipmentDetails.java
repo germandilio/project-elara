@@ -1,6 +1,8 @@
 package ru.hse.elarateam.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,19 +34,23 @@ public class ShipmentDetails {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
+    @JsonManagedReference
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "to_address_id")
     private Address toAddress;
 
+    @JsonManagedReference
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "from_address_id")
     private Address fromAddress;
 
+    @NotBlank
     @Column(nullable = false)
     private BigDecimal deliveryCost;
 
+    @JsonManagedReference
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "shipment_method_id")

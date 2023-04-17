@@ -9,7 +9,7 @@ public interface AuthenticationManager {
      * @param jwtToken token to authenticate
      * @return user info
      * @throws IllegalArgumentException if token is invalid
-     * @throws IllegalStateException    if cannot connect to login service
+     * @throws IllegalStateException    if cannot connect to login jwt
      */
     UserServiceInfoDTO authenticate(String jwtToken);
 }

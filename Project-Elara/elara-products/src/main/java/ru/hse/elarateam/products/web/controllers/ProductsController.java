@@ -43,7 +43,7 @@ public class ProductsController {
     @PostMapping("/allocate")
     public ResponseEntity<ResponsePayloadDTO<List<UUID>>> allocateProducts(@RequestHeader("Authorization") String serviceToken,
                                                                            @RequestBody OrderRequestDTO orderRequestDTO) {
-        // service token validation
+        // jwt token validation
         if (!validateServiceToken(serviceToken)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -74,7 +74,7 @@ public class ProductsController {
     @PostMapping("/deallocate")
     public ResponseEntity<ResponsePayloadDTO<List<UUID>>> deallocateProducts(@RequestHeader("Authorization") String serviceToken,
                                                                              @RequestBody OrderRequestDTO orderRequestDTO) {
-        // service token validation
+        // jwt token validation
         if (!validateServiceToken(serviceToken)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

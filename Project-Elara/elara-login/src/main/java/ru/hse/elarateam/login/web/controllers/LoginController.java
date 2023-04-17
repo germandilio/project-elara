@@ -43,7 +43,7 @@ public class LoginController {
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Login or password is not provided",
                     content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", description = "Login service is unavailable",
+            @ApiResponse(responseCode = "500", description = "Login jwt is unavailable",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/login")
@@ -65,16 +65,16 @@ public class LoginController {
      * Get user info by token.
      *
      * @param token        JWT token
-     * @param serviceToken service token
+     * @param serviceToken jwt token
      * @return user info
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return user info"),
-            @ApiResponse(responseCode = "401", description = "Invalid service token",
+            @ApiResponse(responseCode = "401", description = "Invalid jwt token",
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Token is not provided",
                     content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", description = "Login service is unavailable",
+            @ApiResponse(responseCode = "500", description = "Login jwt is unavailable",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/user")
