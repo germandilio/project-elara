@@ -53,7 +53,7 @@ public class OrderedItem {
 
     @NotBlank
     @Column(nullable = false)
-    private Integer quantity;
+    private Long quantity;
 
     @CreationTimestamp
     @Column(updatable = false)

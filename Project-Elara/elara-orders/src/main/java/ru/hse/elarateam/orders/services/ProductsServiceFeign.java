@@ -6,8 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.hse.elarateam.orders.dto.request.OrderRequestDTO;
-import ru.hse.elarateam.orders.dto.response.OrderResponseDTO;
-import ru.hse.elarateam.orders.dto.response.ResponsePayloadDTO;
+import ru.hse.elarateam.orders.dto.response.ProductResponseDTO;
 import ru.hse.elarateam.orders.web.feign.ProductsServiceFeignClient;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Component
 public class ProductsServiceFeign {
     private final ProductsServiceFeignClient productsServiceFeignClient;
-    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> allocateProducts(OrderRequestDTO  orderRequestDTO) {
+    public ResponseEntity<List<ProductResponseDTO>> allocateProducts(OrderRequestDTO  orderRequestDTO) {
         try {
             var response = productsServiceFeignClient.allocateProducts(orderRequestDTO);
 //            if(response.getBody().getData().equals(orderRequestDTO.getPositions()));
@@ -46,7 +45,7 @@ public class ProductsServiceFeign {
         return null;
     }
 
-    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> deallocateProducts(OrderRequestDTO  orderRequestDTO) {
+    public ResponseEntity<List<UUID>> deallocateProducts(OrderRequestDTO  orderRequestDTO) {
         try {
             var response = productsServiceFeignClient.deallocateProducts(orderRequestDTO);
 //            if(response.getBody().getData().equals(orderRequestDTO.getPositions()));

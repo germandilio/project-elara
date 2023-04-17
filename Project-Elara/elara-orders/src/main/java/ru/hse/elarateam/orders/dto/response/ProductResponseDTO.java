@@ -1,5 +1,6 @@
 package ru.hse.elarateam.orders.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,9 +9,8 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class OrderedItemResponseDTO {
-    private UUID id;
-    private UUID orderId;
+@AllArgsConstructor
+public class ProductResponseDTO {
     private UUID productId;
     private BigDecimal price;
     private Integer discount;

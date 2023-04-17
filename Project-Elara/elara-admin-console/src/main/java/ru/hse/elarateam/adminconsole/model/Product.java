@@ -3,7 +3,8 @@ package ru.hse.elarateam.adminconsole.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.*;
@@ -36,46 +37,40 @@ public class Product {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String upc;
 
-    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String name;
 
-    @NotBlank
     @Column(nullable = false)
     private BigDecimal price;
 
     /**
      * Discount in percents
      */
+    @Min(1)
+    @Max(100)
     private Integer discount;
 
     @Column(length = 1024, columnDefinition = "varchar(1024)", nullable = false)
     private String description;
 
-    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String brand;
 
-    @NotBlank
     @Column(nullable = false)
     private Long quantity;
 
     @Column(length = 64, columnDefinition = "varchar(64)")
     private String countryOfOrigin;
 
-    @NotBlank
     @Column(nullable = false)
     private Double sizeUS;
 
-    @NotBlank
     @Column(nullable = false)
     private Double sizeUK;
 
-    @NotBlank
     @Column(nullable = false)
     private Double sizeEUR;
 
@@ -112,19 +107,15 @@ public class Product {
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<String> pictures = new LinkedHashSet<>();
 
-    @NotBlank
     @Column(nullable = false)
     private Double height;
 
-    @NotBlank
     @Column(nullable = false)
     private Double length;
 
-    @NotBlank
     @Column(nullable = false)
     private Double width;
 
-    @NotBlank
     @Column(nullable = false)
     private Double weight;
 

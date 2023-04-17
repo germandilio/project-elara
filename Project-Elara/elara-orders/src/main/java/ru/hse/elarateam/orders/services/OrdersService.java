@@ -16,10 +16,12 @@ import ru.hse.elarateam.orders.mappers.OrdersMapper;
 import ru.hse.elarateam.orders.mappers.PaymentDetailsMapper;
 import ru.hse.elarateam.orders.mappers.ShipmentDetailsMapper;
 import ru.hse.elarateam.orders.model.status.OrderStatus;
+import ru.hse.elarateam.orders.repositories.OrderedItemsRepository;
 import ru.hse.elarateam.orders.repositories.OrdersRepository;
 import ru.hse.elarateam.orders.repositories.PaymentDetailsRepository;
 import ru.hse.elarateam.orders.repositories.ShipmentDetailsRepository;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -32,6 +34,7 @@ public class OrdersService {
     private final ShipmentDetailsMapper shipmentDetailsMapper;
     private final PaymentDetailsRepository paymentDetailsRepository;
     private final PaymentDetailsMapper paymentDetailsMapper;
+    private final OrderedItemsRepository orderedItemsRepository;
     private final OrderedItemsMapper orderedItemsMapper;
     private final ProductsServiceFeign productsServiceFeign;
 
@@ -98,7 +101,7 @@ public class OrdersService {
         }
         var order = ordersRepository.findById(orderId).get();
 
-        if(status == OrderStatus.CANCELLED){
+        if (status == OrderStatus.CANCELLED) {
             var deallocationRequest = OrderRequestDTO.builder()
                     .userId(order.getUserId())
                     .positions(order.getOrderedItems().stream()
@@ -106,8 +109,8 @@ public class OrdersService {
                             .toList())
                     .build();
 
-            productsServiceFeign.deallocateProducts(deallocationRequest);
-            log.info("Products deallocated for order: " + orderId);
+            var deallocatedIds = Objects.requireNonNull(productsServiceFeign.deallocateProducts(deallocationRequest).getBody());
+            log.info("Products " + deallocatedIds + " deallocated for order: " + orderId);
         }
 
         order.setStatus(status);
@@ -118,13 +121,39 @@ public class OrdersService {
         // todo sent user email about status change
     }
 
-    @Transactional(rollbackFor = RuntimeException.class)
-    public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) {
-
-
-        var saved = ordersRepository.save(order);
-        log.info("Order placed: " + saved);
-        return ordersMapper.orderToOrderResponseDTO(saved);
-    }
+//    @Transactional(rollbackFor = RuntimeException.class)
+//    public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) {
+//        // knocking to products service
+//        var allocatedProducts = productsServiceFeign.allocateProducts(orderRequestDTO).getBody();
+//        log.info("Products " + allocatedProducts + " allocated.");
+//
+//        var orderedItems = new ArrayList<OrderedItem>();
+//        var totalWithDiscount = new BigDecimal(0);
+//        var totalWithoutDiscount = new BigDecimal(0);
+//        for (var item : Objects.requireNonNull(allocatedProducts)) {
+//            orderedItems.add(OrderedItem.builder()
+//                    .productId(item.getProductId())
+//                    .price(item.getPrice())
+//                    .discount(item.getDiscount())
+//                    .quantity(item.getQuantity())
+//                    .build());
+//
+//            totalWithDiscount = totalWithDiscount.add(
+//                    item.getPrice()
+//                            .multiply(new BigDecimal(item.getQuantity()))
+//                            .multiply(new BigDecimal((100 - item.getDiscount())/100)));
+//
+//            totalWithoutDiscount = totalWithoutDiscount.add(
+//                    item.getPrice()
+//                            .multiply(new BigDecimal(item.getQuantity())));
+//        }
+//        var savedItems = orderedItemsRepository.saveAllAndFlush(orderedItems);
+//        log.info("Ordered items saved: " + savedItems);
+//
+//        var order =
+//                var saved = ordersRepository.save(order);
+//        log.info("Order placed: " + saved);
+//        return ordersMapper.orderToOrderResponseDTO(saved);
+//    }
 
 }
