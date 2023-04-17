@@ -191,7 +191,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/api/v1/users/2ae75234-505d-48d9-88c0-68aba0956c1c",
+							"raw": "http://localhost:8085/api/v1/users/437019f6-9f37-4f6e-9211-6237d89dc80c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -201,7 +201,7 @@
 								"api",
 								"v1",
 								"users",
-								"2ae75234-505d-48d9-88c0-68aba0956c1c"
+								"437019f6-9f37-4f6e-9211-6237d89dc80c"
 							]
 						}
 					},
@@ -258,6 +258,11 @@
 				}
 			],
 			"id": "1781c1f3-78e3-448b-adcf-b33b8159eb88"
+		},
+		{
+			"name": "Products",
+			"item": [],
+			"id": "8ff828b7-a6e9-4170-947f-44e554e5a178"
 		}
 	],
 	"event": [

@@ -85,7 +85,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/api/v1/users/verify-email?token=oCyiq4nvjTZeJmcvXISYMnTg5a8PYEkzFEugbJN8l8yuVwLCbCPXcBasLSLUzg7yjGVlkyfMabBvgIsV0gPGCmT2dtvJEmFJdVEo",
+							"raw": "http://localhost:8085/api/v1/users/verify-email?token=6ZUVaDHxkxCj748chEjdWnPzZ9HuDBgozehkOO7VuKMLJga2BkZdsXkh7D5P7lAUbopCPhKGI9mshmIVp6TeirVwlUQtzPSZ8Ppk",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -100,7 +100,8 @@
 							"query": [
 								{
 									"key": "token",
-									"value": "oCyiq4nvjTZeJmcvXISYMnTg5a8PYEkzFEugbJN8l8yuVwLCbCPXcBasLSLUzg7yjGVlkyfMabBvgIsV0gPGCmT2dtvJEmFJdVEo"
+									"value": "6ZUVaDHxkxCj748chEjdWnPzZ9HuDBgozehkOO7VuKMLJga2BkZdsXkh7D5P7lAUbopCPhKGI9mshmIVp6TeirVwlUQtzPSZ8Ppk",
+									"type": "text"
 								}
 							]
 						}
@@ -217,259 +218,485 @@
 			"id": "79a37f5d-76a6-4dbc-9913-7c4689528137"
 		},
 		{
-			"name": "Products",
+			"name": "AdminConsole",
 			"item": [
 				{
-					"name": "get by id",
-					"id": "8b2adeb0-ffeb-4c54-b4f5-3c7d639b2f46",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/v1/products/2ae75234-505d-48d9-88c0-68aba0a56c1f",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"v1",
-								"products",
-								"2ae75234-505d-48d9-88c0-68aba0a56c1f"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get products by id, upc or name",
-					"id": "0dfa4d87-fc53-4786-843b-e533640163cf",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/v1/products/service?ids=&upcs",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"v1",
-								"products",
-								"service"
-							],
-							"query": [
-								{
-									"key": "ids",
-									"value": "",
-									"description": "optional",
-									"type": "text"
+					"name": "products",
+					"item": [
+						{
+							"name": "createProduct",
+							"id": "c893a98f-5955-4650-b678-91c4969999da",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
 								},
-								{
-									"key": "upcs",
-									"value": null,
-									"description": "optional",
-									"type": "text"
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/product",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"product"
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get products by filters and query",
-					"id": "a4010503-112d-4fde-848f-94529f08f0a5",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/v1/products?sports&colors&features&countries&brands&sizeUS&sizeEUR&sizeUK&minPrice&maxPrice&query&page&size&sort",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"v1",
-								"products"
-							],
-							"query": [
-								{
-									"key": "sports",
-									"value": null,
-									"description": "optional",
-									"type": "text"
+							},
+							"response": []
+						},
+						{
+							"name": "updateProduct",
+							"id": "9ceb8a6f-e03a-4733-ae15-c40f370f413e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
 								},
-								{
-									"key": "colors",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "features",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "countries",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "brands",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "sizeUS",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "sizeEUR",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "sizeUK",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "minPrice",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "maxPrice",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "query",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "page",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "size",
-									"value": null,
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "sort",
-									"value": null,
-									"description": "optional",
-									"type": "text"
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/product",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"product"
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get new products",
-					"id": "ea05f39b-47bb-4940-a6f6-6b2a8d81da76",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/v1/products/recent?page=0&size=20&sort",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"v1",
-								"products",
-								"recent"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0",
-									"description": "optional",
-									"type": "text"
+							},
+							"response": []
+						},
+						{
+							"name": "deleteProduct",
+							"id": "053a0698-54af-4bed-bf1b-2cf3f875dedf",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
 								},
-								{
-									"key": "size",
-									"value": "20",
-									"description": "optional",
-									"type": "text"
-								},
-								{
-									"key": "sort",
-									"value": null,
-									"description": "optional",
-									"type": "text"
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/product",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"product"
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "get product by id",
+							"id": "18d7630c-b5d5-4bf0-8c67-601dbdac4b86",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/product/{}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"product",
+										"{}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"id": "ddc3917d-f841-4277-a5fe-d174a14d6684"
 				},
 				{
-					"name": "get price range",
-					"id": "d695d039-ee6a-4f15-b9ad-eb53fa48d536",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8082/api/v1/products/price=range",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"api",
-								"v1",
-								"products",
-								"price=range"
-							]
+					"name": "colors",
+					"item": [
+						{
+							"name": "createColor",
+							"id": "34dc4e35-5afa-4fa3-8547-35052cf7554b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    // \"id\": \"1\", \n    \"name\": \"some color22\",\n    \"hex\": \"#121212\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/color",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"color"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateColor",
+							"id": "db670c94-f7b2-425e-aa17-d87fa05bba7a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"1\",\n    \"name\": \"some color\",\n    \"hex\": \"#121212\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/color",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"color"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteColor",
+							"id": "460f7b93-490c-4d92-bf41-ef01fb2eb375",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/color?colorId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"color"
+									],
+									"query": [
+										{
+											"key": "colorId",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"id": "63ef314d-85bf-465a-babf-8b913eae942e"
+				},
+				{
+					"name": "features",
+					"item": [
+						{
+							"name": "createFeature",
+							"id": "c1a1925d-4654-46f1-9dc4-9884757c6de7",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    // \"id\": \"1\",\n    \"name\": \"some feature\",\n    \"description\": \"some useless feature\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/feature",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"feature"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateFeature",
+							"id": "fa67b82b-330b-4474-97ca-1392bc90c361",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"1\",\n    \"name\": \"renamed\",\n    \"description\": \"renamed feature\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/feature",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"feature"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteFeature",
+							"id": "591c9ca8-f968-4526-a481-90e33f504b72",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/feature?featureId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"feature"
+									],
+									"query": [
+										{
+											"key": "featureId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "d2a44a1b-9d22-4b35-89e8-4b63a88c4438"
+				},
+				{
+					"name": "sports",
+					"item": [
+						{
+							"name": "createSport",
+							"id": "fae2646a-08e9-4600-b067-9686225a26d8",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"1\",\n    \"name\": \"basketball\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/sport",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"sport"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateSport",
+							"id": "4d4b19f1-dc61-4851-893e-526e414f2c21",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"1\",\n    \"name\": \"judo\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/sport",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"sport"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteSport",
+							"id": "d22955cc-995d-4e4a-82f5-69ff3051fe15",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/admin-console/sport?sportId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"admin-console",
+										"sport"
+									],
+									"query": [
+										{
+											"key": "sportId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "27b95499-f4a7-4d9f-9939-42173f50d199"
 				}
 			],
-			"id": "c1c3ecdb-ba29-48aa-bbbf-6d337faf248f"
+			"id": "8791288c-f3fa-486c-95ac-8de4975ac15e"
 		}
 	]
 }
