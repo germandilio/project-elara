@@ -1,0 +1,292 @@
+version: '3.8'
+
+services:
+    # application servieces
+    elara-eureka:
+        image: germandilio/elara-eureka:1.0-SNAPSHOT
+        ports:
+            - "8761:8761"
+        environment:
+          - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+        restart: on-failure
+        depends_on:
+          - tempo
+          - loki
+          - prometheus
+          - grafana
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-eureka:8761/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    elara-config-server:
+        image: germandilio/elara-config-server:1.0-SNAPSHOT
+        ports:
+            - "8888:8888"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+        restart: on-failure
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-config-server:8888/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    elara-gateway:
+        image: germandilio/elara-gateway:1.0-SNAPSHOT
+        ports:
+            - "8080:8080"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-email:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+            elara-products-get:
+              condition: service_healthy
+            elara-users:
+              condition: service_healthy
+            # elara-delivery
+            # elara-admin-console
+            # elara-delivery
+            # elara-orders
+            # elara-payment
+            # elara-products
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-gateway:8080/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    elara-email:
+        image: germandilio/elara-email:1.0-SNAPSHOT
+        ports:
+            - "8081:8081"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+            jms:
+              condition: service_started
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-email:8081/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    elara-login:
+        image: germandilio/elara-login:1.0-SNAPSHOT
+        ports:
+            - "8086:8086"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://elara-users-db:5433/users
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-users-db:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-login:8086/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    elara-products-get:
+        image: germandilio/elara-products-get:1.0-SNAPSHOT
+        ports:
+            - "8082:8082"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://elara-products-db:5435/products
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-products-db:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-products-get:8082/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    elara-users:
+        image: germandilio/elara-users:1.0-SNAPSHOT
+        ports:
+            - "8085:8085"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://elara-users-db:5433/users
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+            elara-email:
+              condition: service_healthy
+            elara-users-db:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "curl --fail http://elara-users:8085/health || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    # elara-delivery:
+    # elara-admin-console:
+    # elara-delivery:
+    # elara-orders:
+    # elara-payment:
+    # elara-products:
+
+    # datasources
+    elara-users-db:
+        image: postgres:15.2-alpine
+        volumes:
+            - ./docker/database/users/data.sql:/docker-entrypoint-initdb.d/1-init.sql
+            # REPLACE WITH YOUR DIRECTORY FOR PERSISTENT DATA
+            - /Users/germandilio/.dockerdata/postgres/elara-users/:/var/lib/users/data
+        restart: always
+        ports:
+            - "5433:5432"
+        environment:
+            - POSTGRES_USER=postgresql
+            - POSTGRES_PASSWORD=postgresql
+            - POSTGRES_DB=users
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U postgresql"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    # elara-orders-db:
+    #     image: postgres:15.2-alpine
+    #     volumes:
+    #         - ./docker/database/orders/data.sql:/docker-entrypoint-initdb.d/1-init.sql
+    #         # REPLACE WITH YOUR DIRECTORY FOR PERSISTENT DATA
+    #         - /Users/germandilio/.dockerdata/postgres/elara-orders/:/var/lib/orders/data
+    #     restart: always
+    #     ports:
+    #         - "5434:5432"
+    #     environment:
+    #         - POSTGRES_USER=postgresql
+    #         - POSTGRES_PASSWORD=postgresql
+    #         - POSTGRES_DB=orders
+    #     healthcheck:
+    #       test: ["CMD-SHELL", "pg_isready -U postgresql"]
+    #       interval: 10s
+    #       timeout: 5s
+    #       retries: 5
+
+    
+    elara-products-db:
+        image: postgres:15.2-alpine
+        volumes:
+            - ./docker/database/products/data.sql:/docker-entrypoint-initdb.d/1-init.sql
+            # REPLACE WITH YOUR DIRECTORY FOR PERSISTENT DATA
+            - /Users/germandilio/.dockerdata/postgres/elara-products/:/var/lib/products/data
+        restart: always
+        ports:
+            - "5435:5432"
+        environment:
+            - POSTGRES_USER=postgresql
+            - POSTGRES_PASSWORD=postgresql
+            - POSTGRES_DB=products
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U postgresql"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
+    jms:
+     image: rmohr/activemq:5.15.9-alpine
+     ports:
+       - 8161:8161
+       - 61616:61616
+       - 5672:5672
+
+    # Prometheus: http://localhost:9090/
+    # Grafana: http://localhost:3000/
+    tempo:
+        image: grafana/tempo
+        extra_hosts: ['host.docker.internal:host-gateway']
+        command: [ "-config.file=/etc/tempo.yaml" ]
+        volumes:
+            - ./docker/tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+            - ./tempo-data:/tmp/tempo
+        ports:
+            - "14268"  # jaeger ingest
+            - "9411:9411" # zipkin
+
+    loki:
+        image: grafana/loki
+        extra_hosts: ['host.docker.internal:host-gateway']
+        command: [ "-config.file=/etc/loki/local-config.yaml" ]
+        ports:
+            - "3100:3100"                                   # loki needs to be exposed so it receives logs
+        environment:
+            - JAEGER_AGENT_HOST=tempo
+            - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
+            - JAEGER_SAMPLER_TYPE=const
+            - JAEGER_SAMPLER_PARAM=1
+
+    prometheus:
+        image: prom/prometheus
+        extra_hosts: ['host.docker.internal:host-gateway']
+        command:
+            - --enable-feature=exemplar-storage
+            - --config.file=/etc/prometheus/prometheus.yml
+        volumes:
+            - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        ports:
+            - "9090:9090"
+
+    grafana:
+        image: grafana/grafana
+        extra_hosts: ['host.docker.internal:host-gateway']
+        volumes:
+            - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+            - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+        environment:
+            - GF_AUTH_ANONYMOUS_ENABLED=true
+            - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+            - GF_AUTH_DISABLE_LOGIN_FORM=true
+        ports:
+            - "3000:3000"
