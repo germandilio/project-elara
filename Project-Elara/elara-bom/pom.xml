@@ -256,6 +256,13 @@
             <version>1.4.0</version>
         </dependency>
 
+<!--        UPDATED WITHOUT TESTING-->
+        <!-- https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-api -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+            <version>1.25.0</version>
+        </dependency>
     </dependencies>
 
     <build>
