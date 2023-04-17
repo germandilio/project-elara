@@ -20,8 +20,6 @@ import java.util.Set;
 @Table(name = "colors")
 public class Color {
 
-    // todo решить, нужно ли уникальное название цвета
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // при откате транзакции счетчик все равно увеличивается на 1
     private Long id;

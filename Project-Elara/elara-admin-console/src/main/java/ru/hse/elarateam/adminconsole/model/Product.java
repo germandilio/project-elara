@@ -3,10 +3,12 @@ package ru.hse.elarateam.adminconsole.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -34,40 +36,48 @@ public class Product {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-//    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
-//    private String upc;
+    @NotBlank
+    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
+    private String upc;
 
+    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String name;
 
-//    @Column(nullable = false)
-//    private BigDecimal price;
-//
-//    /**
-//     * Discount in percents
-//     */
-//    private Integer discount;
-//
-//    @Column(length = 1024, columnDefinition = "varchar(1024)", nullable = false)
-//    private String description;
-//
-//    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
-//    private String brand;
-//
-//    @Column(nullable = false)
-//    private Long quantity;
-//
-//    @Column(length = 64, columnDefinition = "varchar(64)")
-//    private String countryOfOrigin;
-//
-//    @Column(nullable = false)
-//    private Double sizeUS;
-//
-//    @Column(nullable = false)
-//    private Double sizeUK;
-//
-//    @Column(nullable = false)
-//    private Double sizeEUR;
+    @NotBlank
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    /**
+     * Discount in percents
+     */
+    private Integer discount;
+
+    @Column(length = 1024, columnDefinition = "varchar(1024)", nullable = false)
+    private String description;
+
+    @NotBlank
+    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
+    private String brand;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Long quantity;
+
+    @Column(length = 64, columnDefinition = "varchar(64)")
+    private String countryOfOrigin;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double sizeUS;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double sizeUK;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double sizeEUR;
 
     @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
@@ -101,18 +111,22 @@ public class Product {
     @JsonManagedReference
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<String> pictures = new LinkedHashSet<>();
-//
-//    @Column(nullable = false)
-//    private Double height;
-//
-//    @Column(nullable = false)
-//    private Double length;
-//
-//    @Column(nullable = false)
-//    private Double width;
-//
-//    @Column(nullable = false)
-//    private Double weight;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double height;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double length;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double width;
+
+    @NotBlank
+    @Column(nullable = false)
+    private Double weight;
 
     @Column(columnDefinition = "boolean default false")
     @Builder.Default
