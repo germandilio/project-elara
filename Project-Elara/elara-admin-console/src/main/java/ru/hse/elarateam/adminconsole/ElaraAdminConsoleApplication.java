@@ -3,6 +3,7 @@ package ru.hse.elarateam.adminconsole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import ru.hse.elarateam.adminconsole.model.Color;
 import ru.hse.elarateam.adminconsole.model.Product;
@@ -11,7 +12,7 @@ import ru.hse.elarateam.adminconsole.repositories.ProductsRepository;
 
 import java.util.HashSet;
 import java.util.Set;
-
+@EnableFeignClients
 @SpringBootApplication
 public class ElaraAdminConsoleApplication {
     public static void main(String[] args) {

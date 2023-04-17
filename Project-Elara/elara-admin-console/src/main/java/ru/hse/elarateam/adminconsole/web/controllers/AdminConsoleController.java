@@ -5,8 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.elarateam.adminconsole.auth.AuthenticationManagerImpl;
+import ru.hse.elarateam.adminconsole.auth.dto.RoleEnum;
 import ru.hse.elarateam.adminconsole.dto.ColorInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.FeatureInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.ProductInfoDTO;
@@ -26,12 +29,13 @@ public class AdminConsoleController {
     private final ColorsService colorsService;
     private final FeaturesService featuresService;
     private final SportsService sportsService;
+    private final AuthenticationManagerImpl authenticationManager;
 
-    // todo authoirzation
 
     /**
      * Create product.
      *
+     * @param token          JWT token with ADMIN role.
      * @param productInfoDTO id must be null.
      * @return created product.
      */
@@ -46,13 +50,18 @@ public class AdminConsoleController {
     // todo test create product with nonexistent color (id = null, id != null but color doesn't exist)
     // todo test adding new picture
     @PostMapping("/product")
-    public ResponseEntity<ProductInfoDTO> createProduct(@RequestBody ProductInfoDTO productInfoDTO) {
+    public ResponseEntity<ProductInfoDTO> createProduct(@RequestHeader("Authorization") String token,
+                                                        @RequestBody ProductInfoDTO productInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(productsService.createProduct(productInfoDTO));
     }
 
     /**
      * Update product.
      *
+     * @param token          JWT token with ADMIN role.
      * @param productInfoDTO id must not be null.
      * @return updated product.
      */
@@ -69,13 +78,18 @@ public class AdminConsoleController {
     // todo test update product with nonexistent color (id = null, id != null but color doesn't exist)
     // todo test removing picture, adding new picture
     @PutMapping("/product")
-    public ResponseEntity<ProductInfoDTO> updateProduct(@RequestBody ProductInfoDTO productInfoDTO) {
+    public ResponseEntity<ProductInfoDTO> updateProduct(@RequestHeader("Authorization") String token,
+                                                        @RequestBody ProductInfoDTO productInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(productsService.updateProduct(productInfoDTO));
     }
 
     /**
      * Delete product.
      *
+     * @param token     JWT token with ADMIN role.
      * @param productId id of product to delete.
      * @return status code.
      */
@@ -89,7 +103,11 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @DeleteMapping("/product")
-    public ResponseEntity<?> deleteProduct(@RequestParam("productID") UUID productId) {
+    public ResponseEntity<?> deleteProduct(@RequestHeader("Authorization") String token,
+                                           @RequestParam("productID") UUID productId) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         productsService.deleteProduct(productId);
         return ResponseEntity.ok().build();
     }
@@ -97,6 +115,7 @@ public class AdminConsoleController {
     /**
      * Create feature.
      *
+     * @param token          JWT token with ADMIN role.
      * @param featureInfoDTO id must be null.
      * @return created feature.
      */
@@ -109,13 +128,18 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/feature")
-    public ResponseEntity<FeatureInfoDTO> createFeature(@RequestBody FeatureInfoDTO featureInfoDTO) {
+    public ResponseEntity<FeatureInfoDTO> createFeature(@RequestHeader("Authorization") String token,
+                                                        @RequestBody FeatureInfoDTO featureInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(featuresService.createFeature(featureInfoDTO));
     }
 
     /**
      * Update feature.
      *
+     * @param token          JWT token with ADMIN role.
      * @param featureInfoDTO id must not be null.
      * @return updated feature.
      */
@@ -130,13 +154,18 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PutMapping("/feature")
-    public ResponseEntity<FeatureInfoDTO> updateFeature(@RequestBody FeatureInfoDTO featureInfoDTO) {
+    public ResponseEntity<FeatureInfoDTO> updateFeature(@RequestHeader("Authorization") String token,
+                                                        @RequestBody FeatureInfoDTO featureInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(featuresService.updateFeature(featureInfoDTO));
     }
 
     /**
      * Delete feature.
      *
+     * @param token     JWT token with ADMIN role.
      * @param featureId id of feature to delete.
      * @return status code.
      */
@@ -150,7 +179,11 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @DeleteMapping("/feature")
-    public ResponseEntity<?> deleteFeature(@RequestParam("featureID") Long featureId) {
+    public ResponseEntity<?> deleteFeature(@RequestHeader("Authorization") String token,
+                                           @RequestParam("featureID") Long featureId) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         featuresService.deleteFeature(featureId);
         return ResponseEntity.ok().build();
     }
@@ -158,6 +191,7 @@ public class AdminConsoleController {
     /**
      * Create color.
      *
+     * @param token        JWT token with ADMIN role.
      * @param colorInfoDTO id must be null.
      * @return created color.
      */
@@ -170,13 +204,18 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/color")
-    public ResponseEntity<ColorInfoDTO> createColor(@RequestBody ColorInfoDTO colorInfoDTO) {
+    public ResponseEntity<ColorInfoDTO> createColor(@RequestHeader("Authorization") String token,
+                                                    @RequestBody ColorInfoDTO colorInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(colorsService.createColor(colorInfoDTO));
     }
 
     /**
      * Update color.
      *
+     * @param token        JWT token with ADMIN role.
      * @param colorInfoDTO id must be null.
      * @return updated color.
      */
@@ -191,13 +230,18 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PutMapping("/color")
-    public ResponseEntity<ColorInfoDTO> updateColor(@RequestBody ColorInfoDTO colorInfoDTO) {
+    public ResponseEntity<ColorInfoDTO> updateColor(@RequestHeader("Authorization") String token,
+                                                    @RequestBody ColorInfoDTO colorInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(colorsService.updateColor(colorInfoDTO));
     }
 
     /**
      * Delete color.
      *
+     * @param token   JWT token with ADMIN role.
      * @param colorId id of color to delete.
      * @return status code.
      */
@@ -211,7 +255,11 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @DeleteMapping("/color")
-    public ResponseEntity<?> deleteColor(@RequestParam("colorID") Long colorId) {
+    public ResponseEntity<?> deleteColor(@RequestHeader("Authorization") String token,
+                                         @RequestParam("colorID") Long colorId) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         colorsService.deleteColor(colorId);
         return ResponseEntity.ok().build();
     }
@@ -220,6 +268,7 @@ public class AdminConsoleController {
     /**
      * Create sport.
      *
+     * @param token        JWT token with ADMIN role.
      * @param sportInfoDTO id must be null.
      * @return created sport.
      */
@@ -232,13 +281,18 @@ public class AdminConsoleController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/sport")
-    public ResponseEntity<SportInfoDTO> createSport(@RequestBody SportInfoDTO sportInfoDTO) {
+    public ResponseEntity<SportInfoDTO> createSport(@RequestHeader("Authorization") String token,
+                                                    @RequestBody SportInfoDTO sportInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(sportsService.createSport(sportInfoDTO));
     }
 
     /**
      * Update sport.
      *
+     * @param token        JWT token with ADMIN role.
      * @param sportInfoDTO id must not be null.
      * @return updated sport.
      */
@@ -252,13 +306,18 @@ public class AdminConsoleController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @PutMapping("/sport")
-    public ResponseEntity<SportInfoDTO> updateSport(@RequestBody SportInfoDTO sportInfoDTO) {
+    public ResponseEntity<SportInfoDTO> updateSport(@RequestHeader("Authorization") String token,
+                                                    @RequestBody SportInfoDTO sportInfoDTO) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(sportsService.updateSport(sportInfoDTO));
     }
 
     /**
      * Delete sport.
      *
+     * @param token   JWT token with ADMIN role.
      * @param sportId id of sport to delete.
      * @return status code.
      */
@@ -271,7 +330,11 @@ public class AdminConsoleController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @DeleteMapping("/sport")
-    public ResponseEntity<?> deleteSport(@RequestParam("sportID") Long sportId) {
+    public ResponseEntity<?> deleteSport(@RequestHeader("Authorization") String token,
+                                         @RequestParam("sportID") Long sportId) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         sportsService.deleteSport(sportId);
         return ResponseEntity.ok().build();
     }
@@ -281,12 +344,29 @@ public class AdminConsoleController {
      * SERVICE ENDPOINT.
      * DEBUG
      *
+     * @param token     JWT token with ADMIN role.
      * @param productId product id.
      * @return product.
      */
     @GetMapping("/product/{productId}")
-    public ResponseEntity<?> getProductById(@PathVariable("productId") UUID productId){
+    public ResponseEntity<?> getProductById(@RequestHeader("Authorization") String token,
+                                            @PathVariable("productId") UUID productId) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(productsService.getProductById(productId));
+    }
+
+    private boolean notAuthenticated(String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return true;
+        }
+        try {
+            var userServiceInfo = authenticationManager.authenticate(token.substring(7));
+            return userServiceInfo.getRoleName() != RoleEnum.ADMIN;
+        } catch (IllegalArgumentException e) {
+            return true;
+        }
     }
 
 }
