@@ -15,12 +15,17 @@ import ru.hse.elarateam.orders.mappers.OrderedItemsMapper;
 import ru.hse.elarateam.orders.mappers.OrdersMapper;
 import ru.hse.elarateam.orders.mappers.PaymentDetailsMapper;
 import ru.hse.elarateam.orders.mappers.ShipmentDetailsMapper;
+import ru.hse.elarateam.orders.model.Order;
+import ru.hse.elarateam.orders.model.OrderedItem;
 import ru.hse.elarateam.orders.model.status.OrderStatus;
 import ru.hse.elarateam.orders.repositories.OrderedItemsRepository;
 import ru.hse.elarateam.orders.repositories.OrdersRepository;
 import ru.hse.elarateam.orders.repositories.PaymentDetailsRepository;
 import ru.hse.elarateam.orders.repositories.ShipmentDetailsRepository;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,6 +42,7 @@ public class OrdersService {
     private final OrderedItemsRepository orderedItemsRepository;
     private final OrderedItemsMapper orderedItemsMapper;
     private final ProductsServiceFeign productsServiceFeign;
+    private final BinPackingSolver3d binPackingSolver3d;
 
     // todo logs
     @Transactional(readOnly = true)
@@ -121,39 +127,56 @@ public class OrdersService {
         // todo sent user email about status change
     }
 
-//    @Transactional(rollbackFor = RuntimeException.class)
-//    public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) {
-//        // knocking to products service
-//        var allocatedProducts = productsServiceFeign.allocateProducts(orderRequestDTO).getBody();
-//        log.info("Products " + allocatedProducts + " allocated.");
-//
-//        var orderedItems = new ArrayList<OrderedItem>();
-//        var totalWithDiscount = new BigDecimal(0);
-//        var totalWithoutDiscount = new BigDecimal(0);
-//        for (var item : Objects.requireNonNull(allocatedProducts)) {
-//            orderedItems.add(OrderedItem.builder()
-//                    .productId(item.getProductId())
-//                    .price(item.getPrice())
-//                    .discount(item.getDiscount())
-//                    .quantity(item.getQuantity())
-//                    .build());
-//
-//            totalWithDiscount = totalWithDiscount.add(
-//                    item.getPrice()
-//                            .multiply(new BigDecimal(item.getQuantity()))
-//                            .multiply(new BigDecimal((100 - item.getDiscount())/100)));
-//
-//            totalWithoutDiscount = totalWithoutDiscount.add(
-//                    item.getPrice()
-//                            .multiply(new BigDecimal(item.getQuantity())));
-//        }
-//        var savedItems = orderedItemsRepository.saveAllAndFlush(orderedItems);
-//        log.info("Ordered items saved: " + savedItems);
-//
-//        var order =
-//                var saved = ordersRepository.save(order);
-//        log.info("Order placed: " + saved);
-//        return ordersMapper.orderToOrderResponseDTO(saved);
-//    }
+    @Transactional(rollbackFor = RuntimeException.class)
+    public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) {
+        // knocking to products service
+        var allocatedProducts = productsServiceFeign.allocateProducts(orderRequestDTO).getBody();
+        log.info("Products " + allocatedProducts + " allocated.");
+
+        var orderedItems = new ArrayList<OrderedItem>();
+        var totalWithDiscount = new BigDecimal(0);
+        var totalWithoutDiscount = new BigDecimal(0);
+        for (var item : Objects.requireNonNull(allocatedProducts)) {
+            orderedItems.add(OrderedItem.builder()
+                    .productId(item.getProductId())
+                    .price(item.getPrice())
+                    .discount(item.getDiscount())
+                    .quantity(item.getQuantity())
+                    .build());
+
+            totalWithDiscount = totalWithDiscount.add(
+                    item.getPrice()
+                            .multiply(new BigDecimal(item.getQuantity()))
+                            .multiply(new BigDecimal((100 - item.getDiscount()) / 100)));
+
+            totalWithoutDiscount = totalWithoutDiscount.add(
+                    item.getPrice()
+                            .multiply(new BigDecimal(item.getQuantity())));
+        }
+        var savedItems = orderedItemsRepository.saveAllAndFlush(orderedItems);
+        log.info("Ordered items saved: " + savedItems);
+
+        var dimentions = binPackingSolver3d.solve(savedItems);
+        log.info("Optimal dimentions. Height:{}, Width:{}, Length:{}, Weight: {}",
+                dimentions.get(0), dimentions.get(1), dimentions.get(2), dimentions.get(3));
+
+
+        var order = Order.builder()
+                .userId(orderRequestDTO.getUserId())
+                .orderedItems(new HashSet<>(savedItems))
+                .totalWithDiscount(totalWithDiscount)
+                .total(totalWithoutDiscount)
+                .status(OrderStatus.ALLOCATED)
+                .totalHeight(dimentions.get(0))
+                .totalWidth(dimentions.get(1))
+                .totalLength(dimentions.get(2))
+                .totalWeight(dimentions.get(3))
+                .build();
+
+        var savedOrder = ordersRepository.save(order);
+        log.info("Order placed: " + savedOrder);
+
+        return ordersMapper.orderToOrderResponseDTO(savedOrder);
+    }
 
 }

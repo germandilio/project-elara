@@ -35,7 +35,6 @@ public class Order {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID userId;
 
@@ -56,31 +55,24 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderedItem> orderedItems = new LinkedHashSet<>();
 
-    @NotBlank
     @Column(nullable = false)
     private BigDecimal totalWithDiscount;
 
-    @NotBlank
     @Column(nullable = false)
     private BigDecimal total;
 
-    @NotBlank
     @Column(nullable = false)
     private OrderStatus status;
 
-    @NotBlank
     @Column(nullable = false)
     private Double totalHeight;
 
-    @NotBlank
     @Column(nullable = false)
     private Double totalLength;
 
-    @NotBlank
     @Column(nullable = false)
     private Double totalWidth;
 
-    @NotBlank
     @Column(nullable = false)
     private Double totalWeight;
 

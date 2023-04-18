@@ -15,4 +15,8 @@ public class ProductResponseDTO {
     private BigDecimal price;
     private Integer discount;
     private Long quantity;
+    private Double height;
+    private Double width;
+    private Double length;
+    private Double weight;
 }

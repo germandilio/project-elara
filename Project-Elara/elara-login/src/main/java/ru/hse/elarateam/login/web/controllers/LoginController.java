@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import ru.hse.elarateam.login.web.services.jwt.JWTUtils;
 import ru.hse.elarateam.login.web.services.jwt.service.ServiceTokenUtils;
 import ru.hse.elarateam.login.web.services.users.UsersService;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
 @RestController
@@ -93,6 +95,7 @@ public class LoginController {
             return ResponseEntity.ok(user);
 
         } catch (IllegalArgumentException ex) {
+            log.error(ex.getMessage());
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }

@@ -2,7 +2,6 @@ package ru.hse.elarateam.orders.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,19 +38,27 @@ public class OrderedItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @NotBlank
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID productId;
 
-    @NotBlank
     @Column(nullable = false)
     private BigDecimal price;
 
-    @NotBlank
     @Column(nullable = false)
     private Integer discount;
 
-    @NotBlank
+    @Column(nullable = false)
+    private Double height;
+
+    @Column(nullable = false)
+    private Double width;
+
+    @Column(nullable = false)
+    private Double length;
+
+    @Column(nullable = false)
+    private Double weight;
+
     @Column(nullable = false)
     private Long quantity;
 

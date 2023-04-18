@@ -19,12 +19,12 @@ import java.util.Set;
 @Builder
 @Table(name = "sports")
 public class Sport {
-
+    // todo restore nullable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 32, columnDefinition = "varchar(32)", nullable = false)
+    @Column(length = 32, columnDefinition = "varchar(32)")
     private String name;
 
     @JsonBackReference

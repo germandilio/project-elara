@@ -8,14 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.elarateam.orders.auth.AuthenticationManager;
+import ru.hse.elarateam.orders.auth.dto.RoleEnum;
 import ru.hse.elarateam.orders.dto.info.PaymentDetailsInfoDTO;
 import ru.hse.elarateam.orders.dto.info.ShipmentDetailsInfoDTO;
 import ru.hse.elarateam.orders.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.orders.dto.response.OrderResponseDTO;
 import ru.hse.elarateam.orders.model.status.OrderStatus;
 import ru.hse.elarateam.orders.services.OrdersService;
+import ru.hse.elarateam.orders.services.jwt.ServiceTokenUtilsImpl;
 
 import java.util.UUID;
 
@@ -23,9 +27,9 @@ import java.util.UUID;
 @RequestMapping("/v1/orders")
 @RequiredArgsConstructor
 public class OrdersController {
-    // todo authorization everywhere
-
     private final OrdersService ordersService;
+    private final AuthenticationManager authenticationManager;
+    private final ServiceTokenUtilsImpl serviceTokenUtils;
 
     /**
      * Place order by orderRequestDTO.
@@ -46,7 +50,10 @@ public class OrdersController {
     @PostMapping("/place")
     public ResponseEntity<OrderResponseDTO> placeOrder(@RequestHeader("Authorization") String token,
                                                        @RequestBody OrderRequestDTO orderRequestDTO) {
-        return null;
+        if (notAuthenticated(token, false)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(ordersService.placeOrder(orderRequestDTO));
     }
 
     /**
@@ -72,6 +79,9 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changeShipmentDetails(@RequestHeader("Authorization") String serviceToken,
                                                                   @RequestParam("orderId") UUID orderId,
                                                                   @RequestBody ShipmentDetailsInfoDTO shipmentDetailsInfoDTO) {
+        if (serviceTokenInvalid(serviceToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(ordersService.changeShipmentDetails(shipmentDetailsInfoDTO, orderId));
     }
 
@@ -98,6 +108,9 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changePaymentDetails(@RequestHeader("Authorization") String serviceToken,
                                                                  @RequestParam("orderId") UUID orderId,
                                                                  @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
+        if (serviceTokenInvalid(serviceToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(ordersService.changePaymentDetails(paymentDetailsInfoDTO, orderId));
     }
 
@@ -121,6 +134,9 @@ public class OrdersController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDTO> getOrderById(@RequestHeader("Authorization") String token,
                                                          @PathVariable("orderId") UUID orderId) {
+        if (notAuthenticated(token, false)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         return ResponseEntity.ok(ordersService.getOrderById(orderId));
     }
 
@@ -128,8 +144,8 @@ public class OrdersController {
     /**
      * Get orders by user id.
      *
-     * @param token      JWT token.
-     * @param userId     user id.
+     * @param token    JWT token.
+     * @param userId   user id.
      * @param pageable automatically parses page parameters.
      * @return page of orderResponseDTO or string exception message.
      */
@@ -141,11 +157,13 @@ public class OrdersController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/{userId}")
-    //todo подумать над response entity
-    public Page<OrderResponseDTO> getOrdersByUserId(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Page<OrderResponseDTO>> getOrdersByUserId(@RequestHeader("Authorization") String token,
                                                                     @PathVariable("userId") UUID userId,
                                                                     @ParameterObject Pageable pageable) {
-        return ordersService.getOrdersByUserId(userId, pageable);
+        if (notAuthenticated(token, true)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(ordersService.getOrdersByUserId(userId, pageable));
     }
 
     /**
@@ -162,10 +180,12 @@ public class OrdersController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @GetMapping("/")
-    //todo подумать над response entity
-    public Page<OrderResponseDTO> getAllOrders(@RequestHeader("Authorization") String token,
-                                               @ParameterObject Pageable pageable) {
-        return ordersService.getAllOrders(pageable);
+    public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(@RequestHeader("Authorization") String token,
+                                                               @ParameterObject Pageable pageable) {
+        if (notAuthenticated(token, true)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(ordersService.getAllOrders(pageable));
     }
 
     /**
@@ -189,6 +209,9 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changeOrderStatusAdmin(@RequestHeader("Authorization") String token,
                                                                    @RequestParam("orderId") UUID orderId,
                                                                    @RequestParam("status") String status) {
+        if (notAuthenticated(token, true)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         var statusEnum = OrderStatus.valueOf(status);
         return ResponseEntity.ok(ordersService.changeOrderStatus(orderId, statusEnum));
     }
@@ -215,8 +238,44 @@ public class OrdersController {
     public ResponseEntity<OrderResponseDTO> changeOrderStatusSystem(@RequestHeader("Authorization") String serviceToken,
                                                                     @RequestParam("orderId") UUID orderId,
                                                                     @RequestParam("status") String status) {
+        if (serviceTokenInvalid(serviceToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         var statusEnum = OrderStatus.valueOf(status);
         return ResponseEntity.ok(ordersService.changeOrderStatus(orderId, statusEnum));
+    }
+
+    /**
+     * For users.
+     *
+     * @param token       user JWT token.
+     * @param askingAdmin true if admin role is required.
+     * @return true if user is not authenticated.
+     */
+    private boolean notAuthenticated(String token, boolean askingAdmin) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return true;
+        }
+        try {
+            var userServiceInfo = authenticationManager.authenticate(token.substring(7));
+            return userServiceInfo.getRoleName() != RoleEnum.ADMIN || !askingAdmin;
+        } catch (IllegalArgumentException e) {
+            return true;
+        }
+    }
+
+    /**
+     * For services.
+     *
+     * @param serviceToken service JWT token.
+     * @return true if token is valid.
+     */
+    private boolean serviceTokenInvalid(String serviceToken) {
+        if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
+            return true;
+        }
+        return !serviceTokenUtils.validateToken(serviceToken.substring(7));
     }
 
 }

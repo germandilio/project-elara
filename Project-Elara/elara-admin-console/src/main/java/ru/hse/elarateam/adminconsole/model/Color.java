@@ -19,14 +19,15 @@ import java.util.Set;
 @Table(name = "colors")
 public class Color {
 
+    // todo restore nullable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // при откате транзакции счетчик все равно увеличивается на 1
     private Long id;
 
-    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
+    @Column(length = 64, columnDefinition = "varchar(64)")
     private String name;
 
-    @Column(length = 7, columnDefinition = "varchar(7)", nullable = false)
+    @Column(length = 7, columnDefinition = "varchar(7)")
     private String hex;
 
     @ManyToMany(mappedBy = "colors", fetch = FetchType.LAZY)

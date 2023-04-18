@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LoginServiceConfig {
     @Value("${elara.login-service.token}")
-    private String userServiceToken;
+    private String loginServiceToken;
 
     @Bean
     public AuthTokenInterceptor authTokenInterceptor() {
-        return new AuthTokenInterceptor(userServiceToken);
+        return new AuthTokenInterceptor(loginServiceToken);
     }
 }

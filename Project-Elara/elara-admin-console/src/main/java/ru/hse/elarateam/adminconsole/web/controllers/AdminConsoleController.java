@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import ru.hse.elarateam.adminconsole.services.SportsService;
 
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/admin-console")
@@ -30,7 +32,6 @@ public class AdminConsoleController {
     private final FeaturesService featuresService;
     private final SportsService sportsService;
     private final AuthenticationManagerImpl authenticationManager;
-
 
     /**
      * Create product.
@@ -359,14 +360,16 @@ public class AdminConsoleController {
 
     private boolean notAuthenticated(String token) {
         if (token == null || !token.startsWith("Bearer ")) {
+            log.info("Token is not valid (precheck): " + token);
             return true;
         }
         try {
             var userServiceInfo = authenticationManager.authenticate(token.substring(7));
+            log.info("User found: " + userServiceInfo.getLogin() + " role: " + userServiceInfo.getRoleName());
             return userServiceInfo.getRoleName() != RoleEnum.ADMIN;
         } catch (IllegalArgumentException e) {
+            log.info("Token is not valid: " + token);
             return true;
         }
     }
-
 }
