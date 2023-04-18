@@ -1,8 +1,7 @@
-package ru.hse.elarateam.orders.model;
+package ru.hse.elarateam.delivery.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,8 +21,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "shipment_details")
-public class ShipmentDetails {
+@Table(name = "ordered_items")
+public class OrderedItem {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -34,26 +33,34 @@ public class ShipmentDetails {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @JsonManagedReference
-    @ToString.Exclude
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "to_address_id")
-    private Address toAddress;
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @JsonManagedReference
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "from_address_id")
-    private Address fromAddress;
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    private UUID productId;
 
+    @Column(nullable = false)
+    private BigDecimal price;
 
-    private BigDecimal deliveryCost;
+    @Column(nullable = false)
+    private Integer discount;
 
-    @JsonManagedReference
-    @ToString.Exclude
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "shipment_method_id")
-    private ShipmentMethod shipmentMethod;
+    @Column(nullable = false)
+    private Double height;
+
+    @Column(nullable = false)
+    private Double width;
+
+    @Column(nullable = false)
+    private Double length;
+
+    @Column(nullable = false)
+    private Double weight;
+
+    @Column(nullable = false)
+    private Long quantity;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -66,7 +73,7 @@ public class ShipmentDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        ShipmentDetails that = (ShipmentDetails) o;
+        OrderedItem that = (OrderedItem) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

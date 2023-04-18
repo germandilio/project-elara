@@ -14,9 +14,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SDEKFeignService {
-    private final SDEKFeignClient sdekFeignClient;
-
-    public List<ShipmentMethod> getShipmentMethods(AddressInfoDTO fromAddress, AddressInfoDTO toAddress, ) {
+    public List<ShipmentMethod> getShipmentMethods(Double totalHeight,
+                                                   Double totalWidth,
+                                                   Double totalLength,
+                                                   Double totalWeight,
+                                                   AddressInfoDTO fromAddress,
+                                                   AddressInfoDTO toAddress) {
         return List.of(
                 ShipmentMethod.builder()
                         .deliverySum(new BigDecimal(322L))

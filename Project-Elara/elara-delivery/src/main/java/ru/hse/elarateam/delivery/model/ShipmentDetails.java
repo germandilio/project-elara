@@ -1,8 +1,7 @@
-package ru.hse.elarateam.orders.model;
+package ru.hse.elarateam.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;

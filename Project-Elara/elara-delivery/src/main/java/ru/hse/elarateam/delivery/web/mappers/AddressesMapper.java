@@ -14,5 +14,4 @@ public interface AddressesMapper {
     @Mapping(target = "id", ignore = true)
     Address addressInfoDTOToAddress(AddressInfoDTO addressInfoDTO);
 
-//    Set<Address> map(Set<AddressInfoDTO> addressInfoDTOs);
 }

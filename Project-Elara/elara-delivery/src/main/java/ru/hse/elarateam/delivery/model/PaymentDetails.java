@@ -1,17 +1,14 @@
-package ru.hse.elarateam.orders.model;
+package ru.hse.elarateam.delivery.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UpdateTimestamp;
+import ru.hse.elarateam.delivery.model.status.PaymentStatus;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,8 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "shipment_details")
-public class ShipmentDetails {
+@Table(name = "payment_details")
+public class PaymentDetails {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -34,39 +31,27 @@ public class ShipmentDetails {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @JsonManagedReference
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "to_address_id")
-    private Address toAddress;
+    @NotBlank
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    private UUID orderId;
 
-    @JsonManagedReference
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "from_address_id")
-    private Address fromAddress;
+    @NotBlank
+    @Column(nullable = false)
+    private PaymentStatus status;
 
+    @NotBlank
+    @Column(nullable = false)
+    private String userEmail;
 
-    private BigDecimal deliveryCost;
-
-    @JsonManagedReference
-    @ToString.Exclude
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "shipment_method_id")
-    private ShipmentMethod shipmentMethod;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Timestamp createdDate;
-
-    @UpdateTimestamp
-    private Timestamp lastModifiedDate;
+    @NotBlank
+    @Column(nullable = false)
+    private Date updateTime;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        ShipmentDetails that = (ShipmentDetails) o;
+        PaymentDetails that = (PaymentDetails) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

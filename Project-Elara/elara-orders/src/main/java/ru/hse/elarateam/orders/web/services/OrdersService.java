@@ -63,41 +63,41 @@ public class OrdersService {
                 .map(ordersMapper::orderToOrderResponseDTO);
     }
 
-    @Transactional(rollbackFor = RuntimeException.class)
-    public OrderResponseDTO changeShipmentDetails(ShipmentDetailsInfoDTO shipmentDetailsInfoDTO, UUID orderId) {
-        if (!ordersRepository.existsById(orderId)) {
-            log.error("Order with id " + orderId + " not found.");
-            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
-        }
-        var order = ordersRepository.findById(orderId).get();
-        // todo подумать, возможно стоит передавать paymentDetailsId и забирать объект из базы
-        if (!shipmentDetailsRepository.existsById(shipmentDetailsInfoDTO.getId())) {
-            log.error("Shipment details object with id " + shipmentDetailsInfoDTO.getId() + " not found.");
-            throw new IllegalArgumentException("Shipment details object with id " + shipmentDetailsInfoDTO.getId() + " not found.");
-        }
-        order.setShipmentDetails(shipmentDetailsMapper.shipmentDetailsInfoDTOToShipmentDetails(shipmentDetailsInfoDTO));
-        var saved = ordersRepository.save(order);
-        log.info("Shipment details for order " + orderId + " changed for: " + saved.getShipmentDetails());
-        return ordersMapper.orderToOrderResponseDTO(saved);
-    }
-
-    @Transactional(rollbackFor = RuntimeException.class)
-    public OrderResponseDTO changePaymentDetails(PaymentDetailsInfoDTO paymentDetailsInfoDTO, UUID orderId) {
-        if (!ordersRepository.existsById(orderId)) {
-            log.error("Order with id " + orderId + " not found.");
-            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
-        }
-        var order = ordersRepository.findById(orderId).get();
-        // todo подумать, возможно стоит передавать paymentDetailsId и забирать объект из базы
-        if (!paymentDetailsRepository.existsById(paymentDetailsInfoDTO.getId())) {
-            log.error("Payment details object with id " + paymentDetailsInfoDTO.getId() + " not found.");
-            throw new IllegalArgumentException("Payment details object with id " + paymentDetailsInfoDTO.getId() + " not found.");
-        }
-        order.setPaymentDetails(paymentDetailsMapper.paymentDetailsInfoDTOToPaymentDetails(paymentDetailsInfoDTO));
-        var saved = ordersRepository.save(order);
-        log.info("Payment details for order " + orderId + " changed for: " + saved.getPaymentDetails());
-        return ordersMapper.orderToOrderResponseDTO(saved);
-    }
+//    @Transactional(rollbackFor = RuntimeException.class)
+//    public OrderResponseDTO changeShipmentDetails(ShipmentDetailsInfoDTO shipmentDetailsInfoDTO, UUID orderId) {
+//        if (!ordersRepository.existsById(orderId)) {
+//            log.error("Order with id " + orderId + " not found.");
+//            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
+//        }
+//        var order = ordersRepository.findById(orderId).get();
+//        // todo подумать, возможно стоит передавать paymentDetailsId и забирать объект из базы
+//        if (!shipmentDetailsRepository.existsById(shipmentDetailsInfoDTO.getId())) {
+//            log.error("Shipment details object with id " + shipmentDetailsInfoDTO.getId() + " not found.");
+//            throw new IllegalArgumentException("Shipment details object with id " + shipmentDetailsInfoDTO.getId() + " not found.");
+//        }
+//        order.setShipmentDetails(shipmentDetailsMapper.shipmentDetailsInfoDTOToShipmentDetails(shipmentDetailsInfoDTO));
+//        var saved = ordersRepository.save(order);
+//        log.info("Shipment details for order " + orderId + " changed for: " + saved.getShipmentDetails());
+//        return ordersMapper.orderToOrderResponseDTO(saved);
+//    }
+//
+//    @Transactional(rollbackFor = RuntimeException.class)
+//    public OrderResponseDTO changePaymentDetails(PaymentDetailsInfoDTO paymentDetailsInfoDTO, UUID orderId) {
+//        if (!ordersRepository.existsById(orderId)) {
+//            log.error("Order with id " + orderId + " not found.");
+//            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
+//        }
+//        var order = ordersRepository.findById(orderId).get();
+//        // todo подумать, возможно стоит передавать paymentDetailsId и забирать объект из базы
+//        if (!paymentDetailsRepository.existsById(paymentDetailsInfoDTO.getId())) {
+//            log.error("Payment details object with id " + paymentDetailsInfoDTO.getId() + " not found.");
+//            throw new IllegalArgumentException("Payment details object with id " + paymentDetailsInfoDTO.getId() + " not found.");
+//        }
+//        order.setPaymentDetails(paymentDetailsMapper.paymentDetailsInfoDTOToPaymentDetails(paymentDetailsInfoDTO));
+//        var saved = ordersRepository.save(order);
+//        log.info("Payment details for order " + orderId + " changed for: " + saved.getPaymentDetails());
+//        return ordersMapper.orderToOrderResponseDTO(saved);
+//    }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public OrderResponseDTO changeOrderStatus(UUID orderId, OrderStatus status) {

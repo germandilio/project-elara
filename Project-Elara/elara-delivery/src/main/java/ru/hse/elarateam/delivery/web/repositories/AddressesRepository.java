@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface AddressesRepository extends JpaRepository<Address, UUID> {
     // todo initialize database with first address = from address
-    List<Address> findByUsersContains(UUID user);
+    List<Address> findByUserId(UUID userId);
 }

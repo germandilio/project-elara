@@ -1,7 +1,6 @@
 package ru.hse.elarateam.delivery.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -23,7 +22,6 @@ import java.util.UUID;
 @Builder
 @Table(name = "shipment_methods")
 public class ShipmentMethod {
-    // todo restore nullable & not blank
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -34,27 +32,32 @@ public class ShipmentMethod {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @Column()
+    @NotBlank
+    @Column(nullable = false)
     private Integer tariffCode;
 
-    @Column(length = 64, columnDefinition = "varchar(64)")
+    @NotBlank
+    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String tariffName;
 
-    @Column(length = 64, columnDefinition = "varchar(64)")
+    @NotBlank
+    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String tariffDescription;
 
-    @Column()
+    @NotBlank
+    @Column(nullable = false)
     private Integer deliveryMode;
 
-    @Column()
+    @NotBlank
+    @Column(nullable = false)
     private BigDecimal deliverySum;
 
-    @Min(1)
-    @Column()
+    @NotBlank
+    @Column(nullable = false)
     private Integer periodMin;
 
-    @Min(1)
-    @Column()
+    @NotBlank
+    @Column(nullable = false)
     private Integer periodMax;
 
     @CreationTimestamp

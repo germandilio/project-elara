@@ -4,24 +4,30 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.delivery.dto.info.AddressInfoDTO;
 import ru.hse.elarateam.delivery.dto.request.SelectShipmentMethodRequestDTO;
 import ru.hse.elarateam.delivery.dto.request.ShipmentMethodsRequestDTO;
 import ru.hse.elarateam.delivery.dto.response.ShipmentMethodsResponseDTO;
+import ru.hse.elarateam.delivery.web.services.DeliveryService;
+import ru.hse.elarateam.delivery.web.services.auth.AuthenticationManagerImpl;
+import ru.hse.elarateam.delivery.web.services.auth.dto.RoleEnum;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/delivery")
+@RequiredArgsConstructor
 public class DeliveryController {
+    private final DeliveryService deliveryService;
+    private final AuthenticationManagerImpl authenticationManager;
 
-    // todo authentication
     /**
      * Get shipment methods by shipmentMethodsRequestDTO.
      *
@@ -40,7 +46,10 @@ public class DeliveryController {
     @PostMapping("/get")
     public ResponseEntity<ShipmentMethodsResponseDTO> getShipmentMethods(@RequestHeader("Authorization") String token,
                                                                          @RequestBody ShipmentMethodsRequestDTO shipmentMethodsRequestDTO) {
-        return null;
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(deliveryService.getShipmentMethods(shipmentMethodsRequestDTO));
     }
 
     /**
@@ -60,15 +69,19 @@ public class DeliveryController {
     @PutMapping("/select")
     public ResponseEntity<?> selectShipmentMethod(@RequestHeader("Authorization") String token,
                                                   @RequestBody SelectShipmentMethodRequestDTO selectShipmentMethodRequestDTO) {
-        return null;
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        deliveryService.selectShipmentMethod(selectShipmentMethodRequestDTO);
+        return ResponseEntity.ok("Shipment method selected.");
     }
 
 
     /**
      * Get users saved addresses. Paginated.
      *
-     * @param token    JWT token.
-     * @param userId   user id.
+     * @param token  JWT token.
+     * @param userId user id.
      * @return page of saved addresses.
      */
     @ApiResponses(value = {
@@ -81,8 +94,26 @@ public class DeliveryController {
     @GetMapping("/saved-addresses")
     public ResponseEntity<List<AddressInfoDTO>> getSavedAddresses(@RequestHeader("Authorization") String token,
                                                                   @RequestParam("userId") UUID userId) {
+        if (notAuthenticated(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         // not to do pagination https://youtu.be/oq-c3D67WqM?t=1931
-        return null;
+        return ResponseEntity.ok(deliveryService.getSavedAddresses(userId));
+    }
+
+    private boolean notAuthenticated(String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            log.info("Token is not valid (precheck): " + token);
+            return true;
+        }
+        try {
+            var userServiceInfo = authenticationManager.authenticate(token.substring(7));
+            log.info("User found: " + userServiceInfo.getLogin() + " role: " + userServiceInfo.getRoleName());
+            return false;
+        } catch (IllegalArgumentException e) {
+            log.info("Token is not valid: " + token);
+            return true;
+        }
     }
 
 
