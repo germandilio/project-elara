@@ -8,5 +8,5 @@ import ru.hse.elarateam.orders.model.ShipmentDetails;
 public interface ShipmentDetailsMapper {
     ShipmentDetailsInfoDTO shipmentDetailsToShipmentDetailsInfoDTO(ShipmentDetails shipmentDetails);
 
-//    ShipmentDetails shipmentDetailsInfoDTOToShipmentDetails(ShipmentDetailsInfoDTO shipmentDetailsInfoDTO);
+    ShipmentDetails shipmentDetailsInfoDTOToShipmentDetails(ShipmentDetailsInfoDTO shipmentDetailsInfoDTO);
 }
