@@ -35,10 +35,10 @@ import java.util.UUID;
 public class OrdersService {
     private final OrdersRepository ordersRepository;
     private final OrdersMapper ordersMapper;
-    private final ShipmentDetailsRepository shipmentDetailsRepository;
-    private final ShipmentDetailsMapper shipmentDetailsMapper;
-    private final PaymentDetailsRepository paymentDetailsRepository;
-    private final PaymentDetailsMapper paymentDetailsMapper;
+//    private final ShipmentDetailsRepository shipmentDetailsRepository;
+//    private final ShipmentDetailsMapper shipmentDetailsMapper;
+//    private final PaymentDetailsRepository paymentDetailsRepository;
+//    private final PaymentDetailsMapper paymentDetailsMapper;
     private final OrderedItemsRepository orderedItemsRepository;
     private final OrderedItemsMapper orderedItemsMapper;
     private final ProductsServiceFeign productsServiceFeign;

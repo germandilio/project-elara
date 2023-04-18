@@ -44,7 +44,7 @@ public class DeliveryService {
         var orderId = shipmentMethodsRequestDTO.getOrderId();
 
         var order = ordersRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id" + orderId + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Order with id" + orderId + " not found."));
 
         checkOrderStatus(order);
 

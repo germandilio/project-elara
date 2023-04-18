@@ -276,18 +276,18 @@ public class OrdersController {
         }
     }
 
-    /**
-     * For services.
-     *
-     * @param serviceToken service JWT token.
-     * @return true if token is valid.
-     */
-    private boolean serviceTokenInvalid(String serviceToken) {
-        if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
-            log.info("Service token is not valid (precheck): " + serviceToken);
-            return true;
-        }
-        return !serviceTokenUtils.validateToken(serviceToken.substring(7));
-    }
+//    /**
+//     * For services.
+//     *
+//     * @param serviceToken service JWT token.
+//     * @return true if token is valid.
+//     */
+//    private boolean serviceTokenInvalid(String serviceToken) {
+//        if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
+//            log.info("Service token is not valid (precheck): " + serviceToken);
+//            return true;
+//        }
+//        return !serviceTokenUtils.validateToken(serviceToken.substring(7));
+//    }
 
 }

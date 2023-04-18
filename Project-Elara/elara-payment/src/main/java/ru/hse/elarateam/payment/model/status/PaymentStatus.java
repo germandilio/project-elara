@@ -1,4 +1,4 @@
-package ru.hse.elarateam.payment.model;
+package ru.hse.elarateam.payment.model.status;
 
 public enum PaymentStatus {
     CREATED,
