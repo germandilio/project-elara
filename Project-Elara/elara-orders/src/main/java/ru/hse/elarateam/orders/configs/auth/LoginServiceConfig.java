@@ -14,7 +14,7 @@ public class LoginServiceConfig {
     private String loginServiceToken;
 
     @Bean
-    public AuthTokenInterceptor authTokenInterceptor() {
+    public AuthTokenInterceptor loginAuthTokenInterceptor() {
         return new AuthTokenInterceptor(loginServiceToken);
     }
 }

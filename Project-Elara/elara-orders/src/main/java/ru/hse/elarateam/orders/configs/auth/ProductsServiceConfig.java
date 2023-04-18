@@ -14,7 +14,7 @@ public class ProductsServiceConfig {
     private String productsServiceToken;
 
     @Bean
-    public AuthTokenInterceptor authTokenInterceptor() {
+    public AuthTokenInterceptor productsAuthTokenInterceptor() {
         return new AuthTokenInterceptor(productsServiceToken);
     }
 }

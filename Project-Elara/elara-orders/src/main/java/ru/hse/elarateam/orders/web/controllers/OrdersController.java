@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +24,12 @@ import ru.hse.elarateam.orders.services.jwt.ServiceTokenUtilsImpl;
 
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/orders")
 @RequiredArgsConstructor
 public class OrdersController {
+    // todo schedule deletion of orders with status < PAID every 15 minutes
     private final OrdersService ordersService;
     private final AuthenticationManager authenticationManager;
     private final ServiceTokenUtilsImpl serviceTokenUtils;
@@ -255,12 +258,15 @@ public class OrdersController {
      */
     private boolean notAuthenticated(String token, boolean askingAdmin) {
         if (token == null || !token.startsWith("Bearer ")) {
+            log.info("Token is not valid (precheck): " + token);
             return true;
         }
         try {
             var userServiceInfo = authenticationManager.authenticate(token.substring(7));
+            log.info("User found: " + userServiceInfo.getLogin() + " role: " + userServiceInfo.getRoleName());
             return userServiceInfo.getRoleName() != RoleEnum.ADMIN || !askingAdmin;
         } catch (IllegalArgumentException e) {
+            log.info("Token is not valid: " + token);
             return true;
         }
     }
@@ -273,6 +279,7 @@ public class OrdersController {
      */
     private boolean serviceTokenInvalid(String serviceToken) {
         if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
+            log.info("Service token is not valid (precheck): " + serviceToken);
             return true;
         }
         return !serviceTokenUtils.validateToken(serviceToken.substring(7));
