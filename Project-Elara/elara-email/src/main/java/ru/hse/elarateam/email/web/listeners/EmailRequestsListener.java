@@ -7,11 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import ru.hse.elarateam.email.configs.JMSConfig;
-import ru.hse.elarateam.email.dto.messages.EmailVerificationMessage;
-import ru.hse.elarateam.email.dto.messages.OrderCheckoutMessage;
-import ru.hse.elarateam.email.dto.messages.ResetPasswordMessage;
 import ru.hse.elarateam.email.web.services.email.EmailService;
 import ru.hse.elarateam.email.web.services.user.UserService;
+import ru.hse.elarateam.messages.EmailVerificationMessage;
+import ru.hse.elarateam.messages.OrderCheckoutMessage;
+import ru.hse.elarateam.messages.ResetPasswordMessage;
 
 @Slf4j
 @RequiredArgsConstructor

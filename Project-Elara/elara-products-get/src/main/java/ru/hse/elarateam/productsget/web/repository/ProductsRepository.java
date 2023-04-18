@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
+public interface ProductsRepository extends JpaRepository<Product, UUID> {
     @NonNull
     @Override
     Optional<Product> findById(@NonNull UUID uuid);
@@ -37,7 +37,23 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
 
     Page<Product> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-    public interface PriceRangeProjection {
+    @Query("SELECT DISTINCT p.brand FROM Product p")
+    Collection<String> findAllBrands();
+
+    @Query("SELECT DISTINCT p.countryOfOrigin FROM Product p")
+    Collection<String> findAllCountries();
+
+    @Query("SELECT DISTINCT p.sizeUS FROM Product p")
+    Collection<Double> findAllSizeUS();
+
+    @Query("SELECT DISTINCT p.sizeEUR FROM Product p")
+    Collection<Double> findAllSizeEUR();
+
+    @Query("SELECT DISTINCT p.sizeUK FROM Product p")
+    Collection<Double> findAllSizeUK();
+
+
+    interface PriceRangeProjection {
         BigDecimal getMin();
 
         BigDecimal getMax();
@@ -95,7 +111,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
     }
 
     @Query(value = """
-                SELECT p.* FROM products p
+                SELECT DISTINCT p.* FROM products p
                 LEFT JOIN products_colors pc ON pc.product_id = p.id
                 LEFT JOIN colors c ON pc.colors_id = c.id
                 JOIN products_features pf on p.id = pf.product_id

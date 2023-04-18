@@ -1,5 +1,6 @@
 package ru.hse.elarateam.productsget.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
@@ -70,6 +71,7 @@ public class Product {
     @Column(nullable = false)
     private Double sizeEUR;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "products_sports",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -77,6 +79,7 @@ public class Product {
     @ToString.Exclude
     private Set<Sport> sports = new LinkedHashSet<>();
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "products_colors",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -84,6 +87,7 @@ public class Product {
     @ToString.Exclude
     private Set<Color> colors = new LinkedHashSet<>();
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "products_features",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -91,9 +95,9 @@ public class Product {
     @ToString.Exclude
     private Set<Feature> features = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<Picture> pictures = new LinkedHashSet<>();
+    private Set<String> pictures = new LinkedHashSet<>();
 
     @Column(nullable = false)
     private Double height;
