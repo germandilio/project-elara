@@ -6,8 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import ru.hse.elarateam.products.model.Product;
-import ru.hse.elarateam.products.repositories.ProductsRepository;
-import ru.hse.elarateam.products.services.jwt.service.ServiceTokenUtilsImpl;
+import ru.hse.elarateam.products.web.repositories.ProductsRepository;
+import ru.hse.elarateam.products.web.services.jwt.ServiceTokenUtilsImpl;
 
 import java.math.BigDecimal;
 

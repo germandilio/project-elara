@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hse.elarateam.orders.services.jwt.ServiceTokenUtilsImpl;
+import ru.hse.elarateam.orders.web.services.jwt.ServiceTokenUtilsImpl;
 
 @Slf4j
 @EnableSpringDataWebSupport

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Feign client for calling products jwt.
+ * Feign client for calling products service.
  */
 @FeignClient(name = "elara-products", url = "http://localhost:8084", configuration = ProductsServiceConfig.class)
 public interface ProductsServiceFeignClient {

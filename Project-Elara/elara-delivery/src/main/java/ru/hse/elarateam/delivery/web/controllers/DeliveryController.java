@@ -14,12 +14,14 @@ import ru.hse.elarateam.delivery.dto.request.SelectShipmentMethodRequestDTO;
 import ru.hse.elarateam.delivery.dto.request.ShipmentMethodsRequestDTO;
 import ru.hse.elarateam.delivery.dto.response.ShipmentMethodsResponseDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/delivery")
 public class DeliveryController {
 
+    // todo authentication
     /**
      * Get shipment methods by shipmentMethodsRequestDTO.
      *
@@ -66,7 +68,6 @@ public class DeliveryController {
      * Get users saved addresses. Paginated.
      *
      * @param token    JWT token.
-     * @param pageable automatically parses page parameters.
      * @param userId   user id.
      * @return page of saved addresses.
      */
@@ -78,10 +79,9 @@ public class DeliveryController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/saved-addresses")
-    public Page<AddressInfoDTO> getSavedAddresses(@RequestHeader("Authorization") String token,
-                                                  @ParameterObject Pageable pageable,
-                                                  @RequestParam("userId") UUID userId) {
-        //todo pagination https://youtu.be/oq-c3D67WqM?t=1931
+    public ResponseEntity<List<AddressInfoDTO>> getSavedAddresses(@RequestHeader("Authorization") String token,
+                                                                  @RequestParam("userId") UUID userId) {
+        // not to do pagination https://youtu.be/oq-c3D67WqM?t=1931
         return null;
     }
 

@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import ru.hse.elarateam.products.dto.request.OrderedItemRequestDTO;
 import ru.hse.elarateam.products.model.Product;
-import ru.hse.elarateam.products.repositories.ProductsRepository;
-import ru.hse.elarateam.products.services.ProductsService;
+import ru.hse.elarateam.products.web.repositories.ProductsRepository;
+import ru.hse.elarateam.products.web.services.ProductsService;
 
 import java.math.BigDecimal;
 import java.util.List;
