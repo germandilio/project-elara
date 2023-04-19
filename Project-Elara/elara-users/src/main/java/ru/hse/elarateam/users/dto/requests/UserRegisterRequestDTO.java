@@ -30,7 +30,6 @@ public class UserRegisterRequestDTO {
     @Length(min = 1, max = 255)
     private String lastName;
 
-    @Length(min = 1, max = 512)
     private String pictureUrl;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
