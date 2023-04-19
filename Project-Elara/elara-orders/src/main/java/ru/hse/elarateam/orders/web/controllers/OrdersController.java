@@ -160,7 +160,7 @@ public class OrdersController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<Page<OrderResponseDTO>> getOrdersByUserId(@RequestHeader("Authorization") String token,
                                                                     @PathVariable("userId") UUID userId,
                                                                     @ParameterObject Pageable pageable) {
