@@ -8,7 +8,7 @@ services:
             - 8761:8761
         environment:
           - SPRING_APPLICATION_NAME=elara-eureka
-          - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+          - SPRING_PROFILES_ACTIVE=local-discovery
           - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
           - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-eureka,compose_service=app-elara-eureka
           - OTEL_METRICS_EXPORTER=none
@@ -32,7 +32,7 @@ services:
             - 8888:8888
         environment:
             - SPRING_APPLICATION_NAME=elara-config-server
-            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - SPRING_PROFILES_ACTIVE=local-discovery
             - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-config-server,compose_service=app-elara-config-server
             - OTEL_METRICS_EXPORTER=none
@@ -55,7 +55,7 @@ services:
             - 8080:8080
         environment:
             - SPRING_APPLICATION_NAME=elara-gateway
-            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - SPRING_PROFILES_ACTIVE=local-discovery
             - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-gateway,compose_service=app-elara-gateway
             - OTEL_METRICS_EXPORTER=none
@@ -95,7 +95,7 @@ services:
             - 8081:8081
         environment:
             - SPRING_APPLICATION_NAME=elara-email
-            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - SPRING_PROFILES_ACTIVE=local-discovery
             - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-email,compose_service=app-elara-email
             - OTEL_METRICS_EXPORTER=none
@@ -133,7 +133,7 @@ services:
             - 8086:8086
         environment:
             - SPRING_APPLICATION_NAME=elara-login
-            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - SPRING_PROFILES_ACTIVE=local-discovery
             - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-login,compose_service=app-elara-login
             - OTEL_METRICS_EXPORTER=none
@@ -164,7 +164,7 @@ services:
             - 8082:8082
         environment:
             - SPRING_APPLICATION_NAME=elara-products-get
-            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - SPRING_PROFILES_ACTIVE=local-discovery
             - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-products-get,compose_service=app-elara-products-get
             - OTEL_METRICS_EXPORTER=none
@@ -195,7 +195,7 @@ services:
             - 8085:8085
         environment:
             - SPRING_APPLICATION_NAME=elara-users
-            - SPRING_PROFILES_ACTIVE=local-dev,local-discovery
+            - SPRING_PROFILES_ACTIVE=local-discovery
             - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
             - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-users,compose_service=app-elara-users
             - OTEL_METRICS_EXPORTER=none
