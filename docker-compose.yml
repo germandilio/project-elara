@@ -77,12 +77,16 @@ services:
               condition: service_healthy
             elara-users:
               condition: service_healthy
-            # elara-delivery
-            # elara-admin-console
-            # elara-delivery
-            # elara-orders
-            # elara-payment
-            # elara-products
+            elara-delivery:
+              condition: service_healthy
+            elara-admin-console:
+              condition: service_healthy
+            elara-orders:
+              condition: service_healthy
+            elara-payment:
+              condition: service_healthy
+            elara-products:
+              condition: service_healthy
         healthcheck:
           test: ["CMD-SHELL", "/cnb/process/health-check"]
           interval: 10s
@@ -189,6 +193,171 @@ services:
           timeout: 15s
           retries: 10
 
+    elara-products:
+        image: germandilio/elara-products:1.0-SNAPSHOT
+        ports:
+            - 8084:8084
+        environment:
+            - SPRING_APPLICATION_NAME=elara-products
+            - SPRING_PROFILES_ACTIVE=local-discovery
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-products,compose_service=app-elara-products
+            - OTEL_METRICS_EXPORTER=none
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/products
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+            - THC_PORT=8084
+            - THC_PATH=/api/actuator/health
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-products-db:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "/cnb/process/health-check"]
+          interval: 10s
+          timeout: 15s
+          retries: 10
+
+    elara-payment:
+        image: germandilio/elara-payment:1.0-SNAPSHOT
+        ports:
+            - 8090:8090
+        environment:
+            - SPRING_APPLICATION_NAME=elara-payment
+            - SPRING_PROFILES_ACTIVE=local-discovery
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-payment,compose_service=app-elara-payment
+            - OTEL_METRICS_EXPORTER=none
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/orders
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+            - THC_PORT=8090
+            - THC_PATH=/api/actuator/health
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-orders-db:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "/cnb/process/health-check"]
+          interval: 10s
+          timeout: 15s
+          retries: 10
+
+    elara-orders:
+        image: germandilio/elara-orders:1.0-SNAPSHOT
+        ports:
+            - 8087:8087
+        environment:
+            - SPRING_APPLICATION_NAME=elara-orders
+            - SPRING_PROFILES_ACTIVE=local-discovery
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-orders,compose_service=app-elara-orders
+            - OTEL_METRICS_EXPORTER=none
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/orders
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+            - THC_PORT=8087
+            - THC_PATH=/api/actuator/health
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-orders-db:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+            elara-products:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "/cnb/process/health-check"]
+          interval: 10s
+          timeout: 15s
+          retries: 10
+
+    elara-delivery:
+        image: germandilio/elara-delivery:1.0-SNAPSHOT
+        ports:
+            - 8089:8089
+        environment:
+            - SPRING_APPLICATION_NAME=elara-delivery
+            - SPRING_PROFILES_ACTIVE=local-discovery
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-delivery,compose_service=app-elara-delivery
+            - OTEL_METRICS_EXPORTER=none
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/orders
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+            - THC_PORT=8089
+            - THC_PATH=/api/actuator/health
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-orders-db:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "/cnb/process/health-check"]
+          interval: 10s
+          timeout: 15s
+          retries: 10
+
+    elara-admin-console:
+        image: germandilio/elara-admin-console:1.0-SNAPSHOT
+        ports:
+            - 8083:8083
+        environment:
+            - SPRING_APPLICATION_NAME=elara-admin-console
+            - SPRING_PROFILES_ACTIVE=local-discovery
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-admin-console,compose_service=app-elara-admin-console
+            - OTEL_METRICS_EXPORTER=none
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
+            - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/products
+            - SPRING_DATASOURCE_USERNAME=postgresql
+            - SPRING_DATASOURCE_PASSWORD=postgresql
+            - THC_PORT=8083
+            - THC_PATH=/api/actuator/health
+        restart: on-failure
+        depends_on:
+            elara-eureka:
+              condition: service_healthy
+            elara-config-server:
+              condition: service_healthy
+            elara-products-db:
+              condition: service_healthy
+            elara-login:
+              condition: service_healthy
+        healthcheck:
+          test: ["CMD-SHELL", "/cnb/process/health-check"]
+          interval: 10s
+          timeout: 15s
+          retries: 10
+
     elara-users:
         image: germandilio/elara-users:1.0-SNAPSHOT
         ports:
@@ -232,20 +401,12 @@ services:
           timeout: 15s
           retries: 10
 
-    # elara-delivery:
-    # elara-admin-console:
-    # elara-delivery:
-    # elara-orders:
-    # elara-payment:
-    # elara-products:
-
     # datasources
     elara-users-db:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/users/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            # REPLACE WITH YOUR DIRECTORY FOR PERSISTENT DATA
-            - /Users/germandilio/.dockerdata/postgres/elara-users/:/var/lib/postgresql/data
+            - db-users-data:/var/lib/postgresql/data
         restart: always
         ports:
             - 5433:5432
@@ -259,32 +420,30 @@ services:
           timeout: 5s
           retries: 5
 
-    # elara-orders-db:
-    #     image: postgres:15.2-alpine
-    #     volumes:
-    #         - ./docker/database/orders/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-    #         # REPLACE WITH YOUR DIRECTORY FOR PERSISTENT DATA
-    #         - /Users/germandilio/.dockerdata/postgres/elara-orders/:/var/lib/postgresql/data
-    #     restart: always
-    #     ports:
-    #         - 5434:5432
-    #     environment:
-    #         - POSTGRES_USER=postgresql
-    #         - POSTGRES_PASSWORD=postgresql
-    #         - POSTGRES_DB=orders
-    #     healthcheck:
-    #       test: ["CMD-SHELL", "pg_isready -U postgresql -d orders"]
-    #       interval: 10s
-    #       timeout: 5s
-    #       retries: 5
+    elara-orders-db:
+        image: postgres:15.2-alpine
+        volumes:
+            - ./docker/database/orders/data.sql:/docker-entrypoint-initdb.d/1-init.sql
+            - db-orders-data:/var/lib/postgresql/data
+        restart: always
+        ports:
+            - 5434:5432
+        environment:
+            - POSTGRES_USER=postgresql
+            - POSTGRES_PASSWORD=postgresql
+            - POSTGRES_DB=orders
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U postgresql -d orders"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
 
     
     elara-products-db:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/products/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            # REPLACE WITH YOUR DIRECTORY FOR PERSISTENT DATA
-            - /Users/germandilio/.dockerdata/postgres/elara-products/:/var/lib/postgresql/data
+            - db-products-data:/var/lib/postgresql/data
         restart: always
         ports:
             - 5435:5432
@@ -353,3 +512,11 @@ services:
             - GF_AUTH_DISABLE_LOGIN_FORM=true
         ports:
             - "3000:3000"
+
+volumes:
+  db-products-data:
+    external: ${DB_PRODUCTS_VOLUME}
+  db-orders-data:
+    external: ${DB_ORDERS_VOLUME}
+  db-users-data:
+    external: ${DB_USERS_VOLUME}
