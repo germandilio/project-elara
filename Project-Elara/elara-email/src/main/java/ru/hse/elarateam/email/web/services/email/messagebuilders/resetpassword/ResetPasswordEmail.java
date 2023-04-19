@@ -51,7 +51,7 @@ public class ResetPasswordEmail implements Email {
         var message = new TemplatedMessage(fromEmail, toEmail, templateId, messageStream);
         var model = new ResetPasswordEmailModel(username,
                 productName,
-                actionUrl + "?token=" + resetToken,
+                actionUrl + "/" + resetToken,
                 companyName,
                 companyAddress);
 
