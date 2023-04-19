@@ -1,7 +1,6 @@
 package ru.hse.elarateam.productsget.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;

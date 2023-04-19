@@ -118,6 +118,7 @@ public class ProductsGetController {
 
     /**
      * Get all sizes (US)
+     *
      * @return list of sizes
      */
     @ApiResponses(value = {
@@ -135,6 +136,7 @@ public class ProductsGetController {
 
     /**
      * Get all sizes (EUR)
+     *
      * @return list of sizes
      */
     @ApiResponses(value = {
@@ -152,6 +154,7 @@ public class ProductsGetController {
 
     /**
      * Get all sizes (UK)
+     *
      * @return list of sizes
      */
     @ApiResponses(value = {

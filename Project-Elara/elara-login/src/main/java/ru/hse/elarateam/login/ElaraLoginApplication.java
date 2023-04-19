@@ -1,19 +1,8 @@
 package ru.hse.elarateam.login;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.annotation.Transactional;
-import ru.hse.elarateam.login.model.Role;
-import ru.hse.elarateam.login.model.RoleEnum;
-import ru.hse.elarateam.login.model.UserServiceInfo;
-import ru.hse.elarateam.login.web.repositories.UsersRepository;
-import ru.hse.elarateam.login.web.services.jwt.JWTUtilsImpl;
-import ru.hse.elarateam.login.web.services.jwt.service.ServiceTokenUtilImpl;
-
-import java.math.BigDecimal;
 
 @Slf4j
 @SpringBootApplication

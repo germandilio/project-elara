@@ -12,14 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.elarateam.orders.web.services.auth.AuthenticationManager;
-import ru.hse.elarateam.orders.web.services.auth.dto.RoleEnum;
-import ru.hse.elarateam.orders.dto.info.PaymentDetailsInfoDTO;
-import ru.hse.elarateam.orders.dto.info.ShipmentDetailsInfoDTO;
 import ru.hse.elarateam.orders.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.orders.dto.response.OrderResponseDTO;
 import ru.hse.elarateam.orders.model.status.OrderStatus;
 import ru.hse.elarateam.orders.web.services.OrdersService;
+import ru.hse.elarateam.orders.web.services.auth.AuthenticationManager;
+import ru.hse.elarateam.orders.web.services.auth.dto.RoleEnum;
 import ru.hse.elarateam.orders.web.services.jwt.ServiceTokenUtilsImpl;
 
 import java.util.UUID;

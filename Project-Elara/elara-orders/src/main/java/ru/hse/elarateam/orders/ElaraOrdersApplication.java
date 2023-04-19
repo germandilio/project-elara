@@ -1,13 +1,9 @@
 package ru.hse.elarateam.orders;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
-import org.springframework.transaction.annotation.Transactional;
-import ru.hse.elarateam.orders.web.services.jwt.ServiceTokenUtilsImpl;
 
 @Slf4j
 @EnableSpringDataWebSupport

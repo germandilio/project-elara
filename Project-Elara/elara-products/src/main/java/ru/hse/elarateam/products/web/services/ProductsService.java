@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.products.dto.request.OrderedItemRequestDTO;
 import ru.hse.elarateam.products.dto.response.ProductResponseDTO;
-import ru.hse.elarateam.products.web.mappers.ProductsMapper;
 import ru.hse.elarateam.products.model.Product;
+import ru.hse.elarateam.products.web.mappers.ProductsMapper;
 import ru.hse.elarateam.products.web.repositories.ProductsRepository;
 
 import java.util.ArrayList;

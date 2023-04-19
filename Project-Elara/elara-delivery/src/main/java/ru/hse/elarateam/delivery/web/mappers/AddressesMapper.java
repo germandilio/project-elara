@@ -5,8 +5,6 @@ import org.mapstruct.Mapping;
 import ru.hse.elarateam.delivery.dto.info.AddressInfoDTO;
 import ru.hse.elarateam.delivery.model.Address;
 
-import java.util.Set;
-
 @Mapper
 public interface AddressesMapper {
     AddressInfoDTO addressToAddressInfoDTO(Address address);

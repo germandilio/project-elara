@@ -1,4 +1,4 @@
-package ru.hse.elarateam.login.configs;
+package ru.hse.elarateam.payment.configs;
 
 import feign.Capability;
 import feign.micrometer.MicrometerCapability;

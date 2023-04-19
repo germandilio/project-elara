@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface OrdersRepository extends JpaRepository<Order, UUID>{
+public interface OrdersRepository extends JpaRepository<Order, UUID> {
     @NonNull
     @Override
     Optional<Order> findById(@NonNull UUID uuid);

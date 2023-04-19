@@ -1,7 +1,6 @@
 package ru.hse.elarateam.adminconsole.web.mappers;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.hse.elarateam.adminconsole.dto.ColorInfoDTO;
 import ru.hse.elarateam.adminconsole.model.Color;
 

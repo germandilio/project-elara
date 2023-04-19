@@ -10,6 +10,8 @@ import java.util.Set;
 @Mapper
 public interface OrderedItemsMapper {
     OrderedItemRequestDTO orderedItemToOrderedItemRequestDTO(OrderedItem orderedItem);
+
     OrderedItemResponseDTO orderedItemToOrderedItemResponseDTO(OrderedItem orderedItem);
+
     Set<OrderedItemResponseDTO> map(Set<OrderedItem> items);
 }

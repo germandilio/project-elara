@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.productsget.dto.*;
-import ru.hse.elarateam.productsget.model.Color;
 import ru.hse.elarateam.productsget.web.mappers.ColorMapper;
 import ru.hse.elarateam.productsget.web.mappers.FeatureMapper;
 import ru.hse.elarateam.productsget.web.mappers.ProductsMapper;
@@ -102,17 +101,17 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public ProductsResponse finaAllByFiltersAndQuery(Collection<String> sports,
-                                                         Collection<String> colors,
-                                                         Collection<String> features,
-                                                         Collection<String> countries,
-                                                         Collection<String> brands,
-                                                         Collection<Double> sizeUS,
-                                                         Collection<Double> sizeEUR,
-                                                         Collection<Double> sizeUK,
-                                                         BigDecimal minPrice,
-                                                         BigDecimal maxPrice,
-                                                         String query,
-                                                         Pageable pageable) {
+                                                     Collection<String> colors,
+                                                     Collection<String> features,
+                                                     Collection<String> countries,
+                                                     Collection<String> brands,
+                                                     Collection<Double> sizeUS,
+                                                     Collection<Double> sizeEUR,
+                                                     Collection<Double> sizeUK,
+                                                     BigDecimal minPrice,
+                                                     BigDecimal maxPrice,
+                                                     String query,
+                                                     Pageable pageable) {
         log.trace("finaAllByFiltersAndQuery({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", sports, colors, features,
                 countries, brands, sizeUS, sizeEUR, sizeUK, minPrice, maxPrice, query);
 
@@ -132,9 +131,9 @@ public class ProductServiceImpl implements ProductService {
             return builder;
         }
         return builder.minPrice(products.stream()
-                .map(ProductInfoDTO::getPrice)
-                .min(BigDecimal::compareTo)
-                .orElse(null))
+                        .map(ProductInfoDTO::getPrice)
+                        .min(BigDecimal::compareTo)
+                        .orElse(null))
                 .maxPrice(products.stream()
                         .map(ProductInfoDTO::getPrice)
                         .max(BigDecimal::compareTo)

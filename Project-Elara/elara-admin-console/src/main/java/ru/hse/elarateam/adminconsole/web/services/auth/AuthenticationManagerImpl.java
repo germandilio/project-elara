@@ -4,7 +4,6 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import ru.hse.elarateam.adminconsole.web.services.auth.dto.UserServiceInfoDTO;
 import ru.hse.elarateam.adminconsole.web.services.auth.loginservice.LoginServiceFeignClient;
 

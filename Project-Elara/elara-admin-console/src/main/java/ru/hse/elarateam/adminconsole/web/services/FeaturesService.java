@@ -30,8 +30,8 @@ public class FeaturesService {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public FeatureInfoDTO updateFeature(FeatureInfoDTO featureInfoDTO){
-        if(!featuresRepository.existsById(featureInfoDTO.getId()))
+    public FeatureInfoDTO updateFeature(FeatureInfoDTO featureInfoDTO) {
+        if (!featuresRepository.existsById(featureInfoDTO.getId()))
             throw new RuntimeException("Feature not found.");
 
         var saved = featuresRepository.saveAndFlush(
@@ -43,7 +43,7 @@ public class FeaturesService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void deleteFeature(Long featureId) {
-        if(!featuresRepository.existsById(featureId))
+        if (!featuresRepository.existsById(featureId))
             throw new RuntimeException("Feature not found.");
 
         featuresRepository.deleteById(featureId);

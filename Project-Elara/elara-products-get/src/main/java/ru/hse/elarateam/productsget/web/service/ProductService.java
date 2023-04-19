@@ -49,17 +49,17 @@ public interface ProductService {
      * @return page of products and metrics for filters such as presented brands, countries, etc.
      */
     ProductsResponse finaAllByFiltersAndQuery(Collection<String> sports,
-                                                  Collection<String> colors,
-                                                  Collection<String> features,
-                                                  Collection<String> countries,
-                                                  Collection<String> brands,
-                                                  Collection<Double> sizeUS,
-                                                  Collection<Double> sizeEUR,
-                                                  Collection<Double> sizeUK,
-                                                  BigDecimal minPrice,
-                                                  BigDecimal maxPrice,
-                                                  String query,
-                                                  Pageable pageable);
+                                              Collection<String> colors,
+                                              Collection<String> features,
+                                              Collection<String> countries,
+                                              Collection<String> brands,
+                                              Collection<Double> sizeUS,
+                                              Collection<Double> sizeEUR,
+                                              Collection<Double> sizeUK,
+                                              BigDecimal minPrice,
+                                              BigDecimal maxPrice,
+                                              String query,
+                                              Pageable pageable);
 
     /**
      * Find all products that were added recently

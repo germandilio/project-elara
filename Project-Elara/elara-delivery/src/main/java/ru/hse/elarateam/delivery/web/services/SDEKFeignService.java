@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hse.elarateam.delivery.dto.info.AddressInfoDTO;
 import ru.hse.elarateam.delivery.model.ShipmentMethod;
-import ru.hse.elarateam.delivery.web.feign.SDEKFeignClient;
 
 import java.math.BigDecimal;
 import java.util.List;

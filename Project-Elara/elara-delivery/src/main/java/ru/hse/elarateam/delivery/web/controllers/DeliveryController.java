@@ -15,7 +15,6 @@ import ru.hse.elarateam.delivery.dto.request.ShipmentMethodsRequestDTO;
 import ru.hse.elarateam.delivery.dto.response.ShipmentMethodsResponseDTO;
 import ru.hse.elarateam.delivery.web.services.DeliveryService;
 import ru.hse.elarateam.delivery.web.services.auth.AuthenticationManagerImpl;
-import ru.hse.elarateam.delivery.web.services.auth.dto.RoleEnum;
 
 import java.util.List;
 import java.util.UUID;

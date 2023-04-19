@@ -33,6 +33,6 @@ public class BinPackingSolver3d {
         totalLength /= items.size();
         totalWeight /= items.size();
 
-        return List.of(totalHeight*2, totalWidth*2, totalLength*2, totalWeight*2);
+        return List.of(totalHeight * 2, totalWidth * 2, totalLength * 2, totalWeight * 2);
     }
 }

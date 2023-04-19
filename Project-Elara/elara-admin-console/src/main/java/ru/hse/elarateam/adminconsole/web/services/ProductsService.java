@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.adminconsole.dto.ProductInfoDTO;
-import ru.hse.elarateam.adminconsole.web.mappers.ProductsMapper;
 import ru.hse.elarateam.adminconsole.model.Product;
+import ru.hse.elarateam.adminconsole.web.mappers.ProductsMapper;
 import ru.hse.elarateam.adminconsole.web.repositories.ProductsRepository;
 
 import java.util.UUID;
@@ -50,6 +50,7 @@ public class ProductsService {
 
         productsRepository.deleteById(productId);
     }
+
     @Transactional(readOnly = true)
     public Product getProductById(UUID productId) {
         return productsRepository.findById(productId)

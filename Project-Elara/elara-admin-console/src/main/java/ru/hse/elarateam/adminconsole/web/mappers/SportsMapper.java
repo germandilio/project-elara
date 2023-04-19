@@ -1,10 +1,7 @@
 package ru.hse.elarateam.adminconsole.web.mappers;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import ru.hse.elarateam.adminconsole.dto.FeatureInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.SportInfoDTO;
-import ru.hse.elarateam.adminconsole.model.Feature;
 import ru.hse.elarateam.adminconsole.model.Sport;
 
 import java.util.Set;

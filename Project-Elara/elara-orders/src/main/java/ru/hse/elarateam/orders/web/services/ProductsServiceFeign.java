@@ -17,13 +17,14 @@ import java.util.UUID;
 @Component
 public class ProductsServiceFeign {
     private final ProductsServiceFeignClient productsServiceFeignClient;
-    public ResponseEntity<List<ProductResponseDTO>> allocateProducts(OrderRequestDTO  orderRequestDTO) {
+
+    public ResponseEntity<List<ProductResponseDTO>> allocateProducts(OrderRequestDTO orderRequestDTO) {
         try {
             var response = productsServiceFeignClient.allocateProducts(orderRequestDTO);
 //            if(response.getBody().getData().equals(orderRequestDTO.getPositions()));
             // todo проверить на соответсвие листы
 
-            if(!response.hasBody()){
+            if (!response.hasBody()) {
                 log.error("Null response from products service.");
                 throw new IllegalStateException("Null response from products service.");
             }
@@ -45,13 +46,13 @@ public class ProductsServiceFeign {
         return null;
     }
 
-    public ResponseEntity<List<UUID>> deallocateProducts(OrderRequestDTO  orderRequestDTO) {
+    public ResponseEntity<List<UUID>> deallocateProducts(OrderRequestDTO orderRequestDTO) {
         try {
             var response = productsServiceFeignClient.deallocateProducts(orderRequestDTO);
 //            if(response.getBody().getData().equals(orderRequestDTO.getPositions()));
             // todo проверить на соответсвие листы
 
-            if(!response.hasBody()){
+            if (!response.hasBody()) {
                 log.error("Null response from products service.");
                 throw new IllegalStateException("Null response from products service.");
             }

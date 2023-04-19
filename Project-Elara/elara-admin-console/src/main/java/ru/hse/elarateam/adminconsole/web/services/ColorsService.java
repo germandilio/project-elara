@@ -32,7 +32,7 @@ public class ColorsService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public ColorInfoDTO updateColor(ColorInfoDTO colorInfoDTO) {
-        if(!colorsRepository.existsById(colorInfoDTO.getId()))
+        if (!colorsRepository.existsById(colorInfoDTO.getId()))
             throw new RuntimeException("Color not found.");
 
         var color = colorsRepository.saveAndFlush(
@@ -43,7 +43,7 @@ public class ColorsService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void deleteColor(Long colorId) {
-        if(!colorsRepository.existsById(colorId))
+        if (!colorsRepository.existsById(colorId))
             throw new RuntimeException("Color not found.");
 
         colorsRepository.deleteById(colorId);

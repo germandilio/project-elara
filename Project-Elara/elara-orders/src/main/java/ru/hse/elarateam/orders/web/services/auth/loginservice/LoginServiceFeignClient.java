@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ru.hse.elarateam.orders.web.services.auth.dto.UserServiceInfoDTO;
 import ru.hse.elarateam.orders.configs.auth.LoginServiceConfig;
+import ru.hse.elarateam.orders.web.services.auth.dto.UserServiceInfoDTO;
 
 /**
  * Feign client for calling login (auth) jwt.

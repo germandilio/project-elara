@@ -75,4 +75,6 @@ VALUES ('f82c4d8a-c4c4-4122-9a3a-72b7251c08f1', 'USER', 'User access', NOW(), NO
 INSERT INTO roles (id, role, role_description, creation_time, last_update_time)
 VALUES ('f52318ca-8734-442e-b0df-a26693c2ba2f', 'ADMIN', 'Admin access. Full access to functionality', NOW(), NOW());
 
-INSERT INTO user_service_info(id, login, password, role_id) values ('b5eef351-27a1-46c8-8775-57c9bc12aa26', 'admin@gmail.com', 'sdfsdfsdfs1213245','f52318ca-8734-442e-b0df-a26693c2ba2f')
+INSERT INTO user_service_info(id, login, password, role_id)
+values ('b5eef351-27a1-46c8-8775-57c9bc12aa26', 'admin@gmail.com', 'sdfsdfsdfs1213245',
+        'f52318ca-8734-442e-b0df-a26693c2ba2f')

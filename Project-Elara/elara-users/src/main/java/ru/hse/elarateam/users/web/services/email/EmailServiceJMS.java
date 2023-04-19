@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-import ru.hse.elarateam.users.configs.JMSConfig;
 import ru.hse.elarateam.messages.EmailVerificationMessage;
 import ru.hse.elarateam.messages.ResetPasswordMessage;
+import ru.hse.elarateam.users.configs.JMSConfig;
 
 import java.util.UUID;
 
