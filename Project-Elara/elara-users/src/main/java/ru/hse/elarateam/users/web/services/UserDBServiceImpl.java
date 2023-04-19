@@ -54,7 +54,7 @@ public class UserDBServiceImpl implements UsersDBService {
                 .orElseThrow(() -> new IllegalStateException("Role " + RoleEnum.EMAIL_NOT_VERIFIED + " not found"));
 
         final var userProfile = userMapper.userRegisterRequestDTOtoUserProfile(userRegisterRequest);
-        if (userProfile.getBirthDate().after(new Date(System.currentTimeMillis()))) {
+        if (userProfile.getBirthDate() != null && userProfile.getBirthDate().after(new Date(System.currentTimeMillis()))) {
             throw new IllegalArgumentException("Birth date cannot be after now");
         }
 
@@ -101,7 +101,7 @@ public class UserDBServiceImpl implements UsersDBService {
         userProfile.setPictureUrl(userProfileUpdateRequest.getPictureUrl());
         userProfile.setBirthDate(userProfileUpdateRequest.getBirthDate());
 
-        if (userProfile.getBirthDate().after(new Date(System.currentTimeMillis()))) {
+        if (userProfile.getBirthDate() != null && userProfile.getBirthDate().after(new Date(System.currentTimeMillis()))) {
             throw new IllegalArgumentException("Birth date cannot be after now");
         }
 
