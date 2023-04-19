@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.security.SecureRandom;
 
 @Setter
-@Configuration
+//@Configuration
 public class PasswordEncodingConfig {
     @Value("${elara.users.password-encoding.salt}")
     private String salt;
