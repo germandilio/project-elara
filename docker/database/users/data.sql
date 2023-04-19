@@ -72,5 +72,12 @@ VALUES ('aec35e77-4c97-4807-853f-7de96617c00b', 'EMAIL_NOT_VERIFIED', 'Initial r
         NOW());
 INSERT INTO roles (id, role, role_description, creation_time, last_update_time)
 VALUES ('f82c4d8a-c4c4-4122-9a3a-72b7251c08f1', 'USER', 'User access', NOW(), NOW());
-INSERT INTO roles (id, role, role_description, creation_time, last_update_time)
-VALUES ('f52318ca-8734-442e-b0df-a26693c2ba2f', 'ADMIN', 'Admin access. Full access to functionality', NOW(), NOW());
+
+INSERT INTO user_profiles (id, email, first_name, last_name, creation_time, last_update_time)
+values ('b8e66310-4a80-4dd8-8692-55bbca419e4b', 'admin@gmail.com', 'Admin', 'Admin', NOW(), NOW());
+
+-- add admin
+INSERT INTO user_profiles (id, email, first_name, last_name, creation_time, last_update_time)
+values ('b8e66310-4a80-4dd8-8692-55bbca419e4b', 'admin@gmail.com', 'Admin', 'Admin', NOW(), NOW());
+INSERT INTO user_service_info (id, login, password, role_id, creation_time, last_update_time, version, user_profile_id)
+values ('b8e66310-4a80-4dd8-8692-55bbca419e4b', 'admin@gmail.com', 'password123456', 'f52318ca-8734-442e-b0df-a26693c2ba2f', NOW(), NOW(), 1, 'b8e66310-4a80-4dd8-8692-55bbca419e4b');

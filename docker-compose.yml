@@ -3,7 +3,7 @@ version: '3.8'
 services:
     # application services
     elara-eureka:
-        image: germandilio/elara-eureka:1.0-SNAPSHOT
+        image: elara-eureka:1.0-SNAPSHOT
         ports:
             - 8761:8761
         environment:
@@ -27,15 +27,12 @@ services:
           retries: 5
 
     elara-config-server:
-        image: germandilio/elara-config-server:1.0-SNAPSHOT
+        image: elara-config-server:1.0-SNAPSHOT
         ports:
             - 8888:8888
         environment:
             - SPRING_APPLICATION_NAME=elara-config-server
             - SPRING_PROFILES_ACTIVE=local-discovery
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
-            - OTEL_RESOURCE_ATTRIBUTES=service.name=app-elara-config-server,compose_service=app-elara-config-server
-            - OTEL_METRICS_EXPORTER=none
             - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
             - THC_PORT=8888
             - THC_PATH=/actuator/health
@@ -50,7 +47,7 @@ services:
           retries: 5
 
     elara-gateway:
-        image: germandilio/elara-gateway:1.0-SNAPSHOT
+        image: elara-gateway:1.0-SNAPSHOT
         ports:
             - 8080:8080
         environment:
@@ -94,7 +91,7 @@ services:
           retries: 10
 
     elara-email:
-        image: germandilio/elara-email:1.0-SNAPSHOT
+        image: elara-email:1.0-SNAPSHOT
         ports:
             - 8081:8081
         environment:
@@ -132,7 +129,7 @@ services:
           retries: 10
 
     elara-login:
-        image: germandilio/elara-login:1.0-SNAPSHOT
+        image: elara-login:1.0-SNAPSHOT
         ports:
             - 8086:8086
         environment:
@@ -163,7 +160,7 @@ services:
           retries: 10
 
     elara-products-get:
-        image: germandilio/elara-products-get:1.0-SNAPSHOT
+        image: elara-products-get:1.0-SNAPSHOT
         ports:
             - 8082:8082
         environment:
@@ -194,7 +191,7 @@ services:
           retries: 10
 
     elara-products:
-        image: germandilio/elara-products:1.0-SNAPSHOT
+        image: elara-products:1.0-SNAPSHOT
         ports:
             - 8084:8084
         environment:
@@ -225,7 +222,7 @@ services:
           retries: 10
 
     elara-payment:
-        image: germandilio/elara-payment:1.0-SNAPSHOT
+        image: elara-payment:1.0-SNAPSHOT
         ports:
             - 8090:8090
         environment:
@@ -236,7 +233,7 @@ services:
             - OTEL_METRICS_EXPORTER=none
             - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
             - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/orders
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5434/orders
             - SPRING_DATASOURCE_USERNAME=postgresql
             - SPRING_DATASOURCE_PASSWORD=postgresql
             - THC_PORT=8090
@@ -258,7 +255,7 @@ services:
           retries: 10
 
     elara-orders:
-        image: germandilio/elara-orders:1.0-SNAPSHOT
+        image: elara-orders:1.0-SNAPSHOT
         ports:
             - 8087:8087
         environment:
@@ -269,7 +266,7 @@ services:
             - OTEL_METRICS_EXPORTER=none
             - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
             - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/orders
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5434/orders
             - SPRING_DATASOURCE_USERNAME=postgresql
             - SPRING_DATASOURCE_PASSWORD=postgresql
             - THC_PORT=8087
@@ -293,7 +290,7 @@ services:
           retries: 10
 
     elara-delivery:
-        image: germandilio/elara-delivery:1.0-SNAPSHOT
+        image: elara-delivery:1.0-SNAPSHOT
         ports:
             - 8089:8089
         environment:
@@ -304,7 +301,7 @@ services:
             - OTEL_METRICS_EXPORTER=none
             - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://elara-eureka:8761/eureka/
             - SPRING_CONFIG_IMPORT=configserver:http://elara-config-server:8888/
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5435/orders
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5434/orders
             - SPRING_DATASOURCE_USERNAME=postgresql
             - SPRING_DATASOURCE_PASSWORD=postgresql
             - THC_PORT=8089
@@ -326,7 +323,7 @@ services:
           retries: 10
 
     elara-admin-console:
-        image: germandilio/elara-admin-console:1.0-SNAPSHOT
+        image: elara-admin-console:1.0-SNAPSHOT
         ports:
             - 8083:8083
         environment:
@@ -359,7 +356,7 @@ services:
           retries: 10
 
     elara-users:
-        image: germandilio/elara-users:1.0-SNAPSHOT
+        image: elara-users:1.0-SNAPSHOT
         ports:
             - 8085:8085
         environment:
@@ -406,7 +403,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/users/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - db-users-data:/var/lib/postgresql/data
+            - D:\DB_Elara\Users:/var/lib/postgresql/data
         restart: always
         ports:
             - 5433:5432
@@ -424,7 +421,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/orders/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - db-orders-data:/var/lib/postgresql/data
+            - D:\DB_Elara\Orders:/var/lib/postgresql/data
         restart: always
         ports:
             - 5434:5432
@@ -443,7 +440,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/products/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - db-products-data:/var/lib/postgresql/data
+            - D:\DB_Elara\Products:/var/lib/postgresql/data
         restart: always
         ports:
             - 5435:5432
@@ -513,10 +510,3 @@ services:
         ports:
             - "3000:3000"
 
-volumes:
-  db-products-data:
-    external: ${DB_PRODUCTS_VOLUME}
-  db-orders-data:
-    external: ${DB_ORDERS_VOLUME}
-  db-users-data:
-    external: ${DB_USERS_VOLUME}
