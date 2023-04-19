@@ -3,7 +3,7 @@ version: '3.8'
 services:
     # application services
     elara-eureka:
-        image: elara-eureka:1.0-SNAPSHOT
+        image: germandilio/elara-eureka:latest
         ports:
             - 8761:8761
         environment:
@@ -27,7 +27,7 @@ services:
           retries: 5
 
     elara-config-server:
-        image: elara-config-server:1.0-SNAPSHOT
+        image: germandilio/elara-config-server:latest
         ports:
             - 8888:8888
         environment:
@@ -47,7 +47,7 @@ services:
           retries: 5
 
     elara-gateway:
-        image: elara-gateway:1.0-SNAPSHOT
+        image: germandilio/elara-gateway:latest
         ports:
             - 8080:8080
         environment:
@@ -91,7 +91,7 @@ services:
           retries: 10
 
     elara-email:
-        image: elara-email:1.0-SNAPSHOT
+        image: germandilio/elara-email:latest
         ports:
             - 8081:8081
         environment:
@@ -129,7 +129,7 @@ services:
           retries: 10
 
     elara-login:
-        image: elara-login:1.0-SNAPSHOT
+        image: germandilio/elara-login:latest
         ports:
             - 8086:8086
         environment:
@@ -160,7 +160,7 @@ services:
           retries: 10
 
     elara-products-get:
-        image: elara-products-get:1.0-SNAPSHOT
+        image: germandilio/elara-products-get:latest
         ports:
             - 8082:8082
         environment:
@@ -191,7 +191,7 @@ services:
           retries: 10
 
     elara-products:
-        image: elara-products:1.0-SNAPSHOT
+        image: germandilio/elara-products:latest
         ports:
             - 8084:8084
         environment:
@@ -222,7 +222,7 @@ services:
           retries: 10
 
     elara-payment:
-        image: elara-payment:1.0-SNAPSHOT
+        image: germandilio/elara-payment:latest
         ports:
             - 8090:8090
         environment:
@@ -255,7 +255,7 @@ services:
           retries: 10
 
     elara-orders:
-        image: elara-orders:1.0-SNAPSHOT
+        image: germandilio/elara-orders:latest
         ports:
             - 8087:8087
         environment:
@@ -290,7 +290,7 @@ services:
           retries: 10
 
     elara-delivery:
-        image: elara-delivery:1.0-SNAPSHOT
+        image: germandilio/elara-delivery:latest
         ports:
             - 8089:8089
         environment:
@@ -323,7 +323,7 @@ services:
           retries: 10
 
     elara-admin-console:
-        image: elara-admin-console:1.0-SNAPSHOT
+        image: germandilio/elara-admin-console:latest
         ports:
             - 8083:8083
         environment:
@@ -356,7 +356,7 @@ services:
           retries: 10
 
     elara-users:
-        image: elara-users:1.0-SNAPSHOT
+        image: germandilio/elara-users:latest
         ports:
             - 8085:8085
         environment:
@@ -403,7 +403,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/users/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - D:\DB_Elara\Users:/var/lib/postgresql/data
+            - /Users/germandilio/.dockerdata/postgres/users:/var/lib/postgresql/data
         restart: always
         ports:
             - 5433:5432
@@ -421,7 +421,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/orders/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - D:\DB_Elara\Orders:/var/lib/postgresql/data
+            - /Users/germandilio/.dockerdata/postgres/orders:/var/lib/postgresql/data
         restart: always
         ports:
             - 5434:5432
@@ -440,7 +440,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/products/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - D:\DB_Elara\Products:/var/lib/postgresql/data
+            - /Users/germandilio/.dockerdata/postgres/products:/var/lib/postgresql/data
         restart: always
         ports:
             - 5435:5432
