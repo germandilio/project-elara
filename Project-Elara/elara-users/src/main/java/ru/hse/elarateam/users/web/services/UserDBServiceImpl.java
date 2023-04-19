@@ -107,7 +107,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
         // save changes
         var updatedPersistentUserInfo = usersServiceInfoRepository.saveAndFlush(persistentUserInfo.get());
-        log.trace("Updated user service info: {}", updatedPersistentUserInfo);
+        log.trace("Updated user jwt info: {}", updatedPersistentUserInfo);
         log.trace("Updated user profile: {}", updatedPersistentUserInfo.getUserProfile());
 
         return userMapper.userProfileToUserDTO(updatedPersistentUserInfo.getUserProfile());
@@ -124,7 +124,7 @@ public class UserDBServiceImpl implements UsersDBService {
                     .ifPresent(user -> {
                         throw new IllegalArgumentException("User with login " + newEmail + " already exists");
                     });
-            // set new email to profile and service info
+            // set new email to profile and jwt info
             persistentUserInfo.get().setLogin(newEmail);
             userProfile.setEmail(newEmail);
 
@@ -161,7 +161,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
         final var userInfo = persistentUserInfo.get();
 
-        log.debug("Found user service info: {}", userInfo);
+        log.debug("Found user jwt info: {}", userInfo);
         return userMapper.userServiceInfoToUserInfoDTO(userInfo);
     }
 

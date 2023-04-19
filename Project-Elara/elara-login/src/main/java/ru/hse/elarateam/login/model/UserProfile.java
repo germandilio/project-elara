@@ -36,7 +36,7 @@ public class UserProfile {
     @OneToOne(mappedBy = "userProfile", cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private UserServiceInfo userServiceInfo;
 
-    // to do reference to user service info login
+    // to do reference to user jwt info login
     @Column(columnDefinition = "varchar(255)", unique = true, nullable = false)
     private String email;
 

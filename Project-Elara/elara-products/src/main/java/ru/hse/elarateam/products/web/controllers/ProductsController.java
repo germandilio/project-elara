@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.products.dto.request.OrderRequestDTO;
-import ru.hse.elarateam.products.dto.response.ResponsePayloadDTO;
+import ru.hse.elarateam.products.dto.response.ProductResponseDTO;
 import ru.hse.elarateam.products.services.ProductsService;
 import ru.hse.elarateam.products.services.jwt.service.ServiceTokenUtilsImpl;
 
@@ -41,9 +41,9 @@ public class ProductsController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/allocate")
-    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> allocateProducts(@RequestHeader("Authorization") String serviceToken,
-                                                                           @RequestBody OrderRequestDTO orderRequestDTO) {
-        // service token validation
+    public ResponseEntity<List<ProductResponseDTO>> allocateProducts(@RequestHeader("Authorization") String serviceToken,
+                                                                     @RequestBody OrderRequestDTO orderRequestDTO) {
+        // jwt token validation
         if (!validateServiceToken(serviceToken)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -51,9 +51,7 @@ public class ProductsController {
         // аллокация (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
         var allocatedProducts = productsService.allocateProducts(requiredProducts);
-        return new ResponseEntity<>(
-                new ResponsePayloadDTO<>("Products allocated.", allocatedProducts),
-                HttpStatus.OK);
+        return new ResponseEntity<>(allocatedProducts, HttpStatus.OK);
     }
 
     /**
@@ -72,9 +70,9 @@ public class ProductsController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/deallocate")
-    public ResponseEntity<ResponsePayloadDTO<List<UUID>>> deallocateProducts(@RequestHeader("Authorization") String serviceToken,
-                                                                             @RequestBody OrderRequestDTO orderRequestDTO) {
-        // service token validation
+    public ResponseEntity<List<UUID>> deallocateProducts(@RequestHeader("Authorization") String serviceToken,
+                                                         @RequestBody OrderRequestDTO orderRequestDTO) {
+        // jwt token validation
         if (!validateServiceToken(serviceToken)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -82,9 +80,7 @@ public class ProductsController {
         // deallocation (transactional)
         var requiredProducts = orderRequestDTO.getPositions();
         var deallocatedProducts = productsService.deallocateProducts(requiredProducts);
-        return new ResponseEntity<>(
-                new ResponsePayloadDTO<>("Products deallocated.", deallocatedProducts),
-                HttpStatus.OK);
+        return new ResponseEntity<>(deallocatedProducts, HttpStatus.OK);
     }
 
     private boolean validateServiceToken(String serviceToken) {

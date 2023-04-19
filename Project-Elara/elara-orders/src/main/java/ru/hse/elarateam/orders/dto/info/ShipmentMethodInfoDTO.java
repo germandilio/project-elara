@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @Builder
 public class ShipmentMethodInfoDTO {
+    private UUID id;
     private Integer tariffCode;
     private String tariffName;
     private String tariffDescription;

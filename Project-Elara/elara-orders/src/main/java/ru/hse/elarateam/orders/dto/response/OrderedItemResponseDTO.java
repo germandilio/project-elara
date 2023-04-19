@@ -14,5 +14,5 @@ public class OrderedItemResponseDTO {
     private UUID productId;
     private BigDecimal price;
     private Integer discount;
-    private Integer quantity;
+    private Long quantity;
 }

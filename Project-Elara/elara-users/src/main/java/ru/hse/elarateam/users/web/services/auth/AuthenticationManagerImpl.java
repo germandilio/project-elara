@@ -24,7 +24,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
      * @param jwtToken token to authenticate
      * @return user info
      * @throws IllegalArgumentException if token is invalid
-     * @throws IllegalStateException    if cannot connect to login service or internal error
+     * @throws IllegalStateException    if cannot connect to login jwt or internal error
      */
     @Override
     public UserServiceInfoDTO authenticate(String jwtToken) {
@@ -38,12 +38,12 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
             throw new IllegalArgumentException(ex);
         } catch (FeignException.BadRequest ex) {
             // internal error
-            log.error("Bad request to login service ", ex);
-            throw new IllegalStateException("Bad request to login service", ex);
+            log.error("Bad request to login jwt ", ex);
+            throw new IllegalStateException("Bad request to login jwt", ex);
         } catch (FeignException.InternalServerError ex) {
             // internal fatal error
-            log.error("Login service is unavailable");
-            throw new IllegalStateException("Login service is unavailable", ex);
+            log.error("Login jwt is unavailable");
+            throw new IllegalStateException("Login jwt is unavailable", ex);
         } catch (Exception ex) {
             log.error("Error while getting user info by token", ex);
             throw new IllegalStateException(ex);

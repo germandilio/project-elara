@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.products.dto.request.OrderedItemRequestDTO;
+import ru.hse.elarateam.products.dto.response.ProductResponseDTO;
+import ru.hse.elarateam.products.mappers.ProductsMapper;
 import ru.hse.elarateam.products.model.Product;
 import ru.hse.elarateam.products.repositories.ProductsRepository;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class ProductsService {
 
     private final ProductsRepository productsRepository;
+    private final ProductsMapper productsMapper;
 
     /**
      * Checks if required products exist (exists by id)
@@ -34,7 +37,7 @@ public class ProductsService {
      * </p>
      */
     @Transactional(rollbackFor = RuntimeException.class)
-    public List<UUID> allocateProducts(List<OrderedItemRequestDTO> requiredProducts) {
+    public List<ProductResponseDTO> allocateProducts(List<OrderedItemRequestDTO> requiredProducts) {
         // id correctness check
         var incorrectIds = checkIds(requiredProducts);
         if (!incorrectIds.isEmpty()) {
@@ -67,10 +70,16 @@ public class ProductsService {
         }
         log.debug("Updated products to allocate: " + updatedProducts);
 
-        // return allocated products ids
+        // return allocated products response dtos
         var allocatedProducts = productsRepository.saveAllAndFlush(updatedProducts).stream()
-                .map(Product::getId)
+                .map(productsMapper::productToProductResponseDTO)
                 .collect(Collectors.toList());
+
+        // add required quantities to response dtos
+        for (var i = 0; i < allocatedProducts.size(); i++) {
+            var requiredQuantity = requiredProducts.get(i).getQuantity();
+            allocatedProducts.get(i).setQuantity(requiredQuantity);
+        }
 
         log.info("Products allocated: " + allocatedProducts);
 

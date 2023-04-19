@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import ru.hse.elarateam.login.web.services.jwt.JWTUtils;
 import ru.hse.elarateam.login.web.services.jwt.service.ServiceTokenUtils;
 import ru.hse.elarateam.login.web.services.users.UsersService;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
 @RestController
@@ -43,7 +45,7 @@ public class LoginController {
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Login or password is not provided",
                     content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", description = "Login service is unavailable",
+            @ApiResponse(responseCode = "500", description = "Login jwt is unavailable",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/login")
@@ -65,16 +67,16 @@ public class LoginController {
      * Get user info by token.
      *
      * @param token        JWT token
-     * @param serviceToken service token
+     * @param serviceToken jwt token
      * @return user info
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return user info"),
-            @ApiResponse(responseCode = "401", description = "Invalid service token",
+            @ApiResponse(responseCode = "401", description = "Invalid jwt token",
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Token is not provided",
                     content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", description = "Login service is unavailable",
+            @ApiResponse(responseCode = "500", description = "Login jwt is unavailable",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("/user")
@@ -93,6 +95,7 @@ public class LoginController {
             return ResponseEntity.ok(user);
 
         } catch (IllegalArgumentException ex) {
+            log.error(ex.getMessage());
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
