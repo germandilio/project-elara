@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.elarateam.products.dto.request.OrderRequestDTO;
 import ru.hse.elarateam.products.dto.response.ProductResponseDTO;
-import ru.hse.elarateam.products.services.ProductsService;
-import ru.hse.elarateam.products.services.jwt.service.ServiceTokenUtilsImpl;
+import ru.hse.elarateam.products.web.services.ProductsService;
+import ru.hse.elarateam.products.web.services.jwt.ServiceTokenUtilsImpl;
 
 import java.util.List;
 import java.util.UUID;

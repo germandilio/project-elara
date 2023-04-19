@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.adminconsole.dto.ColorInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.ProductInfoDTO;
 import ru.hse.elarateam.adminconsole.model.Color;
-import ru.hse.elarateam.adminconsole.repositories.ColorsRepository;
-import ru.hse.elarateam.adminconsole.repositories.ProductsRepository;
+import ru.hse.elarateam.adminconsole.web.repositories.ColorsRepository;
+import ru.hse.elarateam.adminconsole.web.repositories.ProductsRepository;
+import ru.hse.elarateam.adminconsole.web.services.ProductsService;
 
 import java.util.HashSet;
 import java.util.Set;

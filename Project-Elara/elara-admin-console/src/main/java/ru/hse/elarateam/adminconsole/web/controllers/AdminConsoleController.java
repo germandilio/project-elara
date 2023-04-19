@@ -9,16 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.elarateam.adminconsole.auth.AuthenticationManagerImpl;
-import ru.hse.elarateam.adminconsole.auth.dto.RoleEnum;
+import ru.hse.elarateam.adminconsole.web.services.auth.AuthenticationManagerImpl;
+import ru.hse.elarateam.adminconsole.web.services.auth.dto.RoleEnum;
 import ru.hse.elarateam.adminconsole.dto.ColorInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.FeatureInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.ProductInfoDTO;
 import ru.hse.elarateam.adminconsole.dto.SportInfoDTO;
-import ru.hse.elarateam.adminconsole.services.ColorsService;
-import ru.hse.elarateam.adminconsole.services.FeaturesService;
-import ru.hse.elarateam.adminconsole.services.ProductsService;
-import ru.hse.elarateam.adminconsole.services.SportsService;
+import ru.hse.elarateam.adminconsole.web.services.ColorsService;
+import ru.hse.elarateam.adminconsole.web.services.FeaturesService;
+import ru.hse.elarateam.adminconsole.web.services.ProductsService;
+import ru.hse.elarateam.adminconsole.web.services.SportsService;
 
 import java.util.UUID;
 

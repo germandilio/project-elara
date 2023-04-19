@@ -46,13 +46,12 @@ public class ShipmentDetails {
     @JoinColumn(name = "from_address_id")
     private Address fromAddress;
 
-    @NotBlank
-    @Column(nullable = false)
+
     private BigDecimal deliveryCost;
 
     @JsonManagedReference
     @ToString.Exclude
-    @ManyToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "shipment_method_id")
     private ShipmentMethod shipmentMethod;
 
