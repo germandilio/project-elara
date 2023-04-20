@@ -20,6 +20,8 @@ import java.util.Objects;
 @Converter
 public class PasswordConverter implements AttributeConverter<String, String> {
 
+    private PasswordEncoder passwordEncoder;
+
     /**
      * Converts password to its hash using provided {@link PasswordEncoder}.
      *
@@ -42,9 +44,9 @@ public class PasswordConverter implements AttributeConverter<String, String> {
         return dbData;
     }
 
-    public boolean matches(String rawPassword, String passwordDB) {
-        final var hashPresentPassword = Hashing.sha256().hashString(rawPassword, StandardCharsets.UTF_8).toString();
-        log.debug("Presented password hash: {}, get from db: {}", hashPresentPassword, passwordDB);
-        return Objects.equals(hashPresentPassword, passwordDB);
-    }
+//    public boolean matches(String rawPassword, String passwordDB) {
+//        final var hashPresentPassword = Hashing.sha256().hashString(rawPassword, StandardCharsets.UTF_8).toString();
+//        log.debug("Presented password hash: {}, get from db: {}", hashPresentPassword, passwordDB);
+//        return Objects.equals(hashPresentPassword, passwordDB);
+//    }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,13 @@ import java.util.Objects;
 @Converter
 public class PasswordConverter implements AttributeConverter<String, String> {
 
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     /**
      * Converts password to its hash using provided {@link PasswordEncoder}.
      *
@@ -28,7 +36,10 @@ public class PasswordConverter implements AttributeConverter<String, String> {
      */
     @Override
     public String convertToDatabaseColumn(String attribute) {
-        return Hashing.sha256().hashString(attribute, StandardCharsets.UTF_8).toString();
+        // return Hashing.sha256().hashString(attribute, StandardCharsets.UTF_8).toString();
+        var encoded = passwordEncoder.encode(attribute);
+        log.trace("CONVERTING PASSWORD: {}, to hash: {}", attribute, encoded);
+        return encoded;
     }
 
     /**
@@ -42,9 +53,9 @@ public class PasswordConverter implements AttributeConverter<String, String> {
         return dbData;
     }
 
-    public boolean matches(String rawPassword, String passwordDB) {
-        final var hashPresentPassword = Hashing.sha256().hashString(rawPassword, StandardCharsets.UTF_8).toString();
-        log.debug("Presented password hash: {}, get from db: {}", hashPresentPassword, passwordDB);
-        return Objects.equals(hashPresentPassword, passwordDB);
-    }
+//    public boolean matches(String rawPassword, String passwordDB) {
+//        final var hashPresentPassword = Hashing.sha256().hashString(rawPassword, StandardCharsets.UTF_8).toString();
+//        log.debug("Presented password hash: {}, get from db: {}", hashPresentPassword, passwordDB);
+//        return Objects.equals(hashPresentPassword, passwordDB);
+//    }
 }
