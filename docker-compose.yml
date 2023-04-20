@@ -403,7 +403,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/users/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - /Users/germandilio/.dockerdata/postgres/users:/var/lib/postgresql/data
+            - D:\DB_Elara\Users:/var/lib/postgresql/data
         restart: always
         ports:
             - 5433:5432
@@ -421,7 +421,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/orders/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - /Users/germandilio/.dockerdata/postgres/orders:/var/lib/postgresql/data
+            - D:\DB_Elara\Orders:/var/lib/postgresql/data
         restart: always
         ports:
             - 5434:5432
@@ -440,7 +440,7 @@ services:
         image: postgres:15.2-alpine
         volumes:
             - ./docker/database/products/data.sql:/docker-entrypoint-initdb.d/1-init.sql
-            - /Users/germandilio/.dockerdata/postgres/products:/var/lib/postgresql/data
+            - D:\DB_Elara\Products:/var/lib/postgresql/data
         restart: always
         ports:
             - 5435:5432

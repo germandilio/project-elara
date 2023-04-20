@@ -11,7 +11,7 @@ import ru.hse.elarateam.payment.web.services.auth.dto.UserServiceInfoDTO;
 /**
  * Feign client for calling login (auth) jwt.
  */
-@FeignClient(name = "elara-login", url = "http://localhost:8086", configuration = LoginServiceConfig.class)
+@FeignClient(name = "elara-login", configuration = LoginServiceConfig.class)
 public interface LoginServiceFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/auth/user", produces = "application/json")

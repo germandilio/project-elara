@@ -16,7 +16,7 @@ import java.util.UUID;
 /**
  * Feign client for calling products service.
  */
-@FeignClient(name = "elara-products", url = "http://localhost:8084", configuration = ProductsServiceConfig.class)
+@FeignClient(name = "elara-products", configuration = ProductsServiceConfig.class)
 public interface ProductsServiceFeignClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/v1/products/allocate", produces = "application/json")
