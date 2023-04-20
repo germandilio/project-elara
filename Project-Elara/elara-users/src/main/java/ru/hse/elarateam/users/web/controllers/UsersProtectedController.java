@@ -75,7 +75,7 @@ public class UsersProtectedController {
      * @return status indicating if profile was updated
      */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Profile updated"),
+            @ApiResponse(responseCode = "200", description = "Profile updated"),
             @ApiResponse(responseCode = "400", description = "Invalid profile",
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
@@ -97,7 +97,7 @@ public class UsersProtectedController {
                 .token(newToken)
                 .user(user)
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
