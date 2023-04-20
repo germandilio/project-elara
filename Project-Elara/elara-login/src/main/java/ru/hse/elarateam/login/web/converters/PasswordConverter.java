@@ -5,6 +5,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,13 @@ import java.util.Objects;
 @Component
 @Converter
 public class PasswordConverter implements AttributeConverter<String, String> {
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Converts password to its hash using provided {@link PasswordEncoder}.
@@ -42,9 +50,9 @@ public class PasswordConverter implements AttributeConverter<String, String> {
         return dbData;
     }
 
-    public boolean matches(String rawPassword, String passwordDB) {
-        final var hashPresentPassword = Hashing.sha256().hashString(rawPassword, StandardCharsets.UTF_8).toString();
-        log.debug("Presented password hash: {}, get from db: {}", hashPresentPassword, passwordDB);
-        return Objects.equals(hashPresentPassword, passwordDB);
-    }
+//    public boolean matches(String rawPassword, String passwordDB) {
+//        final var hashPresentPassword = Hashing.sha256().hashString(rawPassword, StandardCharsets.UTF_8).toString();
+//        log.debug("Presented password hash: {}, get from db: {}", hashPresentPassword, passwordDB);
+//        return Objects.equals(hashPresentPassword, passwordDB);
+//    }
 }

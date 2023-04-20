@@ -52,7 +52,7 @@ public class VerifyEmail implements Email {
         var model = new VerifyEmailModel(username,
                 productName,
                 toEmail,
-                actionUrl + "?token=" + verificationToken,
+                actionUrl + "/" + verificationToken,
                 companyName,
                 companyAddress);
 

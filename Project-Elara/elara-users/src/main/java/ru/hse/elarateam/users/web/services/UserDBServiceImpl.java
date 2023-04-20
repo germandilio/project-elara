@@ -190,7 +190,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
         final var userInfo = persistentUserInfo.get();
 
-        if (!passwordConverter.matches(changePasswordRequest.getOldPassword(), userInfo.getPassword())) {
+        if (!passwordConverter.getPasswordEncoder().matches(changePasswordRequest.getOldPassword(), userInfo.getPassword())) {
             log.trace("password from db {}, provided old password {}", userInfo.getPassword(), passwordConverter.convertToDatabaseColumn(changePasswordRequest.getOldPassword()));
             throw new IllegalArgumentException("Old password is incorrect");
         }
