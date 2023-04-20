@@ -46,7 +46,7 @@ public class UsersServiceImpl implements UsersService {
         }
         log.trace("User with login {} found: {}", login, persistentUser.get());
 
-        if (passwordConverter.matches(password, persistentUser.get().getPassword())) {
+        if (passwordConverter.getPasswordEncoder().matches(password, persistentUser.get().getPassword())) {
             log.debug("User with login {} logged in", login);
             return persistentUser.get();
         } else {
