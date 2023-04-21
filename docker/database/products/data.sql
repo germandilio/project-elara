@@ -260,12 +260,12 @@ VALUES ('Waterproof', 'Waterproof'),
 
 INSERT INTO products (id, upc, name, price, discount, description, brand, quantity, country_of_origin, sizeus, sizeuk,
                       sizeeur, height, length, width, weight, created_date, last_modified_date)
-VALUES ('0d61332f-e5a1-49ba-ad14-41922b534fe6', '123456789012', 'Product 1', 10.00, 0.00, 'Product 1 Description',
-        'Brand 1', 10, 'USA', 5, 4.5, 40, 1.00, 1.00, 1.00, 1.00, '2019-01-01 00:00:00', '2019-01-01 00:00:00'),
-       ('8c5d2cfd-7652-4ac5-978e-541cce479fbd', '123456789013', 'Product 2', 20.00, 0.00, 'Product 2 Description',
-        'Brand 2', 20, 'USA', 4, 3.5, 30, 2.00, 2.00, 2.00, 2.00, '2019-01-01 00:00:00', '2019-01-01 00:00:00'),
-       ('7c2d34eb-6f50-460e-a291-16600a8c3130', '123456789014', 'Product 3', 30.00, 0.00, 'Product 3 Description',
-        'Brand 3', 30, 'USA', 6, 7.5, 50, 3.00, 3.00, 3.00, 3.00, '2019-01-01 00:00:00', '2019-01-01 00:00:00');
+VALUES ('0d61332f-e5a1-49ba-ad14-41922b534fe6', '123456789012', 'Product 1', 10.00, 0, 'Product 1 Description',
+        'Brand 1', 10, 'USA', 5, 4.5, 40, 1.00, 1.00, 1.00, 1.00, '2019-01-01 00:00:01', '2019-01-01 00:00:03'),
+       ('8c5d2cfd-7652-4ac5-978e-541cce479fbd', '123456789013', 'Product 2', 20.00, 0, 'Product 2 Description',
+        'Brand 2', 20, 'USA', 4, 3.5, 30, 2.00, 2.00, 2.00, 2.00, '2019-01-01 00:00:02', '2019-01-01 00:00:02'),
+       ('7c2d34eb-6f50-460e-a291-16600a8c3130', '123456789014', 'Product 3', 30.00, 0, 'Product 3 Description',
+        'Brand 3', 30, 'USA', 6, 7.5, 50, 3.00, 3.00, 3.00, 3.00, '2019-01-01 00:00:03', '2019-01-01 00:00:01');
 
 INSERT INTO products_colors (colors_id, product_id)
 VALUES (1, '0d61332f-e5a1-49ba-ad14-41922b534fe6'),

@@ -60,24 +60,9 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
     }
 
     @Query(value = """
-                SELECT MIN(p.price) AS min, MAX(p.price) AS max FROM products p
-                LEFT JOIN products_colors pc ON pc.product_id = p.id
-                LEFT JOIN colors c ON pc.colors_id = c.id
-                JOIN products_features pf on p.id = pf.product_id
-                JOIN features f on f.id = pf.features_id
-                JOIN products_sports ps on p.id = ps.product_id
-                JOIN sports s on ps.sports_id = s.id
-                 WHERE p.deleted = false AND
-                       (:sports IS NULL OR s.name IN :sports) AND
-                        (:colors IS NULL OR c.name IN :colors) AND
-                         (:features IS NULL OR f.name IN :features) AND
-                          (:countries IS NULL OR p.country_of_origin IN :countries) AND
-                           (:brands IS NULL OR p.brand IN :brands) AND
-                            (:sizeUS IS NULL OR p.sizeus IN :sizeUS) AND
-                             (:sizeUK IS NULL OR p.sizeuk IN :sizeUK) AND
-                              (:sizeEUR IS NULL OR p.sizeeur IN :sizeEUR) AND
-                                 (:query IS NULL OR p.name ILIKE CONCAT('%', :query, '%'))
-            """, nativeQuery = true)
+                SELECT MIN(p.price) AS min, MAX(p.price) AS max FROM Product p
+                 WHERE p.deleted = FALSE
+            """)
     PriceRangeProjection findPriceRange(Collection<String> sports,
                                         Collection<String> colors,
                                         Collection<String> features,
@@ -107,10 +92,28 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
         Collection<Double> prSizeUK = sizeUK == null ? Collections.emptyList() : sizeUK;
         String prQuery = query == null ? "" : query;
 
-        var priceRange = findPriceRange(prSports, prColors, prFeatures, prCountries, prBrands, prSizeUS, prSizeEUR, prSizeUK, prQuery);
+        var priceRange = findPriceRange(sports, colors, features, countries, brands, sizeUS, sizeEUR, sizeUK, query);
         return new PriceRangeDTO(priceRange.getMin(), priceRange.getMax());
     }
 
+//    @Query(value = """
+//                SELECT DISTINCT p FROM Product p
+//                JOIN p.sports s
+//                JOIN p.features f
+//                JOIN p.colors c
+//                 WHERE p.deleted = FALSE AND
+//                    (:sports IS NULL OR s.name IN :sports) AND
+//                        (:colors IS NULL OR c.name IN :colors) AND
+//                         (:features IS NULL OR f.name IN :features) AND
+//                          (:countries IS NULL OR p.countryOfOrigin IN :countries) AND
+//                           (:brands IS NULL OR p.brand IN :brands) AND
+//                            (:sizeUS IS NULL OR p.sizeUS IN :sizeUS) AND
+//                             (:sizeEUR IS NULL OR p.sizeEUR IN :sizeEUR) AND
+//                              (:sizeUK IS NULL OR p.sizeUK IN :sizeUK) AND
+//                               (:minPrice IS NULL OR p.price >= :minPrice) AND
+//                                (:maxPrice IS NULL OR p.price <= :maxPrice) AND
+//                                 (:query IS NULL OR LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%'))
+//            """)
     @Query(value = """
                 SELECT DISTINCT p.* FROM products p
                 LEFT JOIN products_colors pc ON pc.product_id = p.id
@@ -119,7 +122,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                 JOIN features f on f.id = pf.features_id
                 JOIN products_sports ps on p.id = ps.product_id
                 JOIN sports s on ps.sports_id = s.id
-                 WHERE p.deleted = false AND 
+                 WHERE p.deleted = FALSE AND
                     (:sports IS NULL OR s.name IN :sports) AND
                         (:colors IS NULL OR c.name IN :colors) AND
                          (:features IS NULL OR f.name IN :features) AND
@@ -130,7 +133,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                               (:sizeUK IS NULL OR p.sizeuk IN :sizeUK) AND
                                (:minPrice IS NULL OR p.price >= :minPrice) AND
                                 (:maxPrice IS NULL OR p.price <= :maxPrice) AND
-                                 (:query IS NULL OR p.name ILIKE CONCAT('%', :query, '%'))
+                                 (:query IS NULL OR LOWER(p.name) ILIKE CONCAT('%', :query, '%'))
             """, nativeQuery = true)
     Page<Product> findAllByFiltersAndQuery(
             Collection<String> sports,
@@ -170,7 +173,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
         Collection<Double> prSizeUK = sizeUK == null ? Collections.emptyList() : sizeUK;
         BigDecimal prMinPrice = minPrice == null ? BigDecimal.ZERO : minPrice;
         BigDecimal prMaxPrice = maxPrice == null ? BigDecimal.valueOf(Long.MAX_VALUE) : maxPrice;
-        String prQuery = query == null ? "" : query;
+//        String prQuery = query == null ? "" : query;
 
         return findAllByFiltersAndQuery(
                 prSports,
@@ -183,7 +186,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                 prSizeUK,
                 prMinPrice,
                 prMaxPrice,
-                prQuery,
+                query,
                 pageable
         );
     }
