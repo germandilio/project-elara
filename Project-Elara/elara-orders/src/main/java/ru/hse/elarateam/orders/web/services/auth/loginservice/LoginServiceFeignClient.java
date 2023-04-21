@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ru.hse.elarateam.orders.configs.auth.LoginServiceConfig;
+import ru.hse.elarateam.orders.configs.auth.ServiceConfig;
 import ru.hse.elarateam.orders.web.services.auth.dto.UserServiceInfoDTO;
 
 /**
  * Feign client for calling login (auth) jwt.
  */
-@FeignClient(name = "elara-login", configuration = LoginServiceConfig.class)
+@FeignClient(name = "elara-login", configuration = ServiceConfig.class)
 public interface LoginServiceFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/auth/user", produces = "application/json")

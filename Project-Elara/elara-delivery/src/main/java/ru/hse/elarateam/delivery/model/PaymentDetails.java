@@ -31,19 +31,16 @@ public class PaymentDetails {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID orderId;
 
-    @NotBlank
     @Column(nullable = false)
     private PaymentStatus status;
 
-    @NotBlank
     @Column(nullable = false)
     private String userEmail;
 
-    @NotBlank
     @Column(nullable = false)
     private Date updateTime;
 

@@ -3,6 +3,7 @@ package ru.hse.elarateam.payment.web.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.payment.dto.info.PaymentDetailsInfoDTO;
 import ru.hse.elarateam.payment.model.Order;
 import ru.hse.elarateam.payment.model.status.OrderStatus;
@@ -18,8 +19,10 @@ public class PaymentService {
     private final PaymentDetailsMapper paymentDetailsMapper;
     private final OrdersRepository ordersRepository;
 
+    @Transactional(rollbackFor = RuntimeException.class)
     public void registerPayment(PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
         var paymentDetails = paymentDetailsMapper.paymentDetailsInfoDTOtoPaymentDetails(paymentDetailsInfoDTO);
+        log.debug("got payment details: " + paymentDetails);
         var orderId = paymentDetails.getOrderId();
 
         var order = ordersRepository.findById(orderId)
@@ -27,11 +30,11 @@ public class PaymentService {
 
         checkOrderStatus(order);
 
-        paymentDetails = paymentDetailsRepository.save(paymentDetails);
+        paymentDetails = paymentDetailsRepository.saveAndFlush(paymentDetails);
         log.info("Payment details saved: " + paymentDetails);
         order.setPaymentDetails(paymentDetails);
         order.setStatus(OrderStatus.PAID);
-        order = ordersRepository.save(order);
+        order = ordersRepository.saveAndFlush(order);
         log.info("Payment details assigned to order: " + order);
     }
 

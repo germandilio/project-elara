@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * Provides {@link AuthTokenInterceptor} bean to add auth header with JWT token to requests.
  */
 @Configuration
-public class ProductsServiceConfig {
+public class ServiceConfig {
     @Value("${elara.products-service.token}")
     private String productsServiceToken;
 

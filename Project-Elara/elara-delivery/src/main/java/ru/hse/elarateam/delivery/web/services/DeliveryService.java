@@ -107,11 +107,13 @@ public class DeliveryService {
 
         var shipmentMethod = shipmentMethodsMapper.shipmentMethodInfoDTOToShipmentMethod(
                 selectShipmentMethodRequestDTO.getShipmentMethod());
+        log.debug("trying to save shipment method: " + shipmentMethod);
         shipmentMethod = shipmentMethodsRepository.saveAndFlush(shipmentMethod);
         log.info("Saved shipment method: " + shipmentMethod);
 
         shipmentDetails.setShipmentMethod(shipmentMethod);
         shipmentDetails.setDeliveryCost(shipmentMethod.getDeliverySum());
+        log.debug("trying to save shipment details: " + shipmentDetails);
         shipmentDetailsRepository.saveAndFlush(shipmentDetails);
         log.info("Saved shipment details: " + shipmentDetails);
 
@@ -124,6 +126,7 @@ public class DeliveryService {
     @Transactional(readOnly = true)
     public List<AddressInfoDTO> getSavedAddresses(UUID userId) {
         var addresses = addressesRepository.findByUserId(userId);
+        log.info("Addresses: " + addresses + "found by user id: " + userId);
         return addresses.stream().map(addressesMapper::addressToAddressInfoDTO).toList();
     }
 

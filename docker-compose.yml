@@ -3,7 +3,7 @@ version: '3.8'
 services:
     # application services
     elara-eureka:
-        image: germandilio/elara-eureka:latest
+        image: elara-eureka:1.0-SNAPSHOT
         ports:
             - 8761:8761
         environment:
@@ -27,7 +27,7 @@ services:
           retries: 5
 
     elara-config-server:
-        image: germandilio/elara-config-server:latest
+        image: elara-config-server:1.0-SNAPSHOT
         ports:
             - 8888:8888
         environment:
@@ -47,7 +47,7 @@ services:
           retries: 5
 
     elara-gateway:
-        image: germandilio/elara-gateway:latest
+        image: elara-gateway:1.0-SNAPSHOT
         ports:
             - 8080:8080
         environment:
@@ -91,7 +91,7 @@ services:
           retries: 10
 
     elara-email:
-        image: germandilio/elara-email:latest
+        image: elara-email:1.0-SNAPSHOT
         ports:
             - 8081:8081
         environment:
@@ -129,7 +129,7 @@ services:
           retries: 10
 
     elara-login:
-        image: germandilio/elara-login:latest
+        image: elara-login:1.0-SNAPSHOT
         ports:
             - 8086:8086
         environment:
@@ -160,7 +160,7 @@ services:
           retries: 10
 
     elara-products-get:
-        image: germandilio/elara-products-get:latest
+        image: elara-products-get:1.0-SNAPSHOT
         ports:
             - 8082:8082
         environment:
@@ -191,7 +191,7 @@ services:
           retries: 10
 
     elara-products:
-        image: germandilio/elara-products:latest
+        image: elara-products:1.0-SNAPSHOT
         ports:
             - 8084:8084
         environment:
@@ -222,7 +222,7 @@ services:
           retries: 10
 
     elara-payment:
-        image: germandilio/elara-payment:latest
+        image: elara-payment:1.0-SNAPSHOT
         ports:
             - 8090:8090
         environment:
@@ -255,7 +255,7 @@ services:
           retries: 10
 
     elara-orders:
-        image: germandilio/elara-orders:latest
+        image: elara-orders:1.0-SNAPSHOT
         ports:
             - 8087:8087
         environment:
@@ -290,7 +290,7 @@ services:
           retries: 10
 
     elara-delivery:
-        image: germandilio/elara-delivery:latest
+        image: elara-delivery:1.0-SNAPSHOT
         ports:
             - 8089:8089
         environment:
@@ -323,7 +323,7 @@ services:
           retries: 10
 
     elara-admin-console:
-        image: germandilio/elara-admin-console:latest
+        image: elara-admin-console:1.0-SNAPSHOT
         ports:
             - 8083:8083
         environment:
@@ -356,7 +356,7 @@ services:
           retries: 10
 
     elara-users:
-        image: germandilio/elara-users:latest
+        image: elara-users:1.0-SNAPSHOT
         ports:
             - 8085:8085
         environment:

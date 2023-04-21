@@ -8,6 +8,7 @@ import ru.hse.elarateam.payment.model.PaymentDetails;
 @Mapper
 public interface PaymentDetailsMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(source = "userEmail", target = "userEmail")
     PaymentDetails paymentDetailsInfoDTOtoPaymentDetails(PaymentDetailsInfoDTO paymentDetailsInfoDTO);
 
     PaymentDetailsInfoDTO paymentDetailsToPaymentDetailsInfoDTO(PaymentDetails paymentDetails);

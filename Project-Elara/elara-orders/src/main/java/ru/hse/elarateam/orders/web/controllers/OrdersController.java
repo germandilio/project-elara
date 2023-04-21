@@ -20,6 +20,7 @@ import ru.hse.elarateam.orders.web.services.auth.AuthenticationManager;
 import ru.hse.elarateam.orders.web.services.auth.dto.RoleEnum;
 import ru.hse.elarateam.orders.web.services.jwt.ServiceTokenUtilsImpl;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -30,7 +31,6 @@ public class OrdersController {
     // todo schedule deletion of orders with status < PAID every 15 minutes
     private final OrdersService ordersService;
     private final AuthenticationManager authenticationManager;
-    private final ServiceTokenUtilsImpl serviceTokenUtils;
 
     /**
      * Place order by orderRequestDTO.
@@ -56,67 +56,6 @@ public class OrdersController {
         }
         return ResponseEntity.ok(ordersService.placeOrder(orderRequestDTO));
     }
-
-    // todo remove
-//    /**
-//     * SERVICE ENDPOINT.
-//     * Delivery jwt target endpoint.
-//     *
-//     * @param serviceToken           jwt authorization.
-//     * @param orderId                order id.
-//     * @param shipmentDetailsInfoDTO shipment details - must be saved in orders db beforehand.
-//     * @return orderResponseDTO or string exception message.
-//     */
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Delivery details changed.",
-//                    content = @Content(schema = @Schema(implementation = OrderResponseDTO.class))),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized.",
-//                    content = @Content(schema = @Schema(implementation = String.class))),
-//            @ApiResponse(responseCode = "404", description = "Order not found.",
-//                    content = @Content(schema = @Schema(implementation = String.class))),
-//            @ApiResponse(responseCode = "500", description = "Internal server error.",
-//                    content = @Content(schema = @Schema(implementation = String.class)))
-//    })
-//    @PutMapping("/delivery")
-//    public ResponseEntity<OrderResponseDTO> changeShipmentDetails(@RequestHeader("Authorization") String serviceToken,
-//                                                                  @RequestParam("orderId") UUID orderId,
-//                                                                  @RequestBody ShipmentDetailsInfoDTO shipmentDetailsInfoDTO) {
-//        if (serviceTokenInvalid(serviceToken)) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-//        // todo поменять статус
-//        return ResponseEntity.ok(ordersService.changeShipmentDetails(shipmentDetailsInfoDTO, orderId));
-//    }
-//
-//    /**
-//     * SERVICE ENDPOINT.
-//     * Payment jwt target endpoint.
-//     *
-//     * @param serviceToken          jwt authorization.
-//     * @param orderId               order id.
-//     * @param paymentDetailsInfoDTO payment details - must be saved in orders db beforehand.
-//     * @return orderResponseDTO or string exception message.
-//     */
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Payment details changed.",
-//                    content = @Content(schema = @Schema(implementation = OrderResponseDTO.class))),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized",
-//                    content = @Content(schema = @Schema(implementation = String.class))),
-//            @ApiResponse(responseCode = "404", description = "Order not found.",
-//                    content = @Content(schema = @Schema(implementation = String.class))),
-//            @ApiResponse(responseCode = "500", description = "Internal server error.",
-//                    content = @Content(schema = @Schema(implementation = String.class)))
-//    })
-//    @PutMapping("/payment")
-//    public ResponseEntity<OrderResponseDTO> changePaymentDetails(@RequestHeader("Authorization") String serviceToken,
-//                                                                 @RequestParam("orderId") UUID orderId,
-//                                                                 @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
-//        if (serviceTokenInvalid(serviceToken)) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-//        // todo поменять статус
-//        return ResponseEntity.ok(ordersService.changePaymentDetails(paymentDetailsInfoDTO, orderId));
-//    }
 
     /**
      * Get order by id.
@@ -220,38 +159,6 @@ public class OrdersController {
         return ResponseEntity.ok(ordersService.changeOrderStatus(orderId, statusEnum));
     }
 
-
-    // useless
-    // todo добавить изменение статуса заказа в соответствующих эндпоинтах
-//    /**
-//     * SERVICE ENDPOINT.
-//     *
-//     * @param serviceToken JWT token.
-//     * @param orderId      order id.
-//     * @param status       new status.
-//     * @return orderResponseDTO or string exception message.
-//     */
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Order status changed.",
-//                    content = @Content(schema = @Schema(implementation = OrderResponseDTO.class))),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized.",
-//                    content = @Content(schema = @Schema(implementation = String.class))),
-//            @ApiResponse(responseCode = "404", description = "Order not found.",
-//                    content = @Content(schema = @Schema(implementation = String.class))),
-//            @ApiResponse(responseCode = "500", description = "Internal server error.",
-//                    content = @Content(schema = @Schema(implementation = String.class)))})
-//    @PutMapping("/service/change-status")
-//    public ResponseEntity<OrderResponseDTO> changeOrderStatusSystem(@RequestHeader("Authorization") String serviceToken,
-//                                                                    @RequestParam("orderId") UUID orderId,
-//                                                                    @RequestParam("status") String status) {
-//        if (serviceTokenInvalid(serviceToken)) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-//
-//        var statusEnum = OrderStatus.valueOf(status);
-//        return ResponseEntity.ok(ordersService.changeOrderStatus(orderId, statusEnum));
-//    }
-
     /**
      * For users.
      *
@@ -267,25 +174,15 @@ public class OrdersController {
         try {
             var userServiceInfo = authenticationManager.authenticate(token.substring(7));
             log.info("User found: " + userServiceInfo.getLogin() + " role: " + userServiceInfo.getRoleName());
-            return userServiceInfo.getRoleName() != RoleEnum.ADMIN || !askingAdmin;
+            if(askingAdmin){
+                log.info("cheking admin");
+            return !Objects.equals(userServiceInfo.getRoleName(), RoleEnum.ADMIN);
+            }
+            return false;
         } catch (IllegalArgumentException e) {
             log.info("Token is not valid: " + token);
             return true;
         }
     }
-
-//    /**
-//     * For services.
-//     *
-//     * @param serviceToken service JWT token.
-//     * @return true if token is valid.
-//     */
-//    private boolean serviceTokenInvalid(String serviceToken) {
-//        if (serviceToken == null || !serviceToken.startsWith("Bearer ")) {
-//            log.info("Service token is not valid (precheck): " + serviceToken);
-//            return true;
-//        }
-//        return !serviceTokenUtils.validateToken(serviceToken.substring(7));
-//    }
 
 }

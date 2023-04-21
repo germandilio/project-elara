@@ -13,19 +13,30 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @see <a href="https://jwt.io/introduction">...</a>
  * <p>
- * Example of usage:
- * {@link LoginServiceConfig}
  */
 @Slf4j
-@RequiredArgsConstructor
 public class AuthTokenInterceptor implements RequestInterceptor {
     private static final String authType = "Bearer";
 
-    private final String authToken;
+    public AuthTokenInterceptor(String loginAuthToken, String productsAuthToken){
+        this.loginAuthToken = loginAuthToken;
+        this.productsAuthToken = productsAuthToken;
+    }
+
+    private final String loginAuthToken;
+    private final String productsAuthToken;
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        requestTemplate.header("Authorization", authType + " " + authToken);
-        log.debug("Added authorization header {} , with token to request: {}", authToken, requestTemplate);
+        if(requestTemplate.request().url().contains("/api/v1/auth")) {
+            requestTemplate.header("Authorization", authType + " " + loginAuthToken);
+            log.debug("Added authorization header {} , with token to request: {}", loginAuthToken, requestTemplate);
+        } else if(requestTemplate.request().url().contains("/api/v1/products")){
+            requestTemplate.header("Authorization", authType + " " + productsAuthToken);
+            log.debug("Added authorization header {} , with token to request: {}", productsAuthToken, requestTemplate);
+        } else {
+            log.error("Unknown api call");
+        }
+        
     }
 }

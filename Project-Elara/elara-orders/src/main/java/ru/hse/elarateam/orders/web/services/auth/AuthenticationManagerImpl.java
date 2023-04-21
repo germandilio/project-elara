@@ -34,6 +34,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
         try {
             return loginServiceFeignClient.getUserInfoByToken(jwtToken);
         } catch (FeignException.Unauthorized ex) {
+            log.error("Token is invalid, authentication manager: ", ex);
             // indicates that token is invalid
             throw new IllegalArgumentException(ex);
         } catch (FeignException.BadRequest ex) {

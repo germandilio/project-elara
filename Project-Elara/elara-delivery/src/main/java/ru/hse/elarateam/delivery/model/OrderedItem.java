@@ -38,6 +38,7 @@ public class OrderedItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID productId;
 

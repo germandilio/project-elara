@@ -29,10 +29,6 @@ import java.util.UUID;
 public class OrdersService {
     private final OrdersRepository ordersRepository;
     private final OrdersMapper ordersMapper;
-    //    private final ShipmentDetailsRepository shipmentDetailsRepository;
-//    private final ShipmentDetailsMapper shipmentDetailsMapper;
-//    private final PaymentDetailsRepository paymentDetailsRepository;
-//    private final PaymentDetailsMapper paymentDetailsMapper;
     private final OrderedItemsRepository orderedItemsRepository;
     private final OrderedItemsMapper orderedItemsMapper;
     private final ProductsServiceFeign productsServiceFeign;
@@ -41,8 +37,14 @@ public class OrdersService {
     // todo logs
     @Transactional(readOnly = true)
     public OrderResponseDTO getOrderById(UUID orderId) {
-        return ordersMapper.orderToOrderResponseDTO(
-                ordersRepository.findById(orderId).orElse(null));
+        var order = ordersRepository.findById(orderId).orElse(null);
+        log.debug("Got order:" + order);
+        assert order != null;
+        log.debug("Ordered items:" + order.getOrderedItems());
+        var orderResponseDTO = ordersMapper.orderToOrderResponseDTO(order);
+        orderResponseDTO.setPositions(order.getOrderedItems().stream().map(orderedItemsMapper::orderedItemToOrderedItemResponseDTO).toList());
+        log.debug("Order response DTO:" + orderResponseDTO);
+        return orderResponseDTO;
     }
 
     @Transactional(readOnly = true)
@@ -57,41 +59,6 @@ public class OrdersService {
                 .map(ordersMapper::orderToOrderResponseDTO);
     }
 
-//    @Transactional(rollbackFor = RuntimeException.class)
-//    public OrderResponseDTO changeShipmentDetails(ShipmentDetailsInfoDTO shipmentDetailsInfoDTO, UUID orderId) {
-//        if (!ordersRepository.existsById(orderId)) {
-//            log.error("Order with id " + orderId + " not found.");
-//            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
-//        }
-//        var order = ordersRepository.findById(orderId).get();
-//        // todo подумать, возможно стоит передавать paymentDetailsId и забирать объект из базы
-//        if (!shipmentDetailsRepository.existsById(shipmentDetailsInfoDTO.getId())) {
-//            log.error("Shipment details object with id " + shipmentDetailsInfoDTO.getId() + " not found.");
-//            throw new IllegalArgumentException("Shipment details object with id " + shipmentDetailsInfoDTO.getId() + " not found.");
-//        }
-//        order.setShipmentDetails(shipmentDetailsMapper.shipmentDetailsInfoDTOToShipmentDetails(shipmentDetailsInfoDTO));
-//        var saved = ordersRepository.save(order);
-//        log.info("Shipment details for order " + orderId + " changed for: " + saved.getShipmentDetails());
-//        return ordersMapper.orderToOrderResponseDTO(saved);
-//    }
-//
-//    @Transactional(rollbackFor = RuntimeException.class)
-//    public OrderResponseDTO changePaymentDetails(PaymentDetailsInfoDTO paymentDetailsInfoDTO, UUID orderId) {
-//        if (!ordersRepository.existsById(orderId)) {
-//            log.error("Order with id " + orderId + " not found.");
-//            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
-//        }
-//        var order = ordersRepository.findById(orderId).get();
-//        // todo подумать, возможно стоит передавать paymentDetailsId и забирать объект из базы
-//        if (!paymentDetailsRepository.existsById(paymentDetailsInfoDTO.getId())) {
-//            log.error("Payment details object with id " + paymentDetailsInfoDTO.getId() + " not found.");
-//            throw new IllegalArgumentException("Payment details object with id " + paymentDetailsInfoDTO.getId() + " not found.");
-//        }
-//        order.setPaymentDetails(paymentDetailsMapper.paymentDetailsInfoDTOToPaymentDetails(paymentDetailsInfoDTO));
-//        var saved = ordersRepository.save(order);
-//        log.info("Payment details for order " + orderId + " changed for: " + saved.getPaymentDetails());
-//        return ordersMapper.orderToOrderResponseDTO(saved);
-//    }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public OrderResponseDTO changeOrderStatus(UUID orderId, OrderStatus status) {
@@ -136,12 +103,16 @@ public class OrdersService {
                     .price(item.getPrice())
                     .discount(item.getDiscount())
                     .quantity(item.getQuantity())
+                            .height(item.getHeight())
+                            .width(item.getWidth())
+                            .length(item.getLength())
+                            .weight(item.getWeight())
                     .build());
 
             totalWithDiscount = totalWithDiscount.add(
                     item.getPrice()
                             .multiply(new BigDecimal(item.getQuantity()))
-                            .multiply(new BigDecimal((100 - item.getDiscount()) / 100)));
+                            .multiply(BigDecimal.valueOf(1.0 * (100 - item.getDiscount()) / 100.0)));
 
             totalWithoutDiscount = totalWithoutDiscount.add(
                     item.getPrice()
@@ -167,7 +138,7 @@ public class OrdersService {
                 .totalWeight(dimentions.get(3))
                 .build();
 
-        var savedOrder = ordersRepository.save(order);
+        var savedOrder = ordersRepository.saveAndFlush(order);
         log.info("Order placed: " + savedOrder);
 
         return ordersMapper.orderToOrderResponseDTO(savedOrder);

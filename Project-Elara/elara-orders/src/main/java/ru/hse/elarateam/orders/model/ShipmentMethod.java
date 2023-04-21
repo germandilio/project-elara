@@ -32,31 +32,24 @@ public class ShipmentMethod {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank
     @Column(nullable = false)
     private Integer tariffCode;
 
-    @NotBlank
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String tariffName;
 
-    @NotBlank
-    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
+    @Column(length = 512, columnDefinition = "varchar(512)", nullable = false)
     private String tariffDescription;
 
-    @NotBlank
     @Column(nullable = false)
     private Integer deliveryMode;
 
-    @NotBlank
     @Column(nullable = false)
     private BigDecimal deliverySum;
 
-    @NotBlank
     @Column(nullable = false)
     private Integer periodMin;
 
-    @NotBlank
     @Column(nullable = false)
     private Integer periodMax;
 

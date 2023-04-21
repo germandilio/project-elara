@@ -8,6 +8,7 @@ import ru.hse.elarateam.orders.model.status.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
