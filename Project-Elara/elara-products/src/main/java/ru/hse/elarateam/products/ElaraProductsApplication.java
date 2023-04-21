@@ -6,8 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import ru.hse.elarateam.products.model.Product;
-import ru.hse.elarateam.products.repositories.ProductsRepository;
-import ru.hse.elarateam.products.services.jwt.service.ServiceTokenUtilsImpl;
+import ru.hse.elarateam.products.web.repositories.ProductsRepository;
+import ru.hse.elarateam.products.web.services.jwt.ServiceTokenUtilsImpl;
 
 import java.math.BigDecimal;
 
@@ -57,9 +57,9 @@ public class ElaraProductsApplication {
                     .weight(42.0)
                     .build());
             productsRepository.flush();
-            log.info(productsRepository.findAll().size() + " elarateam were added to database");
+            log.info(productsRepository.findAll().size() + " products were added to database");
 //            var token = serviceTokenUtils.generateToken();
-//            log.info("service token: " + token);
+//            log.info("jwt token: " + token);
 //            var token = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJlbGFyYS1wcm9kdWN0cyIsImF1ZCI6ImVsYXJhIiwiaWF0IjoxNjgxNDcwMDU4fQ.jNeuKGCWj5he1tYjn7OuILJgAuR6V5hY57t7beElzFnNP3fVjO1gPRljgUeQr3jCmS0VFGxMg_6LCcHSCUmhSA";
 //            log.info("validated token: " + serviceTokenUtils.validateToken(token));
         };

@@ -21,6 +21,16 @@ public interface ProductService {
 
     Page<ProductInfoDTO> getProductsByNames(String name, Pageable pageable);
 
+    List<String> getAllBrands();
+
+    List<String> getAllCountries();
+
+    List<Double> getAllSizeUS();
+
+    List<Double> getAllSizeEUR();
+
+    List<Double> getAllSizeUK();
+
     /**
      * Find all products by filters and query
      *
@@ -36,20 +46,20 @@ public interface ProductService {
      * @param maxPrice
      * @param query     search query over name
      * @param pageable
-     * @return page of products
+     * @return page of products and metrics for filters such as presented brands, countries, etc.
      */
-    Page<ProductInfoDTO> finaAllByFiltersAndQuery(Collection<String> sports,
-                                                  Collection<String> colors,
-                                                  Collection<String> features,
-                                                  Collection<String> countries,
-                                                  Collection<String> brands,
-                                                  Collection<Double> sizeUS,
-                                                  Collection<Double> sizeEUR,
-                                                  Collection<Double> sizeUK,
-                                                  BigDecimal minPrice,
-                                                  BigDecimal maxPrice,
-                                                  String query,
-                                                  Pageable pageable);
+    ProductsResponse finaAllByFiltersAndQuery(Collection<String> sports,
+                                              Collection<String> colors,
+                                              Collection<String> features,
+                                              Collection<String> countries,
+                                              Collection<String> brands,
+                                              Collection<Double> sizeUS,
+                                              Collection<Double> sizeEUR,
+                                              Collection<Double> sizeUK,
+                                              BigDecimal minPrice,
+                                              BigDecimal maxPrice,
+                                              String query,
+                                              Pageable pageable);
 
     /**
      * Find all products that were added recently

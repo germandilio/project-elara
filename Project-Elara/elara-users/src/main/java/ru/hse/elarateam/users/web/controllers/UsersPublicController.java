@@ -69,7 +69,7 @@ public class UsersPublicController {
         if (isAvailable) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Login is not unavailable", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Login is unavailable", HttpStatus.CONFLICT);
         }
     }
 

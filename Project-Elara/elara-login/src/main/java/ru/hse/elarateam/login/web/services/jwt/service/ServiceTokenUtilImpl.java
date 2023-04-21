@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 /**
- * Helper class for generating and validating service tokens.
+ * Helper class for generating and validating jwt tokens.
  */
 @Slf4j
 @Component

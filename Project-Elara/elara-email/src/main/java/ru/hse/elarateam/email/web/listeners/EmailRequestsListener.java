@@ -1,16 +1,17 @@
 package ru.hse.elarateam.email.web.listeners;
 
 import com.postmarkapp.postmark.client.exception.PostmarkException;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import ru.hse.elarateam.email.configs.JMSConfig;
-import ru.hse.elarateam.email.dto.messages.EmailVerificationMessage;
-import ru.hse.elarateam.email.dto.messages.OrderCheckoutMessage;
-import ru.hse.elarateam.email.dto.messages.ResetPasswordMessage;
 import ru.hse.elarateam.email.web.services.email.EmailService;
 import ru.hse.elarateam.email.web.services.user.UserService;
+import ru.hse.elarateam.messages.EmailVerificationMessage;
+import ru.hse.elarateam.messages.OrderCheckoutMessage;
+import ru.hse.elarateam.messages.ResetPasswordMessage;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class EmailRequestsListener {
 
     private final UserService userService;
 
+    @Timed(value = "email_requests_listener.listen_for_email_verification_requests", longTask = true, extraTags = {"queue", JMSConfig.EMAIL_VERIFICATION_QUEUE})
     @JmsListener(destination = JMSConfig.EMAIL_VERIFICATION_QUEUE)
     public void listenForEmailVerificationRequests(EmailVerificationMessage message) {
         if (message.getUserId() == null || message.getVerificationToken() == null) {
@@ -51,6 +53,7 @@ public class EmailRequestsListener {
         }
     }
 
+    @Timed(value = "email_requests_listener.listen_for_reset_password_requests", longTask = true, extraTags = {"queue", JMSConfig.RESET_PASSWORD_QUEUE})
     @JmsListener(destination = JMSConfig.RESET_PASSWORD_QUEUE)
     public void listenForResetPasswordRequests(ResetPasswordMessage message) {
         if (message.getUserId() == null || message.getResetPasswordToken() == null) {
@@ -77,6 +80,7 @@ public class EmailRequestsListener {
         }
     }
 
+    @Timed(value = "email_requests_listener.send_order_checkout_email", longTask = true, extraTags = {"queue", JMSConfig.ORDER_CHECKOUT_QUEUE})
     @JmsListener(destination = JMSConfig.ORDER_CHECKOUT_QUEUE)
     public void sendOrderCheckoutEmail(OrderCheckoutMessage message) {
         if (message.getUserId() == null || message.getOrderCheckoutDTO() == null) {

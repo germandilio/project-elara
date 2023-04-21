@@ -22,6 +22,7 @@ import ru.hse.elarateam.users.web.repositories.UsersServiceInfoRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,6 +54,9 @@ public class UserDBServiceImpl implements UsersDBService {
                 .orElseThrow(() -> new IllegalStateException("Role " + RoleEnum.EMAIL_NOT_VERIFIED + " not found"));
 
         final var userProfile = userMapper.userRegisterRequestDTOtoUserProfile(userRegisterRequest);
+        if (userProfile.getBirthDate() != null && userProfile.getBirthDate().after(new Date(System.currentTimeMillis()))) {
+            throw new IllegalArgumentException("Birth date cannot be after now");
+        }
 
         final var savedProfile = usersProfileRepository.saveAndFlush(userProfile);
 
@@ -97,9 +101,13 @@ public class UserDBServiceImpl implements UsersDBService {
         userProfile.setPictureUrl(userProfileUpdateRequest.getPictureUrl());
         userProfile.setBirthDate(userProfileUpdateRequest.getBirthDate());
 
+        if (userProfile.getBirthDate() != null && userProfile.getBirthDate().after(new Date(System.currentTimeMillis()))) {
+            throw new IllegalArgumentException("Birth date cannot be after now");
+        }
+
         // save changes
         var updatedPersistentUserInfo = usersServiceInfoRepository.saveAndFlush(persistentUserInfo.get());
-        log.trace("Updated user service info: {}", updatedPersistentUserInfo);
+        log.trace("Updated user jwt info: {}", updatedPersistentUserInfo);
         log.trace("Updated user profile: {}", updatedPersistentUserInfo.getUserProfile());
 
         return userMapper.userProfileToUserDTO(updatedPersistentUserInfo.getUserProfile());
@@ -116,7 +124,7 @@ public class UserDBServiceImpl implements UsersDBService {
                     .ifPresent(user -> {
                         throw new IllegalArgumentException("User with login " + newEmail + " already exists");
                     });
-            // set new email to profile and service info
+            // set new email to profile and jwt info
             persistentUserInfo.get().setLogin(newEmail);
             userProfile.setEmail(newEmail);
 
@@ -153,7 +161,7 @@ public class UserDBServiceImpl implements UsersDBService {
 
         final var userInfo = persistentUserInfo.get();
 
-        log.debug("Found user service info: {}", userInfo);
+        log.debug("Found user jwt info: {}", userInfo);
         return userMapper.userServiceInfoToUserInfoDTO(userInfo);
     }
 

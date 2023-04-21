@@ -7,8 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @ControllerAdvice
@@ -21,6 +24,24 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> handleException(Exception e) {
         log.warn("Exception: {}", e.getMessage(), e);
         return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseBody
+    public ResponseEntity<Object> handleMissingParams(MissingServletRequestParameterException ex) {
+        String name = ex.getParameterName();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Required parameter '" + name + "' is missing");
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    @ResponseBody
+    public ResponseEntity<Object> handleMissingHeaders(MissingRequestHeaderException ex) {
+        String name = ex.getHeaderName();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Required header '" + name + "' is missing");
     }
 
     @ExceptionHandler(UserNotFountException.class)
@@ -64,7 +85,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
-    // TODO custom fallback with email service and login service
+    // TODO custom fallback with email jwt and login jwt
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<?> handleException(FeignException e) {
         log.error("Feign exception: {}", e.getMessage(), e);

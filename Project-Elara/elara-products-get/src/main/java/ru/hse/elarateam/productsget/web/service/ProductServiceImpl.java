@@ -17,6 +17,7 @@ import ru.hse.elarateam.productsget.web.repository.ProductsRepository;
 import ru.hse.elarateam.productsget.web.repository.SportsRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -72,32 +73,105 @@ public class ProductServiceImpl implements ProductService {
                 .map(productsMapper::productToProductInfoDTO);
     }
 
+    @Override
+    public List<String> getAllBrands() {
+        return new ArrayList<>(productRepository.findAllBrands());
+    }
+
+    @Override
+    public List<String> getAllCountries() {
+        return new ArrayList<>(productRepository.findAllCountries());
+    }
+
+    @Override
+    public List<Double> getAllSizeUS() {
+        return new ArrayList<>(productRepository.findAllSizeUS());
+    }
+
+    @Override
+    public List<Double> getAllSizeEUR() {
+        return new ArrayList<>(productRepository.findAllSizeEUR());
+    }
+
+    @Override
+    public List<Double> getAllSizeUK() {
+        return new ArrayList<>(productRepository.findAllSizeUK());
+    }
+
     @Transactional(readOnly = true)
     @Override
-    public Page<ProductInfoDTO> finaAllByFiltersAndQuery(Collection<String> sports,
-                                                         Collection<String> colors,
-                                                         Collection<String> features,
-                                                         Collection<String> countries,
-                                                         Collection<String> brands,
-                                                         Collection<Double> sizeUS,
-                                                         Collection<Double> sizeEUR,
-                                                         Collection<Double> sizeUK,
-                                                         BigDecimal minPrice,
-                                                         BigDecimal maxPrice,
-                                                         String query,
-                                                         Pageable pageable) {
+    public ProductsResponse finaAllByFiltersAndQuery(Collection<String> sports,
+                                                     Collection<String> colors,
+                                                     Collection<String> features,
+                                                     Collection<String> countries,
+                                                     Collection<String> brands,
+                                                     Collection<Double> sizeUS,
+                                                     Collection<Double> sizeEUR,
+                                                     Collection<Double> sizeUK,
+                                                     BigDecimal minPrice,
+                                                     BigDecimal maxPrice,
+                                                     String query,
+                                                     Pageable pageable) {
         log.trace("finaAllByFiltersAndQuery({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", sports, colors, features,
                 countries, brands, sizeUS, sizeEUR, sizeUK, minPrice, maxPrice, query);
 
-        return productRepository.findAllByFiltersAndQueryNullable(
+        final var products = productRepository.findAllByFiltersAndQueryNullable(
                         sports, colors, features, countries, brands, sizeUS, sizeEUR, sizeUK, minPrice, maxPrice, query, pageable)
                 .map(productsMapper::productToProductInfoDTO);
+
+        var productResponse = ProductsResponse.builder()
+                .products(products)
+                .minPrice(products.stream()
+                        .map(ProductInfoDTO::getPrice)
+                        .min(BigDecimal::compareTo)
+                        .orElse(null))
+                .maxPrice(products.stream()
+                        .map(ProductInfoDTO::getPrice)
+                        .max(BigDecimal::compareTo)
+                        .orElse(null))
+                .presentedBrands(products.stream()
+                        .map(ProductInfoDTO::getBrand)
+                        .distinct()
+                        .toList())
+                .presentedCountries(products.stream()
+                        .map(ProductInfoDTO::getCountryOfOrigin)
+                        .distinct()
+                        .toList())
+                .presentedColors(products.stream()
+                        .flatMap(product -> product.getColors().stream())
+                        .map(ColorInfoDTO::getName)
+                        .distinct()
+                        .toList())
+                .presentedFeatures(products.stream()
+                        .flatMap(product -> product.getFeatures().stream())
+                        .map(FeatureInfoDTO::getName)
+                        .distinct()
+                        .toList())
+                .presentedSports(products.stream()
+                        .flatMap(product -> product.getSports().stream())
+                        .map(SportInfoDTO::getName)
+                        .distinct()
+                        .toList())
+                .presentedSizeUS(products.stream()
+                        .map(ProductInfoDTO::getSizeUS)
+                        .distinct()
+                        .toList())
+                .presentedSizeEUR(products.stream()
+                        .map(ProductInfoDTO::getSizeEUR)
+                        .distinct()
+                        .toList())
+                .presentedSizeUK(products.stream()
+                        .map(ProductInfoDTO::getSizeUK)
+                        .distinct()
+                        .toList());
+
+        return productResponse.build();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> findAllRecentAddedProducts(Pageable pageable) {
-        return productRepository.findAllByOrderByCreatedDateDesc(pageable)
+        return productRepository.findRecentProducts(pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 

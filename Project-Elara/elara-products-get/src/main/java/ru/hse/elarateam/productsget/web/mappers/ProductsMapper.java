@@ -15,6 +15,5 @@ public interface ProductsMapper {
     @Mapping(target = "sports", expression = "java(product.getSports().stream().map(sportMapper::sportToSportInfoDTO).collect(java.util.stream.Collectors.toSet()))")
     @Mapping(target = "colors", expression = "java(product.getColors().stream().map(colorMapper::colorToColorInfoDTO).collect(java.util.stream.Collectors.toSet()))")
     @Mapping(target = "features", expression = "java(product.getFeatures().stream().map(featureMapper::featureToFeatureInfoDTO).collect(java.util.stream.Collectors.toSet()))")
-    @Mapping(target = "pictures", expression = "java(product.getPictures().stream().map(picture -> picture.getUri()).collect(java.util.stream.Collectors.toSet()))")
     ProductInfoDTO productToProductInfoDTO(Product product);
 }

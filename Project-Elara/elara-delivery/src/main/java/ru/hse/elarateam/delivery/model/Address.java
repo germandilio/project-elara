@@ -28,6 +28,10 @@ public class Address {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    private UUID userId;
+
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String postalCode;
 

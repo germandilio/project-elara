@@ -2,12 +2,12 @@ package ru.hse.elarateam.login.web.services.users;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.elarateam.login.dto.UserServiceInfoDTO;
 import ru.hse.elarateam.login.model.UserServiceInfo;
 import ru.hse.elarateam.login.web.controllers.advice.UnauthorizedException;
+import ru.hse.elarateam.login.web.converters.PasswordConverter;
 import ru.hse.elarateam.login.web.mappers.UsersMapper;
 import ru.hse.elarateam.login.web.repositories.UsersRepository;
 
@@ -21,7 +21,7 @@ public class UsersServiceImpl implements UsersService {
 
     private final UsersMapper usersMapper;
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordConverter passwordConverter;
 
     @Transactional(readOnly = true)
     @Override
@@ -45,7 +45,7 @@ public class UsersServiceImpl implements UsersService {
         }
         log.trace("User with login {} found: {}", login, persistentUser.get());
 
-        if (passwordEncoder.matches(password, persistentUser.get().getPassword())) {
+        if (passwordConverter.getPasswordEncoder().matches(password, persistentUser.get().getPassword())) {
             log.debug("User with login {} logged in", login);
             return persistentUser.get();
         } else {

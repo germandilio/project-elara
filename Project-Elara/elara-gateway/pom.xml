@@ -21,16 +21,108 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
             <version>4.0.4</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>3.1.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+
+
+        <!--        Tracing logging-->
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-observation -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-observation</artifactId>
+            <version>1.10.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing-bridge-otel -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-micrometer -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-micrometer</artifactId>
+            <version>12.3</version>
+            <!--            <scope>test</scope>-->
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.10.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.loki4j/loki-logback-appender -->
+        <dependency>
+            <groupId>com.github.loki4j</groupId>
+            <artifactId>loki-logback-appender</artifactId>
+            <version>1.4.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-            </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -39,6 +131,15 @@
                         <enabled>true</enabled>
                         <includeLayerTools>true</includeLayerTools>
                     </layers>
+                    <image>
+                        <env>
+                            <BP_HEALTH_CHECKER_ENABLED>true</BP_HEALTH_CHECKER_ENABLED>
+                        </env>
+                        <buildpacks>
+                            <buildpack>urn:cnb:builder:paketo-buildpacks/java</buildpack>
+                            <buildpack>gcr.io/paketo-buildpacks/health-checker:latest</buildpack>
+                        </buildpacks>
+                    </image>
                 </configuration>
             </plugin>
 
@@ -54,7 +155,6 @@
                     </execution>
                 </executions>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -84,6 +184,5 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
 </project>

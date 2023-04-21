@@ -20,7 +20,7 @@ public class UserServiceFeign implements UserService {
         try {
             var userDTO = userServiceFeignClient.getUserById(userId);
             if (!userDTO.getUserId().equals(userId)) {
-                log.error("User ID mismatch, got {} from users service, expected {}", userDTO.getUserId(), userId);
+                log.error("User ID mismatch, got {} from users jwt, expected {}", userDTO.getUserId(), userId);
             }
             log.debug("User is {}", userDTO);
             return userDTO;
@@ -29,13 +29,13 @@ public class UserServiceFeign implements UserService {
             log.error("User with ID {} not found", userId);
             throw new IllegalArgumentException("User with ID " + userId + " not found", ex);
         } catch (FeignException.Unauthorized ex) {
-            log.error("Authorization in users service failed");
-            throw new IllegalStateException("Authorization in users service failed", ex);
+            log.error("Authorization in users jwt failed");
+            throw new IllegalStateException("Authorization in users jwt failed", ex);
         } catch (FeignException.BadRequest ex) {
-            log.error("Bad request to users service ", ex);
+            log.error("Bad request to users jwt ", ex);
         } catch (FeignException.InternalServerError ex) {
-            log.error("Users service is unavailable");
-            throw new IllegalStateException("Users service is unavailable", ex);
+            log.error("Users jwt is unavailable");
+            throw new IllegalStateException("Users jwt is unavailable", ex);
         } catch (Exception ex) {
             log.error("Error while getting user by ID", ex);
             throw new IllegalStateException("Error while getting user by ID", ex);

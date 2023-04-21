@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
@@ -19,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
+public interface ProductsRepository extends JpaRepository<Product, UUID> {
     @NonNull
     @Override
     Optional<Product> findById(@NonNull UUID uuid);
@@ -35,9 +34,26 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
 
     Page<Product> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    Page<Product> findAllByOrderByCreatedDateDesc(Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE p.deleted = false ORDER BY p.createdDate DESC")
+    Page<Product> findRecentProducts(Pageable pageable);
 
-    public interface PriceRangeProjection {
+    @Query("SELECT DISTINCT p.brand FROM Product p WHERE p.deleted = false")
+    Collection<String> findAllBrands();
+
+    @Query("SELECT DISTINCT p.countryOfOrigin FROM Product p WHERE p.deleted = false")
+    Collection<String> findAllCountries();
+
+    @Query("SELECT DISTINCT p.sizeUS FROM Product p WHERE p.deleted = false")
+    Collection<Double> findAllSizeUS();
+
+    @Query("SELECT DISTINCT p.sizeEUR FROM Product p WHERE p.deleted = false")
+    Collection<Double> findAllSizeEUR();
+
+    @Query("SELECT DISTINCT p.sizeUK FROM Product p WHERE p.deleted = false")
+    Collection<Double> findAllSizeUK();
+
+
+    interface PriceRangeProjection {
         BigDecimal getMin();
 
         BigDecimal getMax();
@@ -51,7 +67,8 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
                 JOIN features f on f.id = pf.features_id
                 JOIN products_sports ps on p.id = ps.product_id
                 JOIN sports s on ps.sports_id = s.id
-                 WHERE (:sports IS NULL OR s.name IN :sports) AND
+                 WHERE p.deleted = false AND
+                       (:sports IS NULL OR s.name IN :sports) AND
                         (:colors IS NULL OR c.name IN :colors) AND
                          (:features IS NULL OR f.name IN :features) AND
                           (:countries IS NULL OR p.country_of_origin IN :countries) AND
@@ -95,14 +112,15 @@ public interface ProductsRepository extends JpaRepository<Product, UUID>, JpaSpe
     }
 
     @Query(value = """
-                SELECT p.* FROM products p
+                SELECT DISTINCT p.* FROM products p
                 LEFT JOIN products_colors pc ON pc.product_id = p.id
                 LEFT JOIN colors c ON pc.colors_id = c.id
                 JOIN products_features pf on p.id = pf.product_id
                 JOIN features f on f.id = pf.features_id
                 JOIN products_sports ps on p.id = ps.product_id
                 JOIN sports s on ps.sports_id = s.id
-                 WHERE (:sports IS NULL OR s.name IN :sports) AND
+                 WHERE p.deleted = false AND 
+                    (:sports IS NULL OR s.name IN :sports) AND
                         (:colors IS NULL OR c.name IN :colors) AND
                          (:features IS NULL OR f.name IN :features) AND
                           (:countries IS NULL OR p.country_of_origin IN :countries) AND

@@ -1,5 +1,6 @@
 package ru.hse.elarateam.products.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -25,8 +26,9 @@ public class Sport {
     @Column(length = 32, columnDefinition = "varchar(32)", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "sports", fetch = FetchType.LAZY)
+    @JsonBackReference
     @ToString.Exclude
+    @ManyToMany(mappedBy = "sports", fetch = FetchType.LAZY)
     private Set<Product> products = new LinkedHashSet<>();
 
     @Override

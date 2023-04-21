@@ -32,25 +32,25 @@ public class OrderCheckoutDTO {
 
     /**
      * Total order weight.
-     * Information for delivery service.
+     * Information for delivery jwt.
      */
     private Integer totalHeight;
 
     /**
      * Total order length.
-     * Information for delivery service.
+     * Information for delivery jwt.
      */
     private Integer totalLength;
 
     /**
      * Total order width.
-     * Information for delivery service.
+     * Information for delivery jwt.
      */
     private Integer totalWidth;
 
     /**
      * Total order weight.
-     * Information for delivery service.
+     * Information for delivery jwt.
      */
     private Double totalWeight;
 

@@ -37,7 +37,7 @@ public class ShipmentMethod {
     @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
     private String tariffName;
 
-    @Column(length = 64, columnDefinition = "varchar(64)", nullable = false)
+    @Column(length = 512, columnDefinition = "varchar(512)", nullable = false)
     private String tariffDescription;
 
     @Column(nullable = false)

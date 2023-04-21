@@ -1,5 +1,6 @@
 package ru.hse.elarateam.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,19 +33,24 @@ public class Order {
     @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
+
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID userId;
 
+    @JsonManagedReference
     @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "shipment_details_id")
     private ShipmentDetails shipmentDetails;
 
+    @JsonManagedReference
     @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "payment_details_id")
     private PaymentDetails paymentDetails;
 
+    @JsonManagedReference
     @ToString.Exclude
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderedItem> orderedItems = new LinkedHashSet<>();
