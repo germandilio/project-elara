@@ -21,8 +21,6 @@ public class ProductsServiceFeign {
     public ResponseEntity<List<ProductResponseDTO>> allocateProducts(OrderRequestDTO orderRequestDTO) {
         try {
             var response = productsServiceFeignClient.allocateProducts(orderRequestDTO);
-//            if(response.getBody().getData().equals(orderRequestDTO.getPositions()));
-            // todo проверить на соответсвие листы
 
             if (!response.hasBody()) {
                 log.error("Null response from products service.");
@@ -49,8 +47,6 @@ public class ProductsServiceFeign {
     public ResponseEntity<List<UUID>> deallocateProducts(OrderRequestDTO orderRequestDTO) {
         try {
             var response = productsServiceFeignClient.deallocateProducts(orderRequestDTO);
-//            if(response.getBody().getData().equals(orderRequestDTO.getPositions()));
-            // todo проверить на соответсвие листы
 
             if (!response.hasBody()) {
                 log.error("Null response from products service.");

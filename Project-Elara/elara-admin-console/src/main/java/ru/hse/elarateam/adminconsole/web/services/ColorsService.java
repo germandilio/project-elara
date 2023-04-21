@@ -12,8 +12,6 @@ import ru.hse.elarateam.adminconsole.web.repositories.ColorsRepository;
 @Service
 @RequiredArgsConstructor
 public class ColorsService {
-    //todo add logs
-
     private final ColorsRepository colorsRepository;
     private final ColorsMapper colorsMapper;
 

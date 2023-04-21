@@ -48,8 +48,6 @@ public class AdminConsoleController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
-    // todo test create product with nonexistent color (id = null, id != null but color doesn't exist)
-    // todo test adding new picture
     @PostMapping("/product")
     public ResponseEntity<ProductInfoDTO> createProduct(@RequestHeader("Authorization") String token,
                                                         @RequestBody ProductInfoDTO productInfoDTO) {
@@ -76,8 +74,6 @@ public class AdminConsoleController {
             @ApiResponse(responseCode = "500", description = "Internal server error.",
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
-    // todo test update product with nonexistent color (id = null, id != null but color doesn't exist)
-    // todo test removing picture, adding new picture
     @PutMapping("/product")
     public ResponseEntity<ProductInfoDTO> updateProduct(@RequestHeader("Authorization") String token,
                                                         @RequestBody ProductInfoDTO productInfoDTO) {

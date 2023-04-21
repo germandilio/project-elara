@@ -12,8 +12,6 @@ import ru.hse.elarateam.adminconsole.web.repositories.FeaturesRepository;
 @Service
 @RequiredArgsConstructor
 public class FeaturesService {
-    // todo add logs
-
     private final FeaturesRepository featuresRepository;
     private final FeaturesMapper featuresMapper;
 

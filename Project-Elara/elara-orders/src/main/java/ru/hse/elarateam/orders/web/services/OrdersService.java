@@ -37,12 +37,19 @@ public class OrdersService {
     // todo logs
     @Transactional(readOnly = true)
     public OrderResponseDTO getOrderById(UUID orderId) {
+        if (!ordersRepository.existsById(orderId)) {
+            log.error("Order with id " + orderId + " not found.");
+            throw new IllegalArgumentException("Order with id " + orderId + " not found.");
+        }
         var order = ordersRepository.findById(orderId).orElse(null);
         log.debug("Got order:" + order);
         assert order != null;
         log.debug("Ordered items:" + order.getOrderedItems());
         var orderResponseDTO = ordersMapper.orderToOrderResponseDTO(order);
-        orderResponseDTO.setPositions(order.getOrderedItems().stream().map(orderedItemsMapper::orderedItemToOrderedItemResponseDTO).toList());
+        orderResponseDTO.setPositions(
+                order.getOrderedItems().stream()
+                .map(orderedItemsMapper::orderedItemToOrderedItemResponseDTO)
+                .toList());
         log.debug("Order response DTO:" + orderResponseDTO);
         return orderResponseDTO;
     }

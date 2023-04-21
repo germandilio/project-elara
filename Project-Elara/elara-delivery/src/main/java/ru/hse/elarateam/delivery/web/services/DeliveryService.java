@@ -37,7 +37,6 @@ public class DeliveryService {
 
     @Value("${elara.from-address-id}")
     private UUID fromAddressId;
-    // todo add logs
 
     @Transactional(rollbackFor = RuntimeException.class)
     public ShipmentMethodsResponseDTO getShipmentMethods(ShipmentMethodsRequestDTO shipmentMethodsRequestDTO) {

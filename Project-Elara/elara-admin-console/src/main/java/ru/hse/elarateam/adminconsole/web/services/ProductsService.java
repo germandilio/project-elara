@@ -15,8 +15,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ProductsService {
-    // todo add logs
-
     private final ProductsRepository productsRepository;
     private final ProductsMapper productsMapper;
 
