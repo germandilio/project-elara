@@ -34,21 +34,22 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
 
     Page<Product> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    Page<Product> findAllByOrderByCreatedDateDesc(Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE p.deleted = false ORDER BY p.createdDate DESC")
+    Page<Product> findRecentProducts(Pageable pageable);
 
-    @Query("SELECT DISTINCT p.brand FROM Product p")
+    @Query("SELECT DISTINCT p.brand FROM Product p WHERE p.deleted = false")
     Collection<String> findAllBrands();
 
-    @Query("SELECT DISTINCT p.countryOfOrigin FROM Product p")
+    @Query("SELECT DISTINCT p.countryOfOrigin FROM Product p WHERE p.deleted = false")
     Collection<String> findAllCountries();
 
-    @Query("SELECT DISTINCT p.sizeUS FROM Product p")
+    @Query("SELECT DISTINCT p.sizeUS FROM Product p WHERE p.deleted = false")
     Collection<Double> findAllSizeUS();
 
-    @Query("SELECT DISTINCT p.sizeEUR FROM Product p")
+    @Query("SELECT DISTINCT p.sizeEUR FROM Product p WHERE p.deleted = false")
     Collection<Double> findAllSizeEUR();
 
-    @Query("SELECT DISTINCT p.sizeUK FROM Product p")
+    @Query("SELECT DISTINCT p.sizeUK FROM Product p WHERE p.deleted = false")
     Collection<Double> findAllSizeUK();
 
 
@@ -66,7 +67,8 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                 JOIN features f on f.id = pf.features_id
                 JOIN products_sports ps on p.id = ps.product_id
                 JOIN sports s on ps.sports_id = s.id
-                 WHERE (:sports IS NULL OR s.name IN :sports) AND
+                 WHERE p.deleted = false AND
+                       (:sports IS NULL OR s.name IN :sports) AND
                         (:colors IS NULL OR c.name IN :colors) AND
                          (:features IS NULL OR f.name IN :features) AND
                           (:countries IS NULL OR p.country_of_origin IN :countries) AND
@@ -117,7 +119,8 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
                 JOIN features f on f.id = pf.features_id
                 JOIN products_sports ps on p.id = ps.product_id
                 JOIN sports s on ps.sports_id = s.id
-                 WHERE (:sports IS NULL OR s.name IN :sports) AND
+                 WHERE p.deleted = false AND 
+                    (:sports IS NULL OR s.name IN :sports) AND
                         (:colors IS NULL OR c.name IN :colors) AND
                          (:features IS NULL OR f.name IN :features) AND
                           (:countries IS NULL OR p.country_of_origin IN :countries) AND

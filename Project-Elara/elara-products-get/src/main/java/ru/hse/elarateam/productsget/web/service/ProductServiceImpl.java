@@ -178,7 +178,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public Page<ProductInfoDTO> findAllRecentAddedProducts(Pageable pageable) {
-        return productRepository.findAllByOrderByCreatedDateDesc(pageable)
+        return productRepository.findRecentProducts(pageable)
                 .map(productsMapper::productToProductInfoDTO);
     }
 
