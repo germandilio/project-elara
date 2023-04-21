@@ -85,7 +85,7 @@ CREATE TABLE shipment_methods
     id                 VARCHAR(36) NOT NULL,
     tariff_code        INTEGER     NOT NULL,
     tariff_name        VARCHAR(64) NOT NULL,
-    tariff_description VARCHAR(64) NOT NULL,
+    tariff_description VARCHAR(512) NOT NULL,
     delivery_mode      INTEGER     NOT NULL,
     delivery_sum       DECIMAL     NOT NULL,
     period_min         INTEGER     NOT NULL,

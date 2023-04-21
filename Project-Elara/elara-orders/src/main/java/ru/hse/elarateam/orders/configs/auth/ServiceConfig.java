@@ -13,8 +13,11 @@ public class ServiceConfig {
     @Value("${elara.products-service.token}")
     private String productsServiceToken;
 
+    @Value("${elara.login-service.token}")
+    private String loginServiceToken;
+
     @Bean
     public AuthTokenInterceptor productsAuthTokenInterceptor() {
-        return new AuthTokenInterceptor(productsServiceToken);
+        return new AuthTokenInterceptor(loginServiceToken, productsServiceToken);
     }
 }
