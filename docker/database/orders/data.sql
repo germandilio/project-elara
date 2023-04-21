@@ -19,8 +19,10 @@ CREATE TABLE addresses
     CONSTRAINT pk_addresses PRIMARY KEY (id)
 );
 
-INSERT INTO addresses (id, user_id, postal_code, city, country, street, building_number, apartment_number, entrance_number) VALUES
-('24f52725-5d2f-4ed5-a4d8-b6d830ce3b73', 'b8e66310-4a80-4dd8-8692-55bbca419e4b', '111111', 'Moscow', 'Russia', 'Pocrovsky Bulvard', '11', 'S900', 'R3');
+INSERT INTO addresses (id, user_id, postal_code, city, country, street, building_number, apartment_number,
+                       entrance_number)
+VALUES ('24f52725-5d2f-4ed5-a4d8-b6d830ce3b73', 'b8e66310-4a80-4dd8-8692-55bbca419e4b', '111111', 'Moscow', 'Russia',
+        'Pocrovsky Bulvard', '11', 'S900', 'R3');
 
 
 CREATE TABLE orders
@@ -60,10 +62,10 @@ CREATE TABLE ordered_items
 
 CREATE TABLE payment_details
 (
-    id          VARCHAR(36)                 NOT NULL,
-    order_id    VARCHAR(36)                 NOT NULL,
-    status      INTEGER                     NOT NULL,
-    user_email  VARCHAR(255)                NOT NULL,
+    id          VARCHAR(36)  NOT NULL,
+    order_id    VARCHAR(36)  NOT NULL,
+    status      INTEGER      NOT NULL,
+    user_email  VARCHAR(255) NOT NULL,
     update_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT pk_payment_details PRIMARY KEY (id)
 );
@@ -82,14 +84,14 @@ CREATE TABLE shipment_details
 
 CREATE TABLE shipment_methods
 (
-    id                 VARCHAR(36) NOT NULL,
-    tariff_code        INTEGER     NOT NULL,
-    tariff_name        VARCHAR(64) NOT NULL,
+    id                 VARCHAR(36)  NOT NULL,
+    tariff_code        INTEGER      NOT NULL,
+    tariff_name        VARCHAR(64)  NOT NULL,
     tariff_description VARCHAR(512) NOT NULL,
-    delivery_mode      INTEGER     NOT NULL,
-    delivery_sum       DECIMAL     NOT NULL,
-    period_min         INTEGER     NOT NULL,
-    period_max         INTEGER     NOT NULL,
+    delivery_mode      INTEGER      NOT NULL,
+    delivery_sum       DECIMAL      NOT NULL,
+    period_min         INTEGER      NOT NULL,
+    period_max         INTEGER      NOT NULL,
     created_date       TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_shipment_methods PRIMARY KEY (id)
 );

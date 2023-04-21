@@ -103,10 +103,10 @@ public class OrdersService {
                     .price(item.getPrice())
                     .discount(item.getDiscount())
                     .quantity(item.getQuantity())
-                            .height(item.getHeight())
-                            .width(item.getWidth())
-                            .length(item.getLength())
-                            .weight(item.getWeight())
+                    .height(item.getHeight())
+                    .width(item.getWidth())
+                    .length(item.getLength())
+                    .weight(item.getWeight())
                     .build());
 
             totalWithDiscount = totalWithDiscount.add(

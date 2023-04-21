@@ -120,17 +120,8 @@ public class ProductServiceImpl implements ProductService {
                 .map(productsMapper::productToProductInfoDTO);
 
         var productResponse = ProductsResponse.builder()
-                .products(products);
-
-        productResponse = fillMetrics(productResponse, products);
-        return productResponse.build();
-    }
-
-    private ProductsResponse.ProductsResponseBuilder fillMetrics(ProductsResponse.ProductsResponseBuilder builder, Page<ProductInfoDTO> products) {
-        if (builder == null || products == null) {
-            return builder;
-        }
-        return builder.minPrice(products.stream()
+                .products(products)
+                .minPrice(products.stream()
                         .map(ProductInfoDTO::getPrice)
                         .min(BigDecimal::compareTo)
                         .orElse(null))
@@ -173,6 +164,8 @@ public class ProductServiceImpl implements ProductService {
                         .map(ProductInfoDTO::getSizeUK)
                         .distinct()
                         .toList());
+
+        return productResponse.build();
     }
 
     @Transactional(readOnly = true)

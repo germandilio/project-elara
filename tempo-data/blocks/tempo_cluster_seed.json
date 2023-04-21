@@ -1,1 +1,12 @@
-{"UID":"457488a2-e0ab-422f-aef0-002c39f7b311","created_at":"2023-04-16T21:58:33.155480407Z","version":{"version":"main-aa4531f","revision":"aa4531fef","branch":"main","buildUser":"","buildDate":"","goVersion":"go1.20.3"}}
+{
+  "UID": "457488a2-e0ab-422f-aef0-002c39f7b311",
+  "created_at": "2023-04-16T21:58:33.155480407Z",
+  "version": {
+    "version": "main-aa4531f",
+    "revision": "aa4531fef",
+    "branch": "main",
+    "buildUser": "",
+    "buildDate": "",
+    "goVersion": "go1.20.3"
+  }
+}

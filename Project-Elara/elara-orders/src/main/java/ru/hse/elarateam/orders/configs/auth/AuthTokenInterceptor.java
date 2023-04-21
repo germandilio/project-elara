@@ -2,7 +2,6 @@ package ru.hse.elarateam.orders.configs.auth;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthTokenInterceptor implements RequestInterceptor {
     private static final String authType = "Bearer";
 
-    public AuthTokenInterceptor(String loginAuthToken, String productsAuthToken){
+    public AuthTokenInterceptor(String loginAuthToken, String productsAuthToken) {
         this.loginAuthToken = loginAuthToken;
         this.productsAuthToken = productsAuthToken;
     }
@@ -28,15 +27,15 @@ public class AuthTokenInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        if(requestTemplate.request().url().contains("/api/v1/auth")) {
+        if (requestTemplate.request().url().contains("/api/v1/auth")) {
             requestTemplate.header("Authorization", authType + " " + loginAuthToken);
             log.debug("Added authorization header {} , with token to request: {}", loginAuthToken, requestTemplate);
-        } else if(requestTemplate.request().url().contains("/api/v1/products")){
+        } else if (requestTemplate.request().url().contains("/api/v1/products")) {
             requestTemplate.header("Authorization", authType + " " + productsAuthToken);
             log.debug("Added authorization header {} , with token to request: {}", productsAuthToken, requestTemplate);
         } else {
             log.error("Unknown api call");
         }
-        
+
     }
 }

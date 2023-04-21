@@ -1,6 +1,5 @@
 package ru.hse.elarateam.users.web.converters;
 
-import com.google.common.hash.Hashing;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.Getter;
@@ -8,9 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 /**
  * Converts password to its hash using provided {@link PasswordEncoder}.

@@ -18,7 +18,6 @@ import ru.hse.elarateam.orders.model.status.OrderStatus;
 import ru.hse.elarateam.orders.web.services.OrdersService;
 import ru.hse.elarateam.orders.web.services.auth.AuthenticationManager;
 import ru.hse.elarateam.orders.web.services.auth.dto.RoleEnum;
-import ru.hse.elarateam.orders.web.services.jwt.ServiceTokenUtilsImpl;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -174,9 +173,9 @@ public class OrdersController {
         try {
             var userServiceInfo = authenticationManager.authenticate(token.substring(7));
             log.info("User found: " + userServiceInfo.getLogin() + " role: " + userServiceInfo.getRoleName());
-            if(askingAdmin){
+            if (askingAdmin) {
                 log.info("cheking admin");
-            return !Objects.equals(userServiceInfo.getRoleName(), RoleEnum.ADMIN);
+                return !Objects.equals(userServiceInfo.getRoleName(), RoleEnum.ADMIN);
             }
             return false;
         } catch (IllegalArgumentException e) {
