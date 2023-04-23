@@ -12,9 +12,6 @@ import ru.hse.elarateam.adminconsole.web.repositories.SportsRepository;
 @Service
 @RequiredArgsConstructor
 public class SportsService {
-
-    //todo add logs
-
     private final SportsRepository sportsRepository;
     private final SportsMapper sportsMapper;
 

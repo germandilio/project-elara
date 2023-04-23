@@ -38,7 +38,6 @@ public class PaymentController {
     @PostMapping("/")
     public ResponseEntity<?> registerPayment(@RequestHeader("Authorization") String token,
                                              @RequestBody PaymentDetailsInfoDTO paymentDetailsInfoDTO) {
-        //todo maybe send email
         if (notAuthenticated(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
