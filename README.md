@@ -1,8 +1,5 @@
 # Project Elara: e-commerce platform
 
-[![GitHub Workflow Status](https://github.com/germandilio/project-elara/Build%20&%20Publish%20documentation?label=docs&style=flat)](https://germandilio.github.io/project-elara/)
-![GitHub repo size](https://img.shields.io/github/repo-size/germandilio/project-elara)
-
 This repo contains backend part of application.
 
 ## Description
