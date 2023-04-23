@@ -1,5 +1,8 @@
 # Project Elara: e-commerce platform
 
+[![GitHub Workflow Status](https://github.com/germandilio/project-elara/Build%20&%20Publish%20documentation?label=docs&style=flat)](https://germandilio.github.io/project-elara/)
+![GitHub repo size](https://img.shields.io/github/repo-size/germandilio/project-elara)
+
 This repo contains backend part of application.
 
 ## Description
@@ -20,9 +23,9 @@ Project Elara is a shoe e-shop, that allows you to buy sneakers with delivery.
    
 ## Documentation
 
-REST API documenation you can find in [folder](../openapi/api-docs/), it can be visualized using Swagger Editor.
+REST API documenation you can find in [folder](openapi/api-docs/), it can be visualized using Swagger Editor.
 
-Java doc: [site](../docs/index.html)
+Java doc: [site](docs/index.html)
 
 ## Architecture
 
