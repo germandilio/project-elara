@@ -20,9 +20,9 @@ Project Elara is a shoe e-shop, that allows you to buy sneakers with delivery.
    
 ## Documentation
 
-REST API documenation you can find in [folder](../openapi/api-docs/), it can be visualized using Swagger Editor.
+REST API documenation you can find in [folder](openapi/api-docs/), it can be visualized using Swagger Editor.
 
-Java doc: [site](../docs/index.html)
+Java doc: [site](docs/index.html)
 
 ## Architecture
 
